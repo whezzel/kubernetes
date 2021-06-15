@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shinobi-deployment
+  namespace: cctv
+  labels:
+    app: shinobi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shinobi
+  template:
+    metadata:
+      labels:
+        app: shinobi
+    spec:
+      containers:
+        - name: shinobi
+          image: shinobisystems/shinobi:dev
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: shinobi-streams 
+              mountPath: /dev/shm/streams
+            - name: shinobi-config
+              mountPath: /config
+            - name: shinobi-customautoload
+              mountPath: /home/Shinobi/libs/customAutoLoad
+            - name: shinobi-videos
+              mountPath: /home/Shinobi/videos
+            - name: shinobi-plugins 
+              mountPath: /home/Shinobi/plugins
+            - name: shinobi-database
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: shinobi-streams
+          hostPath:
+            path: /dev/shm/shinobi-streams
+        - name: shinobi-config
+          hostPath:
+            path: /opt/shinobi/config
+        - name: shinobi-customautoload
+          hostPath:
+            path: /opt/shinobi/customAutoLoad
+        - name: shinobi-videos
+          hostPath:
+            path: /opt/shinobi/videos
+        - name: shinobi-plugins
+          hostPath:
+            path: /opt/shinobi/plugins
+        - name: shinobi-database
+          persistentVolumeClaim:
+            claimName: shinobi-database-pvc
