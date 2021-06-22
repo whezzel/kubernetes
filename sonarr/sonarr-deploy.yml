@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr-deployment
+  namespace: seedbox
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - name: sonarr
+          image: linuxserver/sonarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8989
+          env:
+            - name: TZ
+              value: America/Chicago
+          volumeMounts:
+            - name: nas-media
+              mountPath: /media
+            - name: sonarr-config
+              mountPath: /config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: nas-media
+          nfs:
+            server: nas.nomacsec.com
+            path: /storage/media
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: sonarr-config-pvc
