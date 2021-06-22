@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jackett-deployment
+  namespace: seedbox
+  labels:
+    app: jackett
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jackett
+  template:
+    metadata:
+      labels:
+        app: jackett
+    spec:
+      containers:
+        - name: jackett
+          image: linuxserver/jackett:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9117
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: jackett
+              mountPath: /config
+              subPath: config
+            - name: jackett
+              mountPath: /downloads
+              subPath: downloads
+      volumes:
+        - name: jackett
+          persistentVolumeClaim:
+            claimName: jackett-pvc
