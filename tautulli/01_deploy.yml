@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tautulli-deployment
+  namespace: plex
+  labels:
+    app: tautulli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tautulli
+  template:
+    metadata:
+      labels:
+        app: tautulli
+    spec:
+      containers:
+        - name: tautulli
+          image: linuxserver/tautulli:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8181
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: tautulli
+              mountPath: /config
+              subPath: config
+            - name: tautulli
+              mountPath: /logs
+              subPath: plexlogs
+      volumes:
+        - name: tautulli
+          persistentVolumeClaim:
+            claimName: tautulli-pvc
