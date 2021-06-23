@@ -24,6 +24,10 @@ spec:
           env:
             - name: TZ
               value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
           volumeMounts:
             - name: nas-media
               mountPath: /media
