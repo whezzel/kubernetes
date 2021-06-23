@@ -24,6 +24,16 @@ metadata:
   namespace: seedbox
 spec:
   rules:
+    - host: lidarr.nomacsec.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lidarr-service
+                port:
+                  number: 80
     - host: lidarr-k3s.nomacsec.com
       http:
         paths:

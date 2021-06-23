@@ -7,38 +7,48 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: radarr-service
+  name: sonarr-service
   namespace: seedbox
 spec:
   selector:
-    app: radarr
+    app: sonarr
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 7878
+      targetPort: 8989
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: radarr-ingress
+  name: sonarr-ingress
   namespace: seedbox
 spec:
   rules:
-    - host: radarr-k3s.nomacsec.com
+    - host: sonarr.nomacsec.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: radarr-service
+                name: sonarr-service
+                port:
+                  number: 80
+    - host: sonarr-k3s.nomacsec.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr-service
                 port:
                   number: 80
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: radarr-config-pvc
+  name: sonarr-config-pvc
   namespace: seedbox
 spec:
   accessModes:
@@ -46,4 +56,4 @@ spec:
   storageClassName: longhorn-sas
   resources:
     requests:
-      storage: 2Gi
+      storage: 250Mi
