@@ -56,4 +56,4 @@ spec:
   storageClassName: longhorn-sas
   resources:
     requests:
-      storage: 250Mi
+      storage: 500Mi
