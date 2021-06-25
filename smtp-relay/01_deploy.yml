@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smtp-relay-deployment
+  namespace: smtp
+  labels:
+    app: smtp-relay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smtp-relay
+  template:
+    metadata:
+      labels:
+        app: smtp-relay
+    spec:
+      containers:
+        - name: smtp-relay
+          image: namshi/smtp:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 25
+          env:
+            - name: RELAY_NETWORKS
+              value: ":10.0.3.0/24"
+            - name: MAILNAME
+              value: "CHANGE_ME"
+            - name: GMAIL_USER
+              value: "CHANGE_ME"
+            - name: GMAIL_PASSWORD
+              value: "CHANGE_ME"
