@@ -46,22 +46,6 @@ spec:
                   number: 80
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: jackett-pv
-spec:
-  storageClassName: local
-  capacity:
-    storage: 256Mi
-  accessModes:
-    - ReadWriteOnce
-  claimRef:
-    name: jackett-pvc
-    namespace: seedbox
-  hostPath:
-    path: /opt/k3s/jackett
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: jackett-pvc
@@ -70,7 +54,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: longhorn
-  volumeName: jackett-pv
   resources:
     requests:
       storage: 256Mi
