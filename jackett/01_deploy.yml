@@ -32,10 +32,13 @@ spec:
             - name: jackett
               mountPath: /config
               subPath: config
-            - name: jackett
+            - name: nas-media
               mountPath: /downloads
-              subPath: downloads
       volumes:
+        - name: nas-media
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/media/downloads/.torrents
         - name: jackett
           persistentVolumeClaim:
             claimName: jackett-pvc
