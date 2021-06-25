@@ -24,7 +24,7 @@ metadata:
   namespace: seedbox
 spec:
   rules:
-    - host: sonarr.nomacsec.com
+    - host: sonarr.whezzel.com
       http:
         paths:
           - path: /
@@ -34,7 +34,7 @@ spec:
                 name: sonarr-service
                 port:
                   number: 80
-    - host: sonarr-k3s.nomacsec.com
+    - host: sonarr-k3s.whezzel.com
       http:
         paths:
           - path: /
@@ -53,7 +53,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn-sas
+  storageClassName: longhorn
   resources:
     requests:
-      storage: 250Mi
+      storage: 512Mi

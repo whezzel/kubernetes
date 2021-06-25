@@ -14,7 +14,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required '
 spec:
   rules:
-  - host: longhorn.nomacsec.com
+  - host: longhorn.whezzel.com
   - http:
       paths:
       - pathType: Prefix

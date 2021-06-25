@@ -24,7 +24,7 @@ metadata:
   namespace: seedbox
 spec:
   rules:
-    - host: jackett.nomacsec.com
+    - host: jackett.whezzel.com
       http:
         paths:
           - path: /
@@ -34,7 +34,7 @@ spec:
                 name: jackett-service
                 port:
                   number: 80
-    - host: jackett-k3s.nomacsec.com
+    - host: jackett-k3s.whezzel.com
       http:
         paths:
           - path: /
