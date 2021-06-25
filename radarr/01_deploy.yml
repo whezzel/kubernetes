@@ -43,8 +43,8 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas.nomacsec.com
-            path: /storage/media
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/media
         - name: radarr-config
           persistentVolumeClaim:
             claimName: radarr-config-pvc

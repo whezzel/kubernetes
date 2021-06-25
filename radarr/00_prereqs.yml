@@ -24,7 +24,7 @@ metadata:
   namespace: seedbox
 spec:
   rules:
-    - host: radarr.nomacsec.com
+    - host: radarr.whezzel.com
       http:
         paths:
           - path: /
@@ -34,7 +34,7 @@ spec:
                 name: radarr-service
                 port:
                   number: 80
-    - host: radarr-k3s.nomacsec.com
+    - host: radarr-k3s.whezzel.com
       http:
         paths:
           - path: /
@@ -53,7 +53,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn-sas
+  storageClassName: longhorn
   resources:
     requests:
       storage: 2Gi
