@@ -24,7 +24,7 @@ metadata:
   namespace: cctv
 spec:
   rules:
-    - host: shinobi.nomacsec.com
+    - host: shinobi.whezzel.com
       http:
         paths:
           - path: /
