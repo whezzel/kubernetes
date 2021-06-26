@@ -56,8 +56,4 @@ spec:
   storageClassName: longhorn
   resources:
     requests:
-<<<<<<< HEAD
       storage: 512Mi
-=======
-      storage: 512Mi
->>>>>>> d7f50c964d13b88b55868d29ea8139fbade665dd
