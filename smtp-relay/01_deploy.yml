@@ -23,7 +23,7 @@ spec:
             - containerPort: 25
           env:
             - name: RELAY_NETWORKS
-              value: ":10.0.3.0/24"
+              value: ":10.0.2.0/24"
             - name: MAILNAME
               value: "CHANGE_ME"
             - name: GMAIL_USER
