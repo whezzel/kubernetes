@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr-deployment
+  namespace: seedbox
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - name: sonarr
+          image: linuxserver/sonarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8989
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: nas-media
+              mountPath: /media
+            - name: sonarr
+              mountPath: /config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: nas-media
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/media
+        - name: sonarr
+          persistentVolumeClaim:
+            claimName: sonarr-pvc
