@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: tautulli-ingress
+  name: mediaserver-ingress
   namespace: mediaserver
 spec:
   rules:
