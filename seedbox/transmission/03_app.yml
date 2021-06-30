@@ -170,9 +170,9 @@ spec:
 #              value: "true"
 ### Queuing ###
             - name: TRANSMISSION_DOWNLOAD_QUEUE_ENABLED
-              value: "false"
-#            - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
-#              value: "5"
+              value: "true"
+            - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
+              value: "10"
 #            - name: TRANSMISSION_QUEUE_STALLED_ENABLED
 #              value: "true"
 #            - name: TRANSMISSION_QUEUE_STALLED_MINUTES
