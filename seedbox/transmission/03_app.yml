@@ -28,7 +28,7 @@ spec:
             - name: DISABLE_PORT_UPDATER
               value: "false"
             - name: ENABLE_UFW
-              value: "false"
+              value: "true"
             - name: GLOBAL_APPLY_PERMISSIONS
               value: "true"
             - name: HEALTH_CHECK_HOST
@@ -86,11 +86,11 @@ spec:
 #            - name: TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED
 #              value: "false"
             - name: TRANSMISSION_SPEED_LIMIT_UP
-              value: "0"
+              value: "2048"
             - name: TRANSMISSION_SPEED_LIMIT_UP_ENABLED
               value: "true"
             - name: TRANSMISSION_UPLOAD_SLOTS_PER_TORRENT
-              value: "0"
+              value: "10"
 ## Blocklists ##
 #            - name: TRANSMISSION_BLOCKLIST_URL
 #              value: "http://www.example.com/blocklist"
@@ -173,14 +173,14 @@ spec:
               value: "true"
             - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
               value: "10"
-#            - name: TRANSMISSION_QUEUE_STALLED_ENABLED
-#              value: "true"
-#            - name: TRANSMISSION_QUEUE_STALLED_MINUTES
-#              value: "30"
+            - name: TRANSMISSION_QUEUE_STALLED_ENABLED
+              value: "true"
+            - name: TRANSMISSION_QUEUE_STALLED_MINUTES
+              value: "10"
             - name: TRANSMISSION_SEED_QUEUE_ENABLED
               value: "true"
             - name: TRANSMISSION_SEED_QUEUE_SIZE
-              value: "0"
+              value: "10"
 ### RPC ###
 #            - name: TRANSMISSION_RPC_AUTHENTICATION_REQUIRED
 #              value: "false"
@@ -213,10 +213,10 @@ spec:
 #              value: "1020"
 #            - name: TRANSMISSION_ALT_SPEED_TIME_DAY
 #              value: "127"
-            - name: TRANSMISSION_IDLE_SEEDING_LIMIT
-              value: "0"
-            - name: TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED
-              value: "true"
+#            - name: TRANSMISSION_IDLE_SEEDING_LIMIT
+#              value: "0"
+#            - name: TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED
+#              value: "true"
             - name: TRANSMISSION_RATIO_LIMIT
               value: "0"
             - name: TRANSMISSION_RATIO_LIMIT_ENABLED
