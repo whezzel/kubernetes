@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-webdashboard
+  namespace: kube-system
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: (Host(`traefik.nomacsec.com`) || Host(`traefik.nomacsec.com`) && PathPrefix(`/api`))
+      services:
+        - kind: TraefikService
+          name: api@internal
