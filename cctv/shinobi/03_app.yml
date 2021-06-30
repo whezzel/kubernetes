@@ -26,16 +26,21 @@ spec:
               mountPath: /etc/localtime
             - name: shinobi-streams 
               mountPath: /dev/shm/streams
-            - name: shinobi-config
+            - name: shinobi
               mountPath: /config
-            - name: shinobi-customautoload
+              subPath: config
+            - name: shinobi
               mountPath: /home/Shinobi/libs/customAutoLoad
-            - name: shinobi-videos
+              subPath: customAutoLoad
+            - name: shinobi
               mountPath: /home/Shinobi/videos
-            - name: shinobi-plugins 
+              subPath: videos
+            - name: shinobi 
               mountPath: /home/Shinobi/plugins
-            - name: shinobi-database
+              subpath: plugins
+            - name: shinobi
               mountPath: /var/lib/mysql
+              subPath: database
       volumes:
         - name: localtime
           hostPath:
@@ -43,18 +48,6 @@ spec:
         - name: shinobi-streams
           hostPath:
             path: /dev/shm/shinobi-streams
-        - name: shinobi-config
-          hostPath:
-            path: /opt/shinobi/config
-        - name: shinobi-customautoload
-          hostPath:
-            path: /opt/shinobi/customAutoLoad
-        - name: shinobi-videos
-          hostPath:
-            path: /opt/shinobi/videos
-        - name: shinobi-plugins
-          hostPath:
-            path: /opt/shinobi/plugins
-        - name: shinobi-database
+        - name: shinobi
           persistentVolumeClaim:
-            claimName: shinobi-database-pvc
+            claimName: shinobi-pvc
