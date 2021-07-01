@@ -32,12 +32,11 @@ spec:
             - name: shinobi
               mountPath: /home/Shinobi/libs/customAutoLoad
               subPath: customAutoLoad
-            - name: shinobi
+            - name: nas-shinobi
               mountPath: /home/Shinobi/videos
-              subPath: videos
             - name: shinobi 
               mountPath: /home/Shinobi/plugins
-              subpath: plugins
+              subPath: plugins
             - name: shinobi
               mountPath: /var/lib/mysql
               subPath: database
@@ -51,3 +50,7 @@ spec:
         - name: shinobi
           persistentVolumeClaim:
             claimName: shinobi-pvc
+        - name: nas-shinobi
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/shinobi
