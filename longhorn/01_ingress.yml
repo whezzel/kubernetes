@@ -29,7 +29,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: longhorn-system-longhorn-https@kubernetescrd
 spec:
   rules:
-  - host: longhorn.whezzel.com
+  - host: longhorn-test.whezzel.com
     http:
       paths:
       - path: /
@@ -51,7 +51,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: longhorn-system-longhorn-headers@kubernetescrd
 spec:
   rules:
-  - host: longhorn.whezzel.com
+  - host: longhorn-test.whezzel.com
     http:
       paths:
       - path: /
