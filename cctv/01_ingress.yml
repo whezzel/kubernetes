@@ -16,13 +16,3 @@ spec:
                 name: shinobi-service
                 port:
                   number: 80
-    - host: shinobi-k3s.whezzel.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: shinobi-service
-                port:
-                  number: 80

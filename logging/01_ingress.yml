@@ -16,13 +16,13 @@ spec:
                 name: grafana-service
                 port:
                   number: 80
-    - host: grafana-k3s.whezzel.com
+    - host: influxdb.whezzel.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: grafana-service
+                name: influxdb-service
                 port:
                   number: 80
