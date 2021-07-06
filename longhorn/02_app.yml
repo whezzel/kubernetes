@@ -670,9 +670,8 @@ data:
     #  backingImageURL: "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"
     #  diskSelector: "ssd,fast"
     #  nodeSelector: "storage,fast"
-    #  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
-    #                   {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,
-    #                    "labels": {"interval":"2m"}}]'
+      recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"* 1 * * *", "retain":7},
+                       {"name":"backup", "task":"backup", "cron":"* 5 ? * SUN", "retain":4}]'
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -908,15 +907,15 @@ spec:
           #- name: CSI_SNAPSHOTTER_IMAGE
           #  value: PREFIX/csi-snapshotter:v2.1.1-lh1
           # Manually specify number of CSI attacher replicas
-          #- name: CSI_ATTACHER_REPLICA_COUNT
-          #  value: "3"
+          - name: CSI_ATTACHER_REPLICA_COUNT
+            value: "1"
           # Manually specify number of CSI provisioner replicas
-          #- name: CSI_PROVISIONER_REPLICA_COUNT
-          #  value: "3"
-          #- name: CSI_RESIZER_REPLICA_COUNT
-          #  value: "3"
-          #- name: CSI_SNAPSHOTTER_REPLICA_COUNT
-          #  value: "3"
+          - name: CSI_PROVISIONER_REPLICA_COUNT
+            value: "1"
+          - name: CSI_RESIZER_REPLICA_COUNT
+            value: "1"
+          - name: CSI_SNAPSHOTTER_REPLICA_COUNT
+            value: "1"
 #      imagePullSecrets:
 #        - name: ""
 #      priorityClassName:
