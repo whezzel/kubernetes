@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-deployment
+  namespace: cloud
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+    spec:
+      containers:
+        - name: nextcloud
+          image: linuxserver/nextcloud:latest
+          imagePullPolicy: Always
+          ports:
+            - name: https
+              containerPort: 443
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: nextcloud
+              mountPath: /config
+              subPath: config
+            - name: nextcloud
+              mountPath: /data
+              subPath: data
+            - name: nas
+              mountPath: /mnt/netstorage
+      volumes:
+        - name: nextcloud
+          persistentVolumeClaim:
+            claimName: nextcloud-pvc
+        - name: nas
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/
