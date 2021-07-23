@@ -40,11 +40,11 @@ spec:
             - name: OPENVPN_OPTS
               value: "--inactive 3600 --ping 10 --ping-exit 60"
             - name: OPENVPN_PASSWORD
-              value: "!Xw!75!@bM8n42NCijh&^9#@^TEm9%bV"
+              value: "PASSWORD"
             - name: OPENVPN_PROVIDER
               value: "PIA"
             - name: OPENVPN_USERNAME
-              value: "p7803505"
+              value: "USERNAME"
             - name: PUID
               value: "1000"
             - name: PGID
@@ -75,8 +75,8 @@ spec:
 #              value: "username"
 ### Transmission Variables ###
 ## Bandwidth ##
-#            - name: TRANSMISSION_ALT_SPEED_ENABLED
-#              value: "false"
+            - name: TRANSMISSION_ALT_SPEED_ENABLED
+              value: "false"
 #            - name: TRANSMISSION_ALT_SPEED_UP
 #              value: "50"
 #            - name: TRANSMISSION_ALT_SPEED_DOWN
