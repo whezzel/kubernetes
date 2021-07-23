@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: passman-ingress
+  namespace: passman
+spec:
+  rules:
+    - host: bitwarden.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden-service
+                port:
+                  number: 80
+          - path: /notifications/hub
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden-websocket-service
+                port:
+                  number: 80

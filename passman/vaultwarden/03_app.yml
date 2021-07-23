@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden-deployment
+  namespace: passman
+  labels:
+    app: vaultwarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      containers:
+        - name: vaultwarden
+          image: vaultwarden/server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+            - containerPort: 3012
+          env:
+            - name: WEBSOCKET_ENABLED
+              value: "true"
+            - name: WEB_VAULT_ENABLED
+              value: "true"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: vaultwarden
+              mountPath: /data
+              subPath: data
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: vaultwarden
+          persistentVolumeClaim:
+            claimName: vaultwarden-pvc
+        - name: nas-vaultwarden
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/vaultwarden
