@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prowlarr-pv
+  namespace: seedbox
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      numberOfReplicas: '1'
+      staleReplicaTimeout: '2880'
+    volumeHandle: prowlarr
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    namespace: seedbox
+    name: prowlarr-pvc

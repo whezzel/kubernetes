@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr-deployment
+  namespace: seedbox
+  labels:
+    app: prowlarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      containers:
+        - name: prowlarr
+          image: linuxserver/prowlarr:develop
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9696
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: nas-media
+              mountPath: /media
+            - name: prowlarr
+              mountPath: /config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: nas-media
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/media
+        - name: prowlarr
+          persistentVolumeClaim:
+            claimName: prowlarr-pvc
