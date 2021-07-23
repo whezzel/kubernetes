@@ -6,9 +6,9 @@ metadata:
   namespace: seedbox
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 512Mi
+      storage: 2Gi
   volumeName: sonarr-pv
   storageClassName: longhorn

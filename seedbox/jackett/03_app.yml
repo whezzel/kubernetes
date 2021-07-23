@@ -22,18 +22,22 @@ spec:
           ports:
             - containerPort: 9117
           env:
-            - name: TZ
-              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: jackett
               mountPath: /config
             - name: nas-media
               mountPath: /downloads
       volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
         - name: nas-media
           nfs:
             server: nas01.whezzel.com

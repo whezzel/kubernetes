@@ -6,9 +6,9 @@ metadata:
   namespace: seedbox
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
+      storage: 2Gi
   volumeName: lidarr-pv
   storageClassName: longhorn

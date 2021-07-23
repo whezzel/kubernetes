@@ -22,6 +22,9 @@ spec:
           ports:
             - containerPort: 3000
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: grafana
               mountPath: /var/lib/grafana
               subPath: data
@@ -32,6 +35,9 @@ spec:
               mountPath: /etc/grafana
               subPath: grafana
       volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
         - name: grafana
           persistentVolumeClaim:
             claimName: grafana-pvc

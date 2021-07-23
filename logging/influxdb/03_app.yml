@@ -22,6 +22,9 @@ spec:
           ports:
             - containerPort: 8086
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: influxdb
               mountPath: /var/lib/influxdb2
               subPath: data
@@ -29,6 +32,9 @@ spec:
               mountPath: /etc/influxdb2
               subPath: config
       volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
         - name: influxdb
           persistentVolumeClaim:
             claimName: influxdb-pvc

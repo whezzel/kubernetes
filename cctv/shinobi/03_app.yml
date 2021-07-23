@@ -24,6 +24,7 @@ spec:
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
+              readOnly: true
             - name: shinobi-streams 
               mountPath: /dev/shm/streams
             - name: shinobi

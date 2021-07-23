@@ -56,3 +56,13 @@ spec:
                 name: sonarr-service
                 port:
                   number: 80
+    - host: prowlarr.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prowlarr-service
+                port:
+                  number: 80

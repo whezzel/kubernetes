@@ -40,11 +40,11 @@ spec:
             - name: OPENVPN_OPTS
               value: "--inactive 3600 --ping 10 --ping-exit 60"
             - name: OPENVPN_PASSWORD
-              value: "password"
+              value: "!Xw!75!@bM8n42NCijh&^9#@^TEm9%bV"
             - name: OPENVPN_PROVIDER
               value: "PIA"
             - name: OPENVPN_USERNAME
-              value: "username"
+              value: "p7803505"
             - name: PUID
               value: "1000"
             - name: PGID
@@ -57,8 +57,8 @@ spec:
 #              value: ""
             - name: TRANSMISSION_WEB_UI
               value: "transmission-web-control"
-            - name: TZ
-              value: "America/Chicago"
+#            - name: TZ
+#              value: "America/Chicago"
             - name: UFW_ALLOW_GW_NET
               value: "true"
 #            - name: UFW_DISABLE_IPTABLES_REJECT
@@ -81,12 +81,12 @@ spec:
 #              value: "50"
 #            - name: TRANSMISSION_ALT_SPEED_DOWN
 #              value: "50"
-#            - name: TRANSMISSION_SPEED_LIMIT_DOWN
-#              value: "100"
-#            - name: TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED
-#              value: "false"
+            - name: TRANSMISSION_SPEED_LIMIT_DOWN
+              value: "3072"
+            - name: TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED
+              value: "true"
             - name: TRANSMISSION_SPEED_LIMIT_UP
-              value: "2048"
+              value: "1024"
             - name: TRANSMISSION_SPEED_LIMIT_UP_ENABLED
               value: "true"
             - name: TRANSMISSION_UPLOAD_SLOTS_PER_TORRENT
@@ -98,7 +98,7 @@ spec:
 #              value: "false"
 ## Files and Locations
             - name: TRANSMISSION_DOWNLOAD_DIR
-              value: "/media/downloads/complete/other"
+              value: "/media/downloads/complete"
             - name: TRANSMISSION_INCOMPLETE_DIR
               value: "/media/downloads/incomplete"
             - name: TRANSMISSION_INCOMPLETE_DIR_ENABLED
@@ -151,8 +151,8 @@ spec:
 #              value: ""
 #            - name: TRANSMISSION_PEER_ID_TTL_HOURS
 #              value: "6"
-#            - name: TRANSMISSION_PEER_LIMIT_GLOBAL
-#              value: "240"
+            - name: TRANSMISSION_PEER_LIMIT_GLOBAL
+              value: "480"
 #            - name: TRANSMISSION_PEER_LIMIT_PER_TORRENT
 #              value: "60"
 #            - name: TRANSMISSION_PEER_SOCKET_TOS
@@ -170,15 +170,15 @@ spec:
 #              value: "true"
 ### Queuing ###
             - name: TRANSMISSION_DOWNLOAD_QUEUE_ENABLED
-              value: "true"
+              value: "false"
             - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
               value: "10"
             - name: TRANSMISSION_QUEUE_STALLED_ENABLED
-              value: "true"
+              value: "false"
             - name: TRANSMISSION_QUEUE_STALLED_MINUTES
               value: "10"
             - name: TRANSMISSION_SEED_QUEUE_ENABLED
-              value: "true"
+              value: "false"
             - name: TRANSMISSION_SEED_QUEUE_SIZE
               value: "10"
 ### RPC ###
@@ -213,17 +213,20 @@ spec:
 #              value: "1020"
 #            - name: TRANSMISSION_ALT_SPEED_TIME_DAY
 #              value: "127"
-#            - name: TRANSMISSION_IDLE_SEEDING_LIMIT
-#              value: "0"
-#            - name: TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED
-#              value: "true"
+            - name: TRANSMISSION_IDLE_SEEDING_LIMIT
+              value: "2"
+            - name: TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED
+              value: "false"
             - name: TRANSMISSION_RATIO_LIMIT
-              value: "0"
+              value: "2"
             - name: TRANSMISSION_RATIO_LIMIT_ENABLED
-              value: "true"
+              value: "false"
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: nas-media
-              mountPath: /downloads
+              mountPath: /media/downloads              
             - name: transmission
               mountPath: /config
               subPath: config
@@ -242,6 +245,9 @@ spec:
               add:
                 - NET_ADMIN
       volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
         - name: nas-media
           nfs:
             server: nas01.whezzel.com
