@@ -6,10 +6,10 @@ metadata:
   namespace: cloud
 spec:
   capacity:
-    storage: 25Gi
+    storage: 50Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:

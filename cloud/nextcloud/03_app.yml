@@ -17,28 +17,35 @@ spec:
     spec:
       containers:
         - name: nextcloud
-          image: linuxserver/nextcloud:latest
+          image: nextcloud:latest
           imagePullPolicy: Always
           ports:
-            - name: https
-              containerPort: 443
-          env:
-            - name: TZ
-              value: America/Chicago
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
+              - containerPort: 80
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: nextcloud
-              mountPath: /config
+              mountPath: /var/www/html
+              subPath: nextcloud
+            - name: nextcloud
+              mountPath: /var/www/html/custom_apps
+              subPath: apps
+            - name: nextcloud
+              mountPath: /var/www/html/config
               subPath: config
             - name: nextcloud
-              mountPath: /data
+              mountPath: /var/www/html/data
               subPath: data
+            - name: nextcloud
+              mountPath: /var/www/html/themes
+              subPath: themes
             - name: nas
               mountPath: /mnt/netstorage
       volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
         - name: nextcloud
           persistentVolumeClaim:
             claimName: nextcloud-pvc

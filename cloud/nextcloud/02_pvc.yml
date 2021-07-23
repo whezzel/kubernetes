@@ -6,9 +6,9 @@ metadata:
   namespace: cloud
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 25Gi
+      storage: 50Gi
   volumeName: nextcloud-pv
   storageClassName: longhorn

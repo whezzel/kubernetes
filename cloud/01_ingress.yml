@@ -6,7 +6,7 @@ metadata:
   namespace: cloud
 spec:
   rules:
-    - host: nextcloud-k3s.whezzel.com
+    - host: nextcloud.whezzel.com
       http:
         paths:
           - path: /
