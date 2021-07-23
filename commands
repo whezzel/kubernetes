@@ -1,7 +1,0 @@
-## Modify contents of longhorn img
-    
-    kubectl -n <namespace> scale --replicas 0 deployment <deployment>
-    mount -o loop /var/lib/longhorn/replicas/path/to/.img /mnt/temp/
-    modify contents
-    unmount /mnt/temp
-    kubectl -n <namespace> scale --replicas 1 deployment <deployment>
