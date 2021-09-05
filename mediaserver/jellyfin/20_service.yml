@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: jellyfin-service
   namespace: mediaserver
+  annotations:
+    metallb.universe.tf/address-pool: default
 spec:
   selector:
     app: jellyfin
