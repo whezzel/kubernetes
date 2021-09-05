@@ -1,0 +1,80 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: vaultwarden-https
+  namespace: passman
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: vaultwarden-headers
+  namespace: passman
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vaultwarden-ingress-http
+  namespace: passman
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web   
+    traefik.ingress.kubernetes.io/router.middlewares: passman-vaultwarden-https@kubernetescrd
+spec:
+  rules:
+    - host: bitwarden.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden-service
+                port:
+                  number: 80
+          - path: /notifications/hub
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden-websocket-service
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vaultwarden-ingress-https
+  namespace: passman
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"       
+    traefik.ingress.kubernetes.io/router.middlewares: passman-vaultwarden-headers@kubernetescrd
+spec:
+  tls:
+  - secretName: whezzel.com-tls
+  rules:
+    - host: bitwarden.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden-service
+                port:
+                  number: 80
+          - path: /notifications/hub
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden-websocket-service
+                port:
+                  number: 80
