@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otrecorder-service
+  namespace: tracking
+spec:
+  selector:
+    app: otrecorder
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8083

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otfrontend-deployment
+  namespace: tracking
+  labels:
+    app: otfrontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otfrontend
+  template:
+    metadata:
+      labels:
+        app: otfrontend
+    spec:
+      containers:
+        - name: otfrontend
+          image: owntracks/frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: SERVER_HOST
+              value: "otrecorder-service"
+            - name: SERVER_PORT
+              value: "80"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: otfrontend
+              mountPath: /usr/share/nginx/html/config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: otfrontend
+          persistentVolumeClaim:
+            claimName: otfrontend-pvc

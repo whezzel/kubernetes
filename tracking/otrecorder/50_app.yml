@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otrecorder-deployment
+  namespace: tracking
+  labels:
+    app: otrecorder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otrecorder
+  template:
+    metadata:
+      labels:
+        app: otrecorder
+    spec:
+      containers:
+        - name: otrecorder
+          image: owntracks/recorder:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+          env:
+            - name: OTR_HOST
+              value: "homeassistant.whezzel.com"
+            - name: OTR_PORT
+              value: "1883"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: otrecorder
+              mountPath: /config
+              subPath: config
+            - name: otrecorder
+              mountPath: /store
+              subPath: store
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: otrecorder
+          persistentVolumeClaim:
+            claimName: otrecorder-pvc
