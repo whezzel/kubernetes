@@ -46,10 +46,13 @@ metadata:
   name: longhorn-ingress-https
   namespace: longhorn-system
   annotations:
+    kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"       
     traefik.ingress.kubernetes.io/router.middlewares: longhorn-system-longhorn-headers@kubernetescrd
 spec:
+  tls:
+  - secretName: whezzel.com-tls
   rules:
   - host: longhorn.whezzel.com
     http:
