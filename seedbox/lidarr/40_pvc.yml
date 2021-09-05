@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: transmission-pvc
+  name: lidarr-pvc
   namespace: seedbox
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 2Gi
-  volumeName: transmission-pv
+  volumeName: lidarr-pv
   storageClassName: longhorn

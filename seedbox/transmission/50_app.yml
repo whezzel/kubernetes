@@ -40,11 +40,11 @@ spec:
             - name: OPENVPN_OPTS
               value: "--inactive 3600 --ping 10 --ping-exit 60"
             - name: OPENVPN_PASSWORD
-              value: "PASSWORD"
+              value: "password"
             - name: OPENVPN_PROVIDER
               value: "PIA"
             - name: OPENVPN_USERNAME
-              value: "USERNAME"
+              value: "username"
             - name: PUID
               value: "1000"
             - name: PGID
@@ -86,7 +86,7 @@ spec:
             - name: TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED
               value: "true"
             - name: TRANSMISSION_SPEED_LIMIT_UP
-              value: "1024"
+              value: "512"
             - name: TRANSMISSION_SPEED_LIMIT_UP_ENABLED
               value: "true"
             - name: TRANSMISSION_UPLOAD_SLOTS_PER_TORRENT
@@ -220,7 +220,7 @@ spec:
             - name: TRANSMISSION_RATIO_LIMIT
               value: "2"
             - name: TRANSMISSION_RATIO_LIMIT_ENABLED
-              value: "false"
+              value: "true"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime

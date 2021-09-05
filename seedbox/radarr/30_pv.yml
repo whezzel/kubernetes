@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lidarr-pv
+  name: radarr-pv
   namespace: seedbox
 spec:
   capacity:
     storage: 2Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:
@@ -18,9 +18,9 @@ spec:
     volumeAttributes:
       numberOfReplicas: '1'
       staleReplicaTimeout: '2880'
-    volumeHandle: lidarr
+    volumeHandle: radarr
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: seedbox
-    name: lidarr-pvc
+    name: radarr-pvc

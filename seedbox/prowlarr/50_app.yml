@@ -1,27 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lidarr-deployment
+  name: prowlarr-deployment
   namespace: seedbox
   labels:
-    app: lidarr
+    app: prowlarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: lidarr
+      app: prowlarr
   template:
     metadata:
       labels:
-        app: lidarr
+        app: prowlarr
     spec:
       containers:
-        - name: lidarr
-          image: linuxserver/lidarr:latest
+        - name: prowlarr
+          image: linuxserver/prowlarr:develop
           imagePullPolicy: Always
           ports:
-            - containerPort: 8686
+            - containerPort: 9696
           env:
+            - name: TZ
+              value: "America/Chicago"
             - name: PUID
               value: "1000"
             - name: PGID
@@ -32,7 +34,7 @@ spec:
               readOnly: true
             - name: nas-media
               mountPath: /media
-            - name: lidarr
+            - name: prowlarr
               mountPath: /config
           resources:
             requests:
@@ -49,6 +51,6 @@ spec:
           nfs:
             server: nas01.whezzel.com
             path: /mnt/netstorage/media
-        - name: lidarr
+        - name: prowlarr
           persistentVolumeClaim:
-            claimName: lidarr-pvc
+            claimName: prowlarr-pvc

@@ -1,27 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jackett-deployment
+  name: radarr-deployment
   namespace: seedbox
   labels:
-    app: jackett
+    app: radarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jackett
+      app: radarr
   template:
     metadata:
       labels:
-        app: jackett
+        app: radarr
     spec:
       containers:
-        - name: jackett
-          image: linuxserver/jackett:latest
+        - name: radarr
+          image: linuxserver/radarr:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 9117
+            - containerPort: 7878
           env:
+            - name: TZ
+              value: "America/Chicago"
             - name: PUID
               value: "1000"
             - name: PGID
@@ -30,10 +32,17 @@ spec:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: jackett
-              mountPath: /config
             - name: nas-media
-              mountPath: /downloads
+              mountPath: /media
+            - name: radarr
+              mountPath: /config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
@@ -41,7 +50,7 @@ spec:
         - name: nas-media
           nfs:
             server: nas01.whezzel.com
-            path: /mnt/netstorage/media/downloads/.torrents
-        - name: jackett
+            path: /mnt/netstorage/media
+        - name: radarr
           persistentVolumeClaim:
-            claimName: jackett-pvc
+            claimName: radarr-pvc
