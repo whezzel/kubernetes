@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bind-deployment
+  namespace: dns
+  labels:
+    app: bind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bind
+  template:
+    metadata:
+      labels:
+        app: bind
+    spec:
+      securityContext:
+        fsGroup: 106
+      containers:
+        - name: bind
+          image: internetsystemsconsortium/bind9:9.11
+          ports:
+            - containerPort: 53
+              #protocol: UDP
+              hostPort: 53
+              name: dns
+            #  name: dns-udp
+            #- containerPort: 53
+            #  protocol: TCP
+            #  hostPort: 53
+            #  name: dns-tcp
+            - containerPort: 953
+              protocol: TCP
+              hostPort: 953
+              name: dns-rndc
+          volumeMounts:
+            - name: bind
+              mountPath: /etc/bind
+              subPath: bind
+            - name: bind
+              mountPath: /var/cache/bind
+              subPath: cache
+            - name: bind
+              mountPath: /var/lib/bind
+              subPath: lib
+            - name: bind
+              mountPath: /var/log
+              subPath: log
+      volumes:
+        - name: bind
+          persistentVolumeClaim:
+            claimName: bind-pvc
