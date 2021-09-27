@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-deployment
+  namespace: logging
+  labels:
+    app: telegraf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf
+  template:
+    metadata:
+      labels:
+        app: telegraf
+    spec:
+      containers:
+        - name: telegraf
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: HOST_ETC
+              value: "/hostfs/etc"
+            - name: HOST_PROC
+              value: "/hostfs/proc"
+            - name: HOST_SYS
+              value: "/hostfs/sys"
+            - name: HOST_VAR
+              value: "/hostfs/var"
+            - name: HOST_RUN
+              value: "/hostfs/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/hostfs"
+
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: telegraf
+              mountPath: /etc/telegraf/
+              subPath: config
+            - name: hostfs
+              mountPath: /hostfs
+              readOnly: true
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: telegraf
+          persistentVolumeClaim:
+            claimName: telegraf-pvc
+        - name: hostfs
+          hostPath:
+            path: /
