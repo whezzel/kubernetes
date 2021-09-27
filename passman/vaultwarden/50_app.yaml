@@ -39,3 +39,6 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
+        - name: vaultwarden
+          persistentVolumeClaim:
+            claimName: vaultwarden-pvc
