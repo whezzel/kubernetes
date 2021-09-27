@@ -2,3 +2,8 @@
 *.zip
 .archive/*
 .kube*
+*/*_secrets.yaml
+*/*/*_configmap.yaml
+k3s.code-workspace
+temp*
+arch/

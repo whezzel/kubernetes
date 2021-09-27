@@ -1,41 +1,42 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: radarr-deployment
-  namespace: seedbox
+  name: otrecorder-deployment
+  namespace: tracking
   labels:
-    app: radarr
+    app: otrecorder
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: radarr
+      app: otrecorder
   template:
     metadata:
       labels:
-        app: radarr
+        app: otrecorder
     spec:
       containers:
-        - name: radarr
-          image: linuxserver/radarr:latest
+        - name: otrecorder
+          image: owntracks/recorder:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 7878
+            - containerPort: 8083
           env:
-            - name: TZ
-              value: "America/Chicago"
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
+            - name: OTR_HOST
+              value: "homeassistant.whezzel.com"
+            - name: OTR_PORT
+              value: "1883"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: nas-media
-              mountPath: /media
-            - name: radarr
+            - name: otrecorder
               mountPath: /config
+              subPath: config
+            - name: otrecorder
+              mountPath: /store
+              subPath: store
           resources:
             requests:
               memory: "128Mi"
@@ -47,10 +48,6 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: nas-media
-          nfs:
-            server: nas01.whezzel.com
-            path: /mnt/netstorage/media
-        - name: radarr
+        - name: otrecorder
           persistentVolumeClaim:
-            claimName: radarr-pvc
+            claimName: otrecorder-pvc

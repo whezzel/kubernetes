@@ -1,32 +1,30 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyfin-deployment
-  namespace: mediaserver
+  name: radarr-deployment
+  namespace: seedbox
   labels:
-    app: jellyfin
+    app: radarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jellyfin
+      app: radarr
   template:
     metadata:
       labels:
-        app: jellyfin
+        app: radarr
     spec:
       containers:
-        - name: jellyfin
-          image: linuxserver/jellyfin:latest
+        - name: radarr
+          image: linuxserver/radarr:latest
           imagePullPolicy: Always
           ports:
-            - name: http
-              containerPort: 8096
-            - name: https
-              containerPort: 8920
+            - containerPort: 7878
           env:
             - name: TZ
-              value: America/Chicago
+              value: "America/Chicago"
             - name: PUID
               value: "1000"
             - name: PGID
@@ -37,17 +35,15 @@ spec:
               readOnly: true
             - name: nas-media
               mountPath: /media
-            - name: nas-ssl
-              mountPath: /ssl
-            - name: jellyfin-config
+            - name: radarr
               mountPath: /config
           resources:
             requests:
-              memory: "4Gi"
-              cpu: "2000m"
+              memory: "128Mi"
+              cpu: "250m"
             limits:
-              memory: "8Gi"
-              cpu: "4000m"
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
@@ -56,10 +52,6 @@ spec:
           nfs:
             server: nas01.whezzel.com
             path: /mnt/netstorage/media
-        - name: nas-ssl
-          nfs:
-            server: nas01.whezzel.com
-            path: /mnt/netstorage/ssl
-        - name: jellyfin-config
+        - name: radarr
           persistentVolumeClaim:
-            claimName: jellyfin-pvc
+            claimName: radarr-pvc

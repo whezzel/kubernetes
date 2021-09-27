@@ -1,26 +1,27 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lidarr-deployment
+  name: sonarr-deployment
   namespace: seedbox
   labels:
-    app: lidarr
+    app: sonarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: lidarr
+      app: sonarr
   template:
     metadata:
       labels:
-        app: lidarr
+        app: sonarr
     spec:
       containers:
-        - name: lidarr
-          image: linuxserver/lidarr:latest
+        - name: sonarr
+          image: linuxserver/sonarr:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8686
+            - containerPort: 8989
           env:
             - name: TZ
               value: "America/Chicago"
@@ -34,7 +35,7 @@ spec:
               readOnly: true
             - name: nas-media
               mountPath: /media
-            - name: lidarr
+            - name: sonarr
               mountPath: /config
           resources:
             requests:
@@ -51,6 +52,6 @@ spec:
           nfs:
             server: nas01.whezzel.com
             path: /mnt/netstorage/media
-        - name: lidarr
+        - name: sonarr
           persistentVolumeClaim:
-            claimName: lidarr-pvc
+            claimName: sonarr-pvc

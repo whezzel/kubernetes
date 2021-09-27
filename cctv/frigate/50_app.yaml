@@ -23,9 +23,6 @@ spec:
           env:
             - name: TZ
               value: America/Chicago
-          envFrom:
-            - secretRef:
-                name: frigate-encoded-secrets
           ports:
             - name: http
               containerPort: 5000

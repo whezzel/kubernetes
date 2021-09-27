@@ -2,13 +2,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: example.com-tls
+  name: whezzel.com-tls
   namespace: cert-manager
 spec:
-  secretName: example.com-tls
+  secretName: whezzel.com-tls
   issuerRef:
     name: letsencrypt-prod
     kind: Issuer
   dnsNames:
-  - example.com
-  - '*.example.com'
+  - whezzel.com
+  - '*.whezzel.com'

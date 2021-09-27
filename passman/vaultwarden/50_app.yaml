@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,10 +39,3 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: vaultwarden
-          persistentVolumeClaim:
-            claimName: vaultwarden-pvc
-        - name: nas-vaultwarden
-          nfs:
-            server: nas01.whezzel.com
-            path: /mnt/netstorage/vaultwarden

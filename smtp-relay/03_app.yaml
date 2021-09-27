@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,12 +24,6 @@ spec:
             - containerPort: 25
               protocol: TCP
               hostPort: 25
-          env:
-            - name: RELAY_NETWORKS
-              value: ":10.0.2.0/24"
-            - name: MAILNAME
-              value: "MAIL_NAME"
-            - name: GMAIL_USER
-              value: "GMAIL_ADDRESS"
-            - name: GMAIL_PASSWORD
-              value: "PASSWORD"
+          envFrom:
+            - secretRef:
+                name: smtp-secrets

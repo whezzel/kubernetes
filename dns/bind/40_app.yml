@@ -23,14 +23,13 @@ spec:
           image: internetsystemsconsortium/bind9:9.11
           ports:
             - containerPort: 53
-              #protocol: UDP
+              protocol: UDP
               hostPort: 53
-              name: dns
-            #  name: dns-udp
-            #- containerPort: 53
-            #  protocol: TCP
-            #  hostPort: 53
-            #  name: dns-tcp
+              name: dns-udp
+            - containerPort: 53
+              protocol: TCP
+              hostPort: 53
+              name: dns-tcp
             - containerPort: 953
               protocol: TCP
               hostPort: 953

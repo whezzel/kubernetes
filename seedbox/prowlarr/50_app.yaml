@@ -1,41 +1,42 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: otrecorder-deployment
-  namespace: tracking
+  name: prowlarr-deployment
+  namespace: seedbox
   labels:
-    app: otrecorder
+    app: prowlarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: otrecorder
+      app: prowlarr
   template:
     metadata:
       labels:
-        app: otrecorder
+        app: prowlarr
     spec:
       containers:
-        - name: otrecorder
-          image: owntracks/recorder:latest
+        - name: prowlarr
+          image: linuxserver/prowlarr:develop
           imagePullPolicy: Always
           ports:
-            - containerPort: 8083
+            - containerPort: 9696
           env:
-            - name: OTR_HOST
-              value: "homeassistant.whezzel.com"
-            - name: OTR_PORT
-              value: "1883"
+            - name: TZ
+              value: "America/Chicago"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: otrecorder
+            - name: nas-media
+              mountPath: /media
+            - name: prowlarr
               mountPath: /config
-              subPath: config
-            - name: otrecorder
-              mountPath: /store
-              subPath: store
           resources:
             requests:
               memory: "128Mi"
@@ -47,6 +48,10 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: otrecorder
+        - name: nas-media
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/media
+        - name: prowlarr
           persistentVolumeClaim:
-            claimName: otrecorder-pvc
+            claimName: prowlarr-pvc

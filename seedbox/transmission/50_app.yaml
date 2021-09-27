@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,17 +35,26 @@ spec:
             - name: HEALTH_CHECK_HOST
               value: "cloudflare.com"
             - name: LOCAL_NETWORK
-              value: "10.0.2.0/24,10.0.100.0/24,10.0.40.0/24"
+              valueFrom:
+                secretKeyRef:
+                  name: transmission-plain-secrets
+                  key: LOCAL_NETWORK
             - name: OPENVPN_CONFIG
               value: "us_east,us_houston,us_texas,us_florida"
             - name: OPENVPN_OPTS
               value: "--inactive 3600 --ping 10 --ping-exit 60"
             - name: OPENVPN_PASSWORD
-              value: "password"
+              valueFrom:
+                secretKeyRef:
+                  name: transmission-encoded-secrets
+                  key: OPENVPN_PASSWORD
             - name: OPENVPN_PROVIDER
               value: "PIA"
             - name: OPENVPN_USERNAME
-              value: "username"
+              valueFrom:
+                secretKeyRef:
+                  name: transmission-encoded-secrets
+                  key: OPENVPN_USERNAME
             - name: PUID
               value: "1000"
             - name: PGID
@@ -189,7 +199,10 @@ spec:
             - name: TRANSMISSION_RPC_ENABLED
               value: "true"
             - name: TRANSMISSION_RPC_HOST_WHITELIST
-              value: "*.whezzel.com"
+              valueFrom:
+                secretKeyRef:
+                  name: transmission-plain-secrets
+                  key: TRANSMISSION_RPC_HOST_WHITELIST
 #            - name: TRANSMISSION_RPC_HOST_WHITELIST_ENABLED
 #              value: "true"
 #            - name: TRANSMISSION_RPC_PASSWORD
@@ -201,7 +214,10 @@ spec:
 #            - name: TRANSMISSION_RPC_USERNAME
 #              value: ""
             - name: TRANSMISSION_RPC_WHITELIST
-              value: "127.0.0.1,10.0.2.*,10.0.9.*,10.0.40.*"
+              valueFrom:
+                secretKeyRef:
+                  name: transmission-plain-secrets
+                  key: TRANSMISSION_RPC_WHITELIST
 #            - name: TRANSMISSION_RPC_WHITELIST_ENABLED
 #              value: "true"
 ### Scheduling ###
