@@ -37,7 +37,7 @@ spec:
             - name: LOCAL_NETWORK
               valueFrom:
                 secretKeyRef:
-                  name: transmission-plain-secrets
+                  name: transmission-secrets
                   key: LOCAL_NETWORK
             - name: OPENVPN_CONFIG
               value: "us_east,us_houston,us_texas,us_florida"
@@ -46,14 +46,14 @@ spec:
             - name: OPENVPN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: transmission-encoded-secrets
+                  name: transmission-secrets
                   key: OPENVPN_PASSWORD
             - name: OPENVPN_PROVIDER
               value: "PIA"
             - name: OPENVPN_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: transmission-encoded-secrets
+                  name: transmission-secrets
                   key: OPENVPN_USERNAME
             - name: PUID
               value: "1000"
@@ -201,7 +201,7 @@ spec:
             - name: TRANSMISSION_RPC_HOST_WHITELIST
               valueFrom:
                 secretKeyRef:
-                  name: transmission-plain-secrets
+                  name: transmission-secrets
                   key: TRANSMISSION_RPC_HOST_WHITELIST
 #            - name: TRANSMISSION_RPC_HOST_WHITELIST_ENABLED
 #              value: "true"
@@ -216,7 +216,7 @@ spec:
             - name: TRANSMISSION_RPC_WHITELIST
               valueFrom:
                 secretKeyRef:
-                  name: transmission-plain-secrets
+                  name: transmission-secrets
                   key: TRANSMISSION_RPC_WHITELIST
 #            - name: TRANSMISSION_RPC_WHITELIST_ENABLED
 #              value: "true"
