@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: smtp-relay-deployment
-  namespace: smtp
+  namespace: email
   labels:
     app: smtp-relay
 spec:
@@ -26,4 +26,4 @@ spec:
               hostPort: 25
           envFrom:
             - secretRef:
-                name: smtp-secrets
+                name: email-secrets
