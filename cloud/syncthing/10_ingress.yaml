@@ -1,0 +1,66 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: syncthing-https
+  namespace: cloud
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: syncthing-headers
+  namespace: cloud
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: syncthing-ingress-http
+  namespace: cloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web   
+    traefik.ingress.kubernetes.io/router.middlewares: cloud-syncthing-https@kubernetescrd
+spec:
+  rules:
+    - host: sync.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: syncthing-service
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: syncthing-ingress-https
+  namespace: cloud
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"       
+    traefik.ingress.kubernetes.io/router.middlewares: cloud-syncthing-headers@kubernetescrd
+spec:
+  tls:
+  - secretName: whezzel.com-tls
+  rules:
+    - host: sync.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: syncthing-service
+                port:
+                  number: 80

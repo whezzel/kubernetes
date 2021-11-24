@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syncthing-deployment
+  namespace: cloud
+  labels:
+    app: syncthing
+  annotations: 
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syncthing
+  template:
+    metadata:
+      labels:
+        app: syncthing
+      name: syncthing
+    spec:
+      containers:
+        - name: syncthing
+          image: linuxserver/syncthing
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          ports:
+            - containerPort: 8384
+            - containerPort: 21027
+              hostPort: 21027
+              protocol: UDP
+            - containerPort: 22000
+              hostPort: 22000
+              protocol: TCP
+            - containerPort: 22000
+              hostPort: 22000
+              protocol: UDP
+          volumeMounts:
+            - name: syncthing
+              mountPath: /config
+              subPath: config
+            - name: nas-syncthing
+              mountPath: /backups
+      volumes:
+        - name: syncthing
+          persistentVolumeClaim:
+            claimName: syncthing-pvc
+        - name: nas-syncthing
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/backups
