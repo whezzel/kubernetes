@@ -6,6 +6,11 @@ metadata:
   namespace: seedbox
   labels:
     app: prowlarr
+  annotations: 
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
 spec:
   replicas: 1
   selector:
@@ -15,6 +20,7 @@ spec:
     metadata:
       labels:
         app: prowlarr
+      name: prowlarr
     spec:
       containers:
         - name: prowlarr
