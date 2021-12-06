@@ -46,7 +46,7 @@ spec:
                   name: transmission-secrets
                   key: LOCAL_NETWORK
             - name: OPENVPN_CONFIG
-              value: "us_east,us_houston,us_texas,us_florida"
+              value: "us_east,us_houston,us_texas"
             - name: OPENVPN_OPTS
               value: "--inactive 3600 --ping 10 --ping-exit 60"
             - name: OPENVPN_PASSWORD
@@ -180,8 +180,8 @@ spec:
 #              value: "65535"
 #            - name: TRANSMISSION_PEER_PORT_RANDOM_LOW
 #              value: "1024"
-#            - name: TRANSMISSION_PEER_PORT_RANDOM_ON_START
-#              value: "false"
+            - name: TRANSMISSION_PEER_PORT_RANDOM_ON_START
+              value: "true"
 #            - name: TRANSMISSION_PORT_FORWARDING_ENABLED
 #              value: "true"
 ### Queuing ###
