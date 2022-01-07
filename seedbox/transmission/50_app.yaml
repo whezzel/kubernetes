@@ -35,7 +35,7 @@ spec:
             - name: DISABLE_PORT_UPDATER
               value: "false"
             - name: ENABLE_UFW
-              value: "true"
+              value: "false"
             - name: GLOBAL_APPLY_PERMISSIONS
               value: "false"
             - name: HEALTH_CHECK_HOST
