@@ -38,8 +38,8 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
-            - name: DOCKER_MODS
-              value: "ghcr.io/gilbn/theme.park:jellyfin"
+#            - name: DOCKER_MODS
+#              value: "ghcr.io/gilbn/theme.park:jellyfin"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
