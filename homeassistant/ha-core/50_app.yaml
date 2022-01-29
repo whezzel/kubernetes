@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ha-core-deployment
+  namespace: homeassistant
+  labels:
+    app: ha-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ha-core
+  template:
+    metadata:
+      labels:
+        app: ha-core
+    spec:
+      containers:
+        - name: ha-core
+          image: homeassistant/home-assistant:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8123
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: ha-core
+              mountPath: /config
+              subPath: config
+          resources:
+            requests:
+              memory: "2048Mi"
+              cpu: "4000m"
+            limits:
+              memory: "4096Mi"
+              cpu: "8000m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: ha-core
+          persistentVolumeClaim:
+            claimName: ha-core-pvc

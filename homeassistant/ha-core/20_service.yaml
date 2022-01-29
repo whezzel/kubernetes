@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ha-core-service
+  namespace: homeassistant
+  annotations:
+    metallb.universe.tf/address-pool: ha-core
+spec:
+  selector:
+    app: ha-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8123
