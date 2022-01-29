@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr-deployment
+  namespace: seedbox
+  labels:
+    app: bazarr
+  annotations: 
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+      name: bazarr
+    spec:
+      containers:
+        - name: bazarr
+          image: linuxserver/bazarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6767
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: DOCKER_MODS
+              value: "ghcr.io/gilbn/theme.park:bazarr"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: nas-media
+              mountPath: /media
+            - name: bazarr
+              mountPath: /config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: nas-media
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/media
+        - name: bazarr
+          persistentVolumeClaim:
+            claimName: bazarr-pvc
