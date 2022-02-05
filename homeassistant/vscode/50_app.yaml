@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vscode-deployment
+  namespace: homeassistant
+  labels:
+    app: vscode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vscode
+  template:
+    metadata:
+      labels:
+        app: vscode
+    spec:
+      containers:
+        - name: vscode
+          image: linuxserver/code-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8443
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+#            - name: "PROXY_DOMAIN"
+#              value: "whezzel.com"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: ha-config
+              mountPath: /config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: ha-config
+          persistentVolumeClaim:
+            claimName: ha-config-pvc
