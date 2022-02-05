@@ -1,0 +1,66 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nodered-https
+  namespace: homeassistant
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nodered-headers
+  namespace: homeassistant
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nodered-ingress-http
+  namespace: homeassistant
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web   
+    traefik.ingress.kubernetes.io/router.middlewares: homeassistant-nodered-https@kubernetescrd
+spec:
+  rules:
+    - host: nodered.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nodered-service
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nodered-ingress-https
+  namespace: homeassistant
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"       
+    traefik.ingress.kubernetes.io/router.middlewares: homeassistant-nodered-headers@kubernetescrd
+spec:
+  tls:
+  - secretName: whezzel.com-tls
+  rules:
+    - host: nodered.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nodered-service
+                port:
+                  number: 80

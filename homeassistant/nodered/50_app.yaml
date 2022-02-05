@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodered-deployment
+  namespace: homeassistant
+  labels:
+    app: nodered
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodered
+  template:
+    metadata:
+      labels:
+        app: nodered
+    spec:
+      containers:
+        - name: nodered
+          image: nodered/node-red:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1880
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: nodered
+              mountPath: /data
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: nodered
+          persistentVolumeClaim:
+            claimName: nodered-pvc
