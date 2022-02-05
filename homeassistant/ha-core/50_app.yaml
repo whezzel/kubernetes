@@ -33,9 +33,8 @@ spec:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: ha-core
+            - name: ha-config
               mountPath: /config
-              subPath: config
           resources:
             requests:
               memory: "2048Mi"
@@ -47,6 +46,6 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: ha-core
+        - name: ha-config
           persistentVolumeClaim:
-            claimName: ha-core-pvc
+            claimName: ha-config-pvc
