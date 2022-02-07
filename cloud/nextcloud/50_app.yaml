@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextcloud-deployment
+  name: nextcloud
   namespace: cloud
   labels:
     app: nextcloud
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
               - containerPort: 443
+                name: webui
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -51,7 +52,7 @@ spec:
             path: /etc/localtime
         - name: nextcloud
           persistentVolumeClaim:
-            claimName: nextcloud-pvc
+            claimName: nextcloud
         - name: nas
           nfs:
             server: nas01.whezzel.com

@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: syncthing-ingress-http
+  name: syncthing-http
   namespace: cloud
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web   
@@ -36,14 +36,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: syncthing-service
+                name: syncthing
                 port:
                   number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: syncthing-ingress-https
+  name: syncthing-https
   namespace: cloud
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -61,6 +61,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: syncthing-service
+                name: syncthing
                 port:
                   number: 80

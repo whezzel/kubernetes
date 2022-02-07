@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: syncthing-pv
+  name: syncthing
   namespace: cloud
 spec:
   capacity:
-    storage: 2048Gi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -23,4 +23,4 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: cloud
-    name: syncthing-pvc
+    name: syncthing

@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nextcloud-ingress-http
+  name: nextcloud-http
   namespace: cloud
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web   
@@ -36,14 +36,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nextcloud-service
+                name: nextcloud
                 port:
                   number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nextcloud-ingress-https
+  name: nextcloud-https
   namespace: cloud
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -61,6 +61,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nextcloud-service
+                name: nextcloud
                 port:
                   number: 80
