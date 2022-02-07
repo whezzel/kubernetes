@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ha-core-deployment
+  name: ha-core
   namespace: homeassistant
   labels:
     app: ha-core
@@ -22,6 +22,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8123
+              name: webui
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -33,7 +34,7 @@ spec:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: ha-config
+            - name: ha-core
               mountPath: /config
           resources:
             requests:
@@ -46,6 +47,6 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: ha-config
+        - name: ha-core
           persistentVolumeClaim:
-            claimName: ha-config-pvc
+            claimName: ha-core

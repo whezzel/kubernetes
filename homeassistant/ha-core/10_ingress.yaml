@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ha-core-ingress-http
+  name: ha-core-http
   namespace: homeassistant
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web   
@@ -36,14 +36,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: ha-core-service
+                name: ha-core
                 port:
                   number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ha-core-ingress-https
+  name: ha-core-https
   namespace: homeassistant
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -61,6 +61,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: ha-core-service
+                name: ha-core
                 port:
                   number: 80

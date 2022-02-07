@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esphome
+  namespace: homeassistant
+  labels:
+    app: esphome
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: esphome
+  template:
+    metadata:
+      labels:
+        app: esphome
+    spec:
+      containers:
+        - name: esphome
+          image: esphome/esphome:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6052
+              name: webui
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+            - name: "ESPHOME_DASHBOARD_USE_PING"
+              value: "true"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: esphome
+              mountPath: /config
+          resources:
+            requests:
+              memory: "2048Mi"
+              cpu: "4000m"
+            limits:
+              memory: "4096Mi"
+              cpu: "8000m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: esphome
+          persistentVolumeClaim:
+            claimName: esphome

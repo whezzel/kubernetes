@@ -2,14 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: vscode-service
+  name: vscode
   namespace: homeassistant
-  annotations:
-    metallb.universe.tf/address-pool: vscode
 spec:
   selector:
     app: vscode
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8443
+      targetPort: webui

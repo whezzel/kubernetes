@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vscode-deployment
+  name: vscode
   namespace: homeassistant
   labels:
     app: vscode
@@ -22,21 +22,30 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
+              name: webui
           env:
             - name: "TZ"
               value: "America/Chicago"
             - name: "PUID"
-              value: "1000"
+              value: "0"
             - name: "PGID"
-              value: "1000"
+              value: "0"
 #            - name: "PROXY_DOMAIN"
 #              value: "whezzel.com"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: ha-config
+            - name: vscode
               mountPath: /config
+            - name: esphome
+              mountPath: /mnt/esphome
+            - name: ha-core
+              mountPath: /mnt/ha-core
+            - name: nodered
+              mountPath: /mnt/nodered
+            - name: vscode
+              mountPath: /mnt/vscode
           resources:
             requests:
               memory: "128Mi"
@@ -48,6 +57,15 @@ spec:
         - name: localtime
           hostPath:
             path: /etc/localtime
-        - name: ha-config
+        - name: esphome
           persistentVolumeClaim:
-            claimName: ha-config-pvc
+            claimName: esphome
+        - name: ha-core
+          persistentVolumeClaim:
+            claimName: ha-core
+        - name: nodered
+          persistentVolumeClaim:
+            claimName: nodered
+        - name: vscode
+          persistentVolumeClaim:
+            claimName: vscode

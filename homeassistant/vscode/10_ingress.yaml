@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vscode-ingress-http
+  name: vscode-http
   namespace: homeassistant
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web   
@@ -36,14 +36,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: vscode-service
+                name: vscode
                 port:
                   number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vscode-ingress-https
+  name: vscode-https
   namespace: homeassistant
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -61,6 +61,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: vscode-service
+                name: vscode
                 port:
                   number: 80
