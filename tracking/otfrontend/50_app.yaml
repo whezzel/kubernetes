@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: otfrontend-deployment
+  name: otfrontend
   namespace: tracking
   labels:
     app: otfrontend
@@ -22,6 +22,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+              name: webui
           env:
             - name: SERVER_HOST
               value: "otrecorder-service"
@@ -46,4 +47,4 @@ spec:
             path: /etc/localtime
         - name: otfrontend
           persistentVolumeClaim:
-            claimName: otfrontend-pvc
+            claimName: otfrontend

@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: otrecorder-pv
+  name: otrecorder
   namespace: tracking
 spec:
   capacity:
-    storage: 2Gi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -23,4 +23,4 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: tracking
-    name: otrecorder-pvc
+    name: otrecorder

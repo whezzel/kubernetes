@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: otrecorder-deployment
+  name: otrecorder
   namespace: tracking
   labels:
     app: otrecorder
@@ -22,6 +22,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8083
+              name: webui
           env:
             - name: OTR_HOST
               value: "homeassistant.whezzel.com"
@@ -50,4 +51,4 @@ spec:
             path: /etc/localtime
         - name: otrecorder
           persistentVolumeClaim:
-            claimName: otrecorder-pvc
+            claimName: otrecorder
