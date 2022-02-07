@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lidarr-deployment
+  name: lidarr
   namespace: seedbox
   labels:
     app: lidarr
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8686
+              name: webui
           env:
             - name: TZ
               value: "America/Chicago"
@@ -62,4 +63,4 @@ spec:
             path: /mnt/netstorage/media
         - name: lidarr
           persistentVolumeClaim:
-            claimName: lidarr-pvc
+            claimName: lidarr

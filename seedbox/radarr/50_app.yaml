@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: radarr-deployment
+  name: radarr
   namespace: seedbox
   labels:
     app: radarr
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 7878
+              name: webui
           env:
             - name: TZ
               value: "America/Chicago"
@@ -62,4 +63,4 @@ spec:
             path: /mnt/netstorage/media
         - name: radarr
           persistentVolumeClaim:
-            claimName: radarr-pvc
+            claimName: radarr

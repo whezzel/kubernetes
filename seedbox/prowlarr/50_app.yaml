@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prowlarr-deployment
+  name: prowlarr
   namespace: seedbox
   labels:
     app: prowlarr
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 9696
+              name: webui
           env:
             - name: TZ
               value: "America/Chicago"
@@ -62,4 +63,4 @@ spec:
             path: /mnt/netstorage/media
         - name: prowlarr
           persistentVolumeClaim:
-            claimName: prowlarr-pvc
+            claimName: prowlarr

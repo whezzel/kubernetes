@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bazarr-deployment
+  name: bazarr
   namespace: seedbox
   labels:
     app: bazarr
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 6767
+              name: webui
           env:
             - name: TZ
               value: "America/Chicago"
@@ -62,4 +63,4 @@ spec:
             path: /mnt/netstorage/media
         - name: bazarr
           persistentVolumeClaim:
-            claimName: bazarr-pvc
+            claimName: bazarr

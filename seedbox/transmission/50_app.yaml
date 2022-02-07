@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transmission-deployment
+  name: transmission
   namespace: seedbox
   labels:
     app: transmission
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 9091
+              name: webui
           env:
 ### Container Variables ###
             - name: CREATE_TUN_DEVICE
@@ -276,4 +277,4 @@ spec:
             path: /mnt/netstorage/media/downloads
         - name: transmission
           persistentVolumeClaim:
-            claimName: transmission-pvc
+            claimName: transmission
