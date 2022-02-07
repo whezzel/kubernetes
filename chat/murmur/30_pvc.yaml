@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: murmur-pvc
+  name: murmur
   namespace: chat
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Mi
-  volumeName: murmur-pv
+      storage: 5Gi
+  volumeName: murmur
   storageClassName: longhorn

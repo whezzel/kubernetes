@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: murmur-deployment
+  name: murmur
   namespace: chat
   labels:
     app: murmur
@@ -29,10 +29,10 @@ spec:
           ports:
             - containerPort: 64738
               protocol: TCP
-              hostPort: 64738
+              name: murmur-tcp
             - containerPort: 64738
               protocol: UDP
-              hostPort: 64738
+              name: murmur-udp
           env:
             - name: PUID
               value: "1000"
@@ -60,4 +60,4 @@ spec:
             path: /etc/localtime
         - name: murmur
           persistentVolumeClaim:
-            claimName: murmur-pvc
+            claimName: murmur
