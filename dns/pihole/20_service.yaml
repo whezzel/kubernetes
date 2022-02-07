@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-web
+  namespace: dns
+spec:
+  selector:
+    app: pihole
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: webui
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-dns
+  namespace: dns
+spec:
+  selector:
+    app: pihole
+  ports:
+    - protocol: UDP
+      port: 5353
+      targetPort: dns-udp
+      name: dns-udp
+    - protocol: TCP
+      port: 5353
+      targetPort: dns-tcp
+      name: dns-tcp

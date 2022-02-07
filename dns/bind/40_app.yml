@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bind-deployment
+  name: bind
   namespace: dns
   labels:
     app: bind
@@ -24,15 +24,12 @@ spec:
           ports:
             - containerPort: 53
               protocol: UDP
-              hostPort: 53
               name: dns-udp
             - containerPort: 53
               protocol: TCP
-              hostPort: 53
               name: dns-tcp
             - containerPort: 953
               protocol: TCP
-              hostPort: 953
               name: dns-rndc
           volumeMounts:
             - name: bind
@@ -50,4 +47,4 @@ spec:
       volumes:
         - name: bind
           persistentVolumeClaim:
-            claimName: bind-pvc
+            claimName: bind
