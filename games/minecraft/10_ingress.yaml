@@ -1,0 +1,66 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: dynmap-https
+  namespace: games
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: dynmap-headers
+  namespace: games
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dynmap-http
+  namespace: games
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web   
+    traefik.ingress.kubernetes.io/router.middlewares: games-dynmap-https@kubernetescrd
+spec:
+  rules:
+    - host: dynmap.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dynmap
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dynmap-https
+  namespace: games
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"       
+    traefik.ingress.kubernetes.io/router.middlewares: games-dynmap-headers@kubernetescrd
+spec:
+  tls:
+  - secretName: whezzel.com-tls
+  rules:
+    - host: dynmap.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dynmap
+                port:
+                  number: 80
