@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grafana-deployment
+  name: grafana
   namespace: logging
   labels:
     app: grafana
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+              name: webui
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -80,4 +81,4 @@ spec:
             path: /etc/localtime
         - name: grafana
           persistentVolumeClaim:
-            claimName: grafana-pvc
+            claimName: grafana

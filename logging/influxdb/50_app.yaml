@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: influxdb-deployment
+  name: influxdb
   namespace: logging
   labels:
     app: influxdb
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8086
+              name: webui
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -44,4 +45,4 @@ spec:
             path: /etc/localtime
         - name: influxdb
           persistentVolumeClaim:
-            claimName: influxdb-pvc
+            claimName: influxdb
