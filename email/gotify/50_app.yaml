@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gotify-deployment
+  name: gotify
   namespace: email
   labels:
     app: gotify
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+              name: webui
           env:
             - name: TZ
               value: "America/Chicago"
@@ -50,4 +51,4 @@ spec:
             path: /etc/localtime
         - name: gotify
           persistentVolumeClaim:
-            claimName: gotify-pvc
+            claimName: gotify

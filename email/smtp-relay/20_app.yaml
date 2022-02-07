@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: smtp-relay-deployment
+  name: smtp-relay
   namespace: email
   labels:
     app: smtp-relay
@@ -29,7 +29,7 @@ spec:
           ports:
             - containerPort: 25
               protocol: TCP
-              hostPort: 25
+              name: smtp
           envFrom:
             - secretRef:
                 name: email-secrets
