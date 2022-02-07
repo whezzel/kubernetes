@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vaultwarden-deployment
+  name: vaultwarden
   namespace: passman
   labels:
     app: vaultwarden
@@ -28,7 +28,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+              name: webui
             - containerPort: 3012
+              name: websocket
           env:
             - name: WEBSOCKET_ENABLED
               value: "true"
@@ -47,4 +49,4 @@ spec:
             path: /etc/localtime
         - name: vaultwarden
           persistentVolumeClaim:
-            claimName: vaultwarden-pvc
+            claimName: vaultwarden

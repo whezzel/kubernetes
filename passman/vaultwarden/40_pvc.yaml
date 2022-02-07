@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: vaultwarden-pvc
+  name: vaultwarden
   namespace: passman
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 50Mi
-  volumeName: vaultwarden-pv
+      storage: 5Gi
+  volumeName: vaultwarden
   storageClassName: longhorn
