@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jellyfin-ingress-http
+  name: jellyfin-http
   namespace: mediaserver
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web   
@@ -36,14 +36,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: jellyfin-service
+                name: jellyfin
                 port:
                   number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: jellyfin-ingress-https
+  name: jellyfin-https
   namespace: mediaserver
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -61,6 +61,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: jellyfin-service
+                name: jellyfin
                 port:
                   number: 80

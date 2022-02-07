@@ -8,3 +8,9 @@
 k3s.code-workspace
 temp*
 arch/
+glusterfs/
+nginx/
+traefik/
+metallb/
+kube-system/
+default/
