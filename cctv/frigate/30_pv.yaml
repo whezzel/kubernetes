@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: frigate-pv
+  name: frigate
   namespace: cctv
 spec:
   capacity:
@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: longhorn-sas
+  storageClassName: longhorn
   csi:
     driver: driver.longhorn.io
     fsType: ext4
@@ -23,4 +23,4 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: cctv
-    name: frigate-pvc
+    name: frigate

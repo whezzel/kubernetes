@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shinobi-deployment
+  name: shinobi
   namespace: cctv
   labels:
     app: shinobi
@@ -28,6 +28,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+              name: webui
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -57,7 +58,7 @@ spec:
             path: /dev/shm/shinobi-streams
         - name: shinobi
           persistentVolumeClaim:
-            claimName: shinobi-pvc
+            claimName: shinobi
         - name: nas-shinobi
           nfs:
             server: nas01.whezzel.com
