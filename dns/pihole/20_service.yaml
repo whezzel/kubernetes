@@ -16,17 +16,32 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pihole-dns
+  name: pihole-udp
   namespace: dns
 spec:
   selector:
     app: pihole
   ports:
     - protocol: UDP
+      name: dns-udp
       port: 5353
       targetPort: dns-udp
-      name: dns-udp
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-tcp
+  namespace: dns
+spec:
+  selector:
+    app: pihole
+  ports:
     - protocol: TCP
+      name: dns-tcp
       port: 5353
       targetPort: dns-tcp
-      name: dns-tcp
+  type: LoadBalancer
+  sessionAffinity: ClientIP
