@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  namespace: homeassistant
+  labels:
+    app: mosquitto
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      nodeSelector:
+        capacity: high
+      containers:
+        - name: mosquitto
+          image: eclipse-mosquitto:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1883
+              name: mqtt
+#            - containerPort: 9001
+#              name: websocket
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: mosquitto
+              mountPath: /mosquitto/config
+              subPath: config
+            - name: mosquitto
+              mountPath: /mosquitto/data
+              subPath: data
+            - name: mosquitto
+              mountPath: /mosquitto/log
+              subPath: log
+          resources:
+            requests:
+              memory: "2048Mi"
+              cpu: "4000m"
+            limits:
+              memory: "4096Mi"
+              cpu: "8000m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: mosquitto
+          persistentVolumeClaim:
+            claimName: mosquitto
