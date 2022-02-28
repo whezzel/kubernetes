@@ -6,7 +6,7 @@ metadata:
   namespace: cctv
   labels:
     app: frigate
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,6 +22,8 @@ spec:
         app: frigate
       name: frigate
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: frigate
           image: blakeblackshear/frigate:stable-amd64
@@ -30,7 +32,7 @@ spec:
             - name: TZ
               value: America/Chicago
           ports:
-            - name: webui
+            - name: http
               containerPort: 5000
               protocol: TCP
             - name: rtmp
@@ -51,7 +53,7 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 30
             failureThreshold: 5
-            timeoutSeconds: 10             
+            timeoutSeconds: 10
           volumeMounts:
             - name: config
               mountPath: /config

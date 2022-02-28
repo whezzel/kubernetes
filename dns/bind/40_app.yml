@@ -16,6 +16,8 @@ spec:
       labels:
         app: bind
     spec:
+      nodeSelector:
+        dnscap: 'yes'
       securityContext:
         fsGroup: 106
       containers:
@@ -25,12 +27,15 @@ spec:
             - containerPort: 53
               protocol: UDP
               name: dns-udp
+#              hostPort: 53
             - containerPort: 53
               protocol: TCP
               name: dns-tcp
+#              hostPort: 53
             - containerPort: 953
               protocol: TCP
               name: dns-rndc
+#              hostPort: 953
           volumeMounts:
             - name: bind
               mountPath: /etc/bind

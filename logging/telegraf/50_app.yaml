@@ -6,7 +6,7 @@ metadata:
   namespace: logging
   labels:
     app: telegraf
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,6 +22,8 @@ spec:
         app: telegraf
       name: telegraf
     spec:
+      nodeSelector:
+        host: archserv01
       containers:
         - name: telegraf
           image: library/telegraf:latest

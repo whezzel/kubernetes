@@ -6,7 +6,7 @@ metadata:
   namespace: email
   labels:
     app: smtp-relay
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,6 +22,8 @@ spec:
         app: smtp-relay
       name: smtp-relay
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: smtp-relay
           image: namshi/smtp:latest

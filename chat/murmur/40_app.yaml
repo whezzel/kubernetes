@@ -6,7 +6,7 @@ metadata:
   namespace: chat
   labels:
     app: murmur
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,6 +22,8 @@ spec:
         app: murmur
       name: murmur
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: murmur
           image: goofball222/murmur:latest

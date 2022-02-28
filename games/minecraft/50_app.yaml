@@ -6,7 +6,7 @@ metadata:
   namespace: games
   labels:
     app: minecraft
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,6 +22,8 @@ spec:
         app: minecraft
       name: minecraft
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: minecraft
           image: itzg/minecraft-server:latest

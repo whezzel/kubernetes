@@ -6,6 +6,11 @@ metadata:
   namespace: homeassistant
   labels:
     app: vscode
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
 spec:
   replicas: 1
   selector:
@@ -16,13 +21,15 @@ spec:
       labels:
         app: vscode
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: vscode
           image: linuxserver/code-server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
-              name: webui
+              name: http
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -30,6 +37,10 @@ spec:
               value: "0"
             - name: "PGID"
               value: "0"
+            - name: "GIT_SSH_COMMAND"
+              value: "ssh -4"
+            - name: "DEFAULT_WORKSPACE"
+              value: "/mnt"
 #            - name: "PROXY_DOMAIN"
 #              value: "whezzel.com"
           volumeMounts:
@@ -46,6 +57,8 @@ spec:
               mountPath: /mnt/nodered
             - name: vscode
               mountPath: /mnt/vscode
+            - name: ssh-config-d
+              mountPath: /etc/ssh/ssh_config.d
           resources:
             requests:
               memory: "128Mi"
@@ -69,3 +82,6 @@ spec:
         - name: vscode
           persistentVolumeClaim:
             claimName: vscode
+        - name: ssh-config-d
+          secret:
+            secretName: ssh-config-d

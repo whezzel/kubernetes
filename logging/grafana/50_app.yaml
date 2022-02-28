@@ -6,7 +6,7 @@ metadata:
   namespace: logging
   labels:
     app: grafana
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,13 +22,15 @@ spec:
         app: grafana
       name: grafana
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: grafana
           image: grafana/grafana:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-              name: webui
+              name: http
           readinessProbe:
             failureThreshold: 3
             httpGet:

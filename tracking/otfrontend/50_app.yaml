@@ -16,16 +16,18 @@ spec:
       labels:
         app: otfrontend
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: otfrontend
           image: owntracks/frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
-              name: webui
+              name: http
           env:
             - name: SERVER_HOST
-              value: "otrecorder-service"
+              value: "otrecorder"
             - name: SERVER_PORT
               value: "80"
           volumeMounts:

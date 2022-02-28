@@ -16,18 +16,23 @@ spec:
       labels:
         app: otrecorder
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: otrecorder
           image: owntracks/recorder:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8083
-              name: webui
+              name: http
           env:
             - name: OTR_HOST
-              value: "homeassistant.whezzel.com"
+              value: "mosquitto-tcp.homeassistant"
             - name: OTR_PORT
               value: "1883"
+          envFrom:
+            - secretRef:
+                name: tracking-secrets
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime

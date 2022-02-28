@@ -6,6 +6,11 @@ metadata:
   namespace: homeassistant
   labels:
     app: ha-core
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
 spec:
   replicas: 1
   selector:
@@ -16,13 +21,15 @@ spec:
       labels:
         app: ha-core
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: ha-core
           image: homeassistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123
-              name: webui
+              name: http
           env:
             - name: "TZ"
               value: "America/Chicago"

@@ -6,7 +6,7 @@ metadata:
   namespace: cloud
   labels:
     app: nextcloud
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,13 +22,15 @@ spec:
         app: nextcloud
       name: nextcloud
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: nextcloud
           image: linuxserver/nextcloud:latest
           imagePullPolicy: Always
           ports:
               - containerPort: 443
-                name: webui
+                name: http
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime

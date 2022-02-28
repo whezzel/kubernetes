@@ -6,7 +6,7 @@ metadata:
   namespace: logging
   labels:
     app: influxdb
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,13 +22,23 @@ spec:
         app: influxdb
       name: influxdb
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: influxdb
           image: library/influxdb:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8086
-              name: webui
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 5
+            timeoutSeconds: 10
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime

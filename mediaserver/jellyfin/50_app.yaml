@@ -6,7 +6,7 @@ metadata:
   namespace: mediaserver
   labels:
     app: jellyfin
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,6 +22,8 @@ spec:
         app: jellyfin
       name: jellyfin
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: jellyfin
           image: linuxserver/jellyfin:latest

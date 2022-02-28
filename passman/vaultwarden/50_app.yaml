@@ -6,7 +6,7 @@ metadata:
   namespace: passman
   labels:
     app: vaultwarden
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,15 +22,41 @@ spec:
         app: vaultwarden
       name: vaultwarden
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: vaultwarden
           image: vaultwarden/server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
-              name: webui
+              name: http
             - containerPort: 3012
               name: websocket
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 3
+            failureThreshold: 5
           env:
             - name: WEBSOCKET_ENABLED
               value: "true"

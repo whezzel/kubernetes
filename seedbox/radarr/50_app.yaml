@@ -6,7 +6,7 @@ metadata:
   namespace: seedbox
   labels:
     app: radarr
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,21 +22,39 @@ spec:
         app: radarr
       name: radarr
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: radarr
           image: linuxserver/radarr:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 7878
-              name: webui
+              name: http
           livenessProbe:
             httpGet:
               path: /
-              port: webui
-            initialDelaySeconds: 60
-            periodSeconds: 5
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 3
             failureThreshold: 5
-            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 3
+            failureThreshold: 5
           env:
             - name: TZ
               value: "America/Chicago"

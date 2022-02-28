@@ -6,7 +6,7 @@ metadata:
   namespace: email
   labels:
     app: gotify
-  annotations: 
+  annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
@@ -22,13 +22,15 @@ spec:
         app: gotify
       name: gotify
     spec:
+      nodeSelector:
+        capacity: high
       containers:
         - name: gotify
           image: gotify/server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
-              name: webui
+              name: http
           env:
             - name: TZ
               value: "America/Chicago"
