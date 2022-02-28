@@ -10,8 +10,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: webui
-
+      targetPort: http
 ---
 apiVersion: v1
 kind: Service
@@ -32,7 +31,6 @@ spec:
       targetPort: sync-udp
   type: LoadBalancer
   sessionAffinity: ClientIP
-
 ---
 apiVersion: v1
 kind: Service

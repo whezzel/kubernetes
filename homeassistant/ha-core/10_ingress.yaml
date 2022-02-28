@@ -1,32 +1,12 @@
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: ha-core-https
-  namespace: homeassistant
-spec:
-  redirectScheme:
-    scheme: https
-    permanent: true
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: ha-core-headers
-  namespace: homeassistant
-spec:
-  headers:
-    customRequestHeaders:
-      X-Forwarded-Proto: "https"
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ha-core-http
   namespace: homeassistant
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web   
-    traefik.ingress.kubernetes.io/router.middlewares: homeassistant-ha-core-https@kubernetescrd
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.middlewares: default-https-redirect@kubernetescrd
 spec:
   rules:
     - host: ha-core.whezzel.com
@@ -48,8 +28,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"       
-    traefik.ingress.kubernetes.io/router.middlewares: homeassistant-ha-core-headers@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: default-headers@kubernetescrd
 spec:
   tls:
   - secretName: whezzel.com-tls

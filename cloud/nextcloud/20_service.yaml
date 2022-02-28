@@ -11,4 +11,4 @@ spec:
     - name: https
       protocol: TCP
       port: 80
-      targetPort: webui
+      targetPort: http
