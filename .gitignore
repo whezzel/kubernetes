@@ -3,7 +3,7 @@
 *.zip
 .archive/*
 .kube*
-*/*_secrets.yaml
+**secrets.yaml
 */*/*_configmap.yaml
 k3s.code-workspace
 temp*
@@ -13,4 +13,3 @@ nginx/
 traefik/
 metallb/
 kube-system/
-default/
