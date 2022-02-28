@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi
+  namespace: wifi
+spec:
+  selector:
+    app: unifi
+  ports:
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: webadmin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi-tcp
+  namespace: wifi
+spec:
+  selector:
+    app: unifi
+  ports:
+    - protocol: TCP
+      name: mobile-tput-tcp
+      port: 6789
+      targetPort: mobile-tput-tcp
+    - protocol: TCP
+      name: dvc-comms-tcp
+      port: 8080
+      targetPort: dvc-comms-tcp
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi-udp
+  namespace: wifi
+spec:
+  selector:
+    app: unifi
+  ports:
+    - protocol: UDP
+      name: stun
+      port: 3478
+      targetPort: stun
+    - protocol: UDP
+      name: mobile-tput-udp
+      port: 6789
+      targetPort: mobile-tput-udp
+    - protocol: UDP
+      name: dvc-comms-udp
+      port: 8080
+      targetPort: dvc-comms-udp
+    - protocol: UDP
+      name: ap-discovery
+      port: 10001
+      targetPort: ap-discovery
+  type: LoadBalancer
+  sessionAffinity: ClientIP
