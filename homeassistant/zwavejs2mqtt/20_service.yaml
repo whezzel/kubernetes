@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zwavejs2mqtt
+  namespace: homeassistant
+spec:
+  selector:
+    app: zwavejs2mqtt
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zwavejs2mqtt-tcp
+  namespace: homeassistant
+spec:
+  selector:
+    app: zwavejs2mqtt
+  ports:
+    - protocol: TCP
+      name: websocket
+      port: 3000
+      targetPort: websocket
+  type: LoadBalancer
+  sessionAffinity: ClientIP

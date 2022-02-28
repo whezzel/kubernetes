@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zwavejs2mqtt
+  namespace: homeassistant
+  labels:
+    app: zwavejs2mqtt
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zwavejs2mqtt
+  template:
+    metadata:
+      labels:
+        app: zwavejs2mqtt
+    spec:
+      nodeSelector:
+        allowed: zwave
+      containers:
+        - name: zwavejs2mqtt
+          securityContext:
+            privileged: true
+          image: zwavejs/zwavejs2mqtt:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8091
+              name: http
+            - containerPort: 3000
+              name: websocket
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+#            - name: zwave
+#              mountPath: /dev/zwave
+            - name: zwavejs2mqtt
+              mountPath: /usr/src/app/store
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+#        - name: zwave
+#          hostPath:
+#            path: /dev/serial/by-id/usb-Silicon_Labs_Zooz_ZST10 700_Z-Wave_Stick_0001-if00-port0
+        - name: zwavejs2mqtt
+          persistentVolumeClaim:
+            claimName: zwavejs2mqtt
