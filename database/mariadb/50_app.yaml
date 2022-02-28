@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: database
+  labels:
+    app: mariadb
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      nodeSelector:
+        capacity: high
+      containers:
+        - name: mariadb
+          image: linuxserver/mariadb:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+              name: mariadb-tcp
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+#            - name: "MYSQL_ROOT_PASSWORD"
+#              valueFrom:
+#                secretKeyRef:
+#                  name: database-secrets
+#                  key: MYSQL_ROOT_PASSWORD
+#            - name: "MYSQL_DATABASE"
+#              valueFrom:
+#                secretKeyRef:
+#                  name: database-secrets
+#                  key: MYSQL_DATABASE
+#            - name: "MYSQL_USER"
+#              valueFrom:
+#                secretKeyRef:
+#                  name: database-secrets
+#                  key: MYSQL_USER
+#            - name: "MYSQL_PASSWORD"
+#              valueFrom:
+#                secretKeyRef:
+#                  name: database-secrets
+#                  key: MYSQL_PASSWORD
+#          envFrom:
+#            - secretRef:
+#                name: database-secrets
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: mariadb
+              mountPath: /config
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "1000m"
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: mariadb
+          persistentVolumeClaim:
+            claimName: mariadb
