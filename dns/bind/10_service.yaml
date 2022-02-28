@@ -14,7 +14,6 @@ spec:
       targetPort: dns-udp
   type: LoadBalancer
   sessionAffinity: ClientIP
-
 ---
 apiVersion: v1
 kind: Service
