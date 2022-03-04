@@ -9,7 +9,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: default-https-redirect@kubernetescrd
 spec:
   rules:
-    - host: z2m.whezzel.com
+    - host: zj2m.whezzel.com
       http:
         paths:
           - path: /
@@ -34,7 +34,7 @@ spec:
   tls:
   - secretName: whezzel.com-tls
   rules:
-    - host: z2m.whezzel.com
+    - host: zj2m.whezzel.com
       http:
         paths:
           - path: /
