@@ -8,6 +8,11 @@ spec:
   selector:
     app: frigate
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: http
+    - name: rtmp
+      protocol: TCP
+      port: 1935
+      targetPort: rtmp

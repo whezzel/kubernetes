@@ -18,23 +18,34 @@ spec:
       app: frigate
   template:
     metadata:
+      name: frigate
       labels:
         app: frigate
-      name: frigate
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: frigate
-          image: blakeblackshear/frigate:stable-amd64
+          securityContext:
+            privileged: true
+          #image: blakeblackshear/frigate:stable-amd64
+          image: blakeblackshear/frigate:stable-amd64nvidia
           imagePullPolicy: Always
           env:
             - name: TZ
               value: America/Chicago
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,utility,video
+          envFrom:
+            - secretRef:
+                name: frigate
           ports:
             - name: http
               containerPort: 5000
               protocol: TCP
+              hostPort: 5000
             - name: rtmp
               containerPort: 1935
               protocol: TCP
@@ -57,17 +68,23 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: data
-              mountPath: /data
+            - name: nas-frigate
+              mountPath: /media/frigate/
+            - name: db
+              mountPath: /mnt/db
             - name: dshm
               mountPath: /dev/shm
       volumes:
         - name: config
           configMap:
             name: frigate
-        - name: data
+        - name: db
           persistentVolumeClaim:
             claimName: frigate
+        - name: nas-frigate
+          nfs:
+            server: nas01.whezzel.com
+            path: /mnt/netstorage/frigate
         - name: dshm
           emptyDir:
             medium: Memory
