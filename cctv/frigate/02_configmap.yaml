@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frigate
+  namespace: cctv
+data:
+  config.yml: |
+    mqtt:
+      # Required: mqtt-server host name
+      host: mqtt.whezzel.com
+      port: 1883
+      topic_prefix: frigate
+      user: frigate
+      password: '{FRIGATE_MQTT_PASSWORD}'
+    #detectors:
+      # coral:
+      #   type: edgetpu
+      #   device: usb
+      #cpu1:
+      #  type: cpu
+      #  num_threads: 3
+    database:
+      path: /mnt/db/frigate.db
+      # Optional: Object configuration
+    objects:
+      track:
+        - person
+        #- car
+        - cat
+        - dog
+    cameras:
+      cam1:
+        ffmpeg:
+          input_args:
+            - -c:v
+            - h264_cuvid
+            - -rtsp_transport
+            - tcp
+          inputs:
+            - path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam1.whezzel.com:554/cam/realmonitor?channel=1&subtype=0'
+              #hwaccel_args: -hwaccel qsv
+              roles:
+                - record
+                - rtmp
+            - path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam1.whezzel.com:554/cam/realmonitor?channel=1&subtype=1'
+              roles:
+                - detect
+                #- record
+                #- rtmp
+        record:
+          enabled: True
+        snapshots:
+          enabled: True
+          bounding_box: True
+        detect:
+          width: 640
+          height: 480
+          #width: 2304
+          #height: 1296
+          fps: 10
+        motion:
+          mask:
+            - 640,0,640,236,0,232,0,0
+        objects:
+          filters:
+            person:
+              mask:
+                - 83,320,128,322,130,266,82,267
+        #live:
+          #height: 1296
+          #quality: 8
