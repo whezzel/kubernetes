@@ -6,7 +6,7 @@ metadata:
   namespace: email
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: default-https-redirect@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-https-redirect@kubernetescrd
 spec:
   rules:
     - host: gotify.whezzel.com
@@ -29,7 +29,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.middlewares: default-headers@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-headers@kubernetescrd
 spec:
   tls:
   - secretName: whezzel.com-tls
