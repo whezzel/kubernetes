@@ -26,6 +26,10 @@ spec:
         kubernetes.io/hostname: archserv01
       containers:
         - name: frigate
+          lifecycle:
+            postStart:
+              exec:
+                command: ['sh', '-c', "apt update; apt install libnvidia-encode-510 -y"]
           securityContext:
             privileged: true
           #image: blakeblackshear/frigate:stable-amd64
