@@ -18,12 +18,12 @@ spec:
       app: murmur
   template:
     metadata:
+      name: murmur
       labels:
         app: murmur
-      name: murmur
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: murmur
           image: goofball222/murmur:latest
@@ -56,6 +56,13 @@ spec:
             - name: murmur
               mountPath: /opt/murmur/log
               subPath: log
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
