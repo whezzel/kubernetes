@@ -18,13 +18,16 @@ spec:
       app: zigbee2mqtt
   template:
     metadata:
+      name: zigbee2mqtt
       labels:
         app: zigbee2mqtt
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archpi01
       containers:
         - name: zigbee2mqtt
+          securityContext:
+            privileged: true
           image: koenkk/zigbee2mqtt:latest
           imagePullPolicy: Always
           ports:
@@ -35,24 +38,30 @@ spec:
               value: "America/Chicago"
           envFrom:
             - secretRef:
-                name: homeassistant-secrets
+                name: zigbee2mqtt-secrets
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
+              readOnly: true
+            - name: dev
+              mountPath: /dev
               readOnly: true
             - name: zigbee2mqtt
               mountPath: /app/data
           resources:
             requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
               memory: "256Mi"
               cpu: "500m"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
       volumes:
         - name: localtime
           hostPath:
             path: /etc/localtime
+        - name: dev
+          hostPath:
+            path: /dev
         - name: zigbee2mqtt
           persistentVolumeClaim:
             claimName: zigbee2mqtt

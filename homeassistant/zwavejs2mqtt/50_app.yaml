@@ -18,11 +18,12 @@ spec:
       app: zwavejs2mqtt
   template:
     metadata:
+      name: zwavejs2mqtt
       labels:
         app: zwavejs2mqtt
     spec:
       nodeSelector:
-        allowed: zwave
+        kubernetes.io/hostname: archpi01
       containers:
         - name: zwavejs2mqtt
           securityContext:
@@ -41,24 +42,27 @@ spec:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
+            - name: dev
+              mountPath: /dev
+              readOnly: true
 #            - name: zwave
 #              mountPath: /dev/zwave
             - name: zwavejs2mqtt
               mountPath: /usr/src/app/store
           resources:
             requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
               memory: "256Mi"
               cpu: "500m"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
       volumes:
         - name: localtime
           hostPath:
             path: /etc/localtime
-#        - name: zwave
-#          hostPath:
-#            path: /dev/serial/by-id/usb-Silicon_Labs_Zooz_ZST10 700_Z-Wave_Stick_0001-if00-port0
+        - name: dev
+          hostPath:
+            path: /dev
         - name: zwavejs2mqtt
           persistentVolumeClaim:
             claimName: zwavejs2mqtt
