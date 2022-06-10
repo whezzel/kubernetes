@@ -1,0 +1,80 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole01
+  namespace: dns
+  labels:
+    app: pihole01
+#  annotations:
+#    keel.sh/policy: force
+#    keel.sh/match-tag: "true"
+#    keel.sh/trigger: poll
+#    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole01
+  template:
+    metadata:
+      name: pihole01
+      labels:
+        app: pihole01
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv01
+      containers:
+        - name: pihole01
+          image: pihole/pihole:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 53
+              hostPort: 5353
+              protocol: TCP
+              name: dns-tcp
+            - containerPort: 53
+              hostPort: 5353
+              protocol: UDP
+              name: dns-udp
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+            - name: "PIHOLE_DNS_"
+              value: "1.1.1.1;1.0.0.1"
+            - name: "DNS_FQDN_REQUIRED"
+              value: "true"
+            - name: "DNSSEC"
+              value: "true"
+            - name: "DNS_BOGUS_PRIV"
+              value: "true"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: pihole01
+              mountPath: /etc/pihole
+              subPath: pihole
+            - name: pihole01
+              mountPath: /etc/dnsmasq.d
+              subPath: dnsmasq
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: pihole01
+          persistentVolumeClaim:
+            claimName: pihole01
