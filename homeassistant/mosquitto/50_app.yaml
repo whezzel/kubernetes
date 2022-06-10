@@ -18,11 +18,12 @@ spec:
       app: mosquitto
   template:
     metadata:
+      name: mosquitto
       labels:
         app: mosquitto
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: mosquitto
           image: eclipse-mosquitto:latest
@@ -54,11 +55,11 @@ spec:
               subPath: log
           resources:
             requests:
-              memory: "2048Mi"
-              cpu: "4000m"
+              memory: "128Mi"
+              cpu: "250m"
             limits:
-              memory: "4096Mi"
-              cpu: "8000m"
+              memory: "256Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:

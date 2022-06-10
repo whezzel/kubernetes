@@ -18,12 +18,12 @@ spec:
       app: vaultwarden
   template:
     metadata:
+      name: vaultwarden
       labels:
         app: vaultwarden
-      name: vaultwarden
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: vaultwarden
           image: vaultwarden/server:latest
@@ -69,6 +69,13 @@ spec:
             - name: vaultwarden
               mountPath: /data
               subPath: data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:

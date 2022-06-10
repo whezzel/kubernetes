@@ -18,12 +18,12 @@ spec:
       app: gotify
   template:
     metadata:
+      name: gotify
       labels:
         app: gotify
-      name: gotify
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: gotify
           image: gotify/server:latest
@@ -45,7 +45,7 @@ spec:
               memory: "128Mi"
               cpu: "250m"
             limits:
-              memory: "512Mi"
+              memory: "256Mi"
               cpu: "500m"
       volumes:
         - name: localtime

@@ -18,11 +18,12 @@ spec:
       app: esphome
   template:
     metadata:
+      name: esphome
       labels:
         app: esphome
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: esphome
           image: esphome/esphome:latest
@@ -47,11 +48,11 @@ spec:
               mountPath: /config
           resources:
             requests:
-              memory: "2048Mi"
-              cpu: "4000m"
+              memory: "2Gi"
+              cpu: "2"
             limits:
-              memory: "4096Mi"
-              cpu: "8000m"
+              memory: "4Gi"
+              cpu: "4"
       volumes:
         - name: localtime
           hostPath:

@@ -18,11 +18,12 @@ spec:
       app: nodered
   template:
     metadata:
+      name: nodered
       labels:
         app: nodered
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: nodered
           image: nodered/node-red:latest
@@ -45,11 +46,11 @@ spec:
               mountPath: /data
           resources:
             requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
               memory: "256Mi"
               cpu: "500m"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
       volumes:
         - name: localtime
           hostPath:

@@ -18,12 +18,12 @@ spec:
       app: syncthing
   template:
     metadata:
+      name: syncthing
       labels:
         app: syncthing
-      name: syncthing
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: syncthing
           image: linuxserver/syncthing
@@ -53,6 +53,13 @@ spec:
               subPath: config
             - name: nas-syncthing
               mountPath: /backups
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
       volumes:
         - name: syncthing
           persistentVolumeClaim:

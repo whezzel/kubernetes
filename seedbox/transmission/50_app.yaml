@@ -18,12 +18,12 @@ spec:
       app: transmission
   template:
     metadata:
+      name: transmission
       labels:
         app: transmission
-      name: transmission
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: transmission
           image: haugene/transmission-openvpn:latest
@@ -287,7 +287,7 @@ spec:
               memory: "128Mi"
               cpu: "250m"
             limits:
-              memory: "512Mi"
+              memory: "256Mi"
               cpu: "500m"
           securityContext:
             capabilities:
