@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtlamr2mqtt
+  namespace: homeassistant
+  labels:
+    app: rtlamr2mqtt
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtlamr2mqtt
+  template:
+    metadata:
+      name: rtlamr2mqtt
+      labels:
+        app: rtlamr2mqtt
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archpi01
+      containers:
+        - name: rtlamr2mqtt
+          securityContext:
+            privileged: true
+          image: allangood/rtlamr2mqtt:1.7.2
+          imagePullPolicy: Always
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+            #- name: "LISTEN_ONLY"
+            #  value: "yes"
+            #- name: "RTL_MSGTYPE"
+            #  value: "all"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: usb
+              mountPath: /dev/bus/usb
+              readOnly: true
+            - name: rtlamr2mqtt-yaml
+              mountPath: "/etc/rtlamr2mqtt.yaml"
+              subPath: rtlamr2mqtt.yaml
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: usb
+          hostPath:
+            path: /dev/bus/usb
+        - name: rtlamr2mqtt-yaml
+          configMap:
+            name: rtlamr2mqtt-yaml

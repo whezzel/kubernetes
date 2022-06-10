@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rtlamr2mqtt-yaml
+  namespace: homeassistant
+data:
+  rtlamr2mqtt.yaml: |
+    ---
+    general:
+      # Sleep for this amount of seconds after one successful of every meter
+      # Set this to 0 (default) to disable it
+      sleep_for: 0
+      # Set the verbosity level. It can be debug or info
+      verbosity: debug
+      device_id: '0bda:2838'
+
+    mqtt:
+      # MQTT host name or IP address
+      host: mosquitto-tcp.homeassistant
+      # MQTT port
+      port: 1883
+      # MQTT user name if you have, remove if you don't use authentication
+      user: rtlamr2mqtt
+      # MQTT user password if you use one, remove if you don't use authentication
+      password: DZt*2K43q^KjAZ&9o8z*#gsLQ*3G&h8QW@R$9r#p^tonR9d2
+      # Whether to use Home Assistant auto-discovery feature or not
+      ha_autodiscovery: true
+      # Home Assistant auto-discovery topic
+      ha_autodiscovery_topic: homeassistant
+      base_topic: 'rtlamr'
+
+    # (Optional)
+    # This entire section is optional.
+    # If you don't need any custom parameter, don't use it.
+    # ***DO NOT ADD -msgtype, -filterid nor -protocol parameters here***
+    custom_parameters:
+      # Documentation for rtl_tcp: https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr
+      rtltcp: "-s 2048000"
+      # Documentation for rtlamr: https://github.com/bemasher/rtlamr/wiki/Configuration
+      rtlamr: "-unique=true -symbollength=32"
+
+    # (Required section)
+    # Here is the place to define your meters
+    meters:
+      # The ID of your meter
+      - id: 1546747850
+        # Protocol: scm, scm+, idm, netidm, r900 and r900bcd
+        protocol: R900
+        # A nice name to show on your Home Assistant/Node Red
+        name: water_meter
+        # A number format to be used for your meter
+        format: "#####.###"
+        # A measurement unit to be used by Home Assistant
+        unit_of_measurement: "\u33A5"
+        # An icon to be used by Home Assistant
+        icon: mdi:gauge
