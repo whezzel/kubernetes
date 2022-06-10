@@ -18,36 +18,57 @@ spec:
       app: nextcloud
   template:
     metadata:
+      name: nextcloud
       labels:
         app: nextcloud
-      name: nextcloud
     spec:
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: nextcloud
-          image: linuxserver/nextcloud:latest
+          image: nextcloud:latest
           imagePullPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                command: ['sh', '-c', "apt update && apt install -y libmagickcore-6.q16-3-extra"]
           ports:
-              - containerPort: 443
+              - containerPort: 80
+                #hostPort: 8081
                 name: http
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
             - name: nextcloud
-              mountPath: /config
+              mountPath: /var/www/html
+              subPath: nextcloud
+            - name: nextcloud
+              mountPath: /var/www/html/custom_apps
+              subPath: apps
+            - name: nextcloud
+              mountPath: /var/www/html/config
               subPath: config
             - name: nextcloud
-              mountPath: /data
+              mountPath: /var/www/html/data
               subPath: data
+            - name: nextcloud
+              mountPath: /var/www/html/themes
+              subPath: themes
             - name: nas
               mountPath: /mnt/netstorage
           env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
+#            - name: APACHE_DISABLE_REWRITE_IP
+#              value: "1"
+            - name: TRUSTED_PROXIES
+              value: "10.42.0.0/16 10.43.0.0/16"
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "2"
+            limits:
+              memory: "2Gi"
+              cpu: "4"
       volumes:
         - name: localtime
           hostPath:
