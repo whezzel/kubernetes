@@ -9,7 +9,17 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-https-redirect@kubernetescrd
 spec:
   rules:
-    - host: archserv01.whezzel.com
+    #- host: transmission.whezzel.com
+    #  http:
+    #    paths:
+    #      - path: /
+    #        pathType: Prefix
+    #        backend:
+    #          service:
+    #            name: transmission
+    #            port:
+    #              number: 80
+    - host: transmission.whezzel.com
       http:
         paths:
           - path: /transmission
@@ -34,7 +44,7 @@ spec:
   tls:
   - secretName: whezzel.com-tls
   rules:
-    - host: archserv01.whezzel.com
+    - host: transmission.whezzel.com
       http:
         paths:
           - path: /transmission
@@ -44,3 +54,13 @@ spec:
                 name: transmission
                 port:
                   number: 80
+    #- host: transmission.whezzel.com
+    #  http:
+    #    paths:
+    #      - path: /
+    #        pathType: Prefix
+    #        backend:
+    #          service:
+    #            name: transmission
+    #            port:
+    #              number: 80
