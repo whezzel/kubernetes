@@ -5,6 +5,7 @@ metadata:
   name: skooner
   namespace: kube-system
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: skooner
   ports:

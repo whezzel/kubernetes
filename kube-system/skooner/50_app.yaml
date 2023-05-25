@@ -22,8 +22,6 @@ spec:
       labels:
         app: skooner
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: skooner
           image: ghcr.io/skooner-k8s/skooner:stable
@@ -45,11 +43,8 @@ spec:
           resources:
             requests:
               memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago

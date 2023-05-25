@@ -17,3 +17,13 @@ subjects:
 - kind: ServiceAccount
   name: skooner
   namespace: kube-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: skooner
+  namespace: kube-system
+  annotations:
+    kubernetes.io/service-account.name: skooner
+type: kubernetes.io/service-account-token
+
