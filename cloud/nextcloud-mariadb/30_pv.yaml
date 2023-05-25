@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mariadb-nextcloud
+  name: nextcloud-mariadb
   namespace: cloud
 spec:
   capacity:
-    storage: 20Gi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -18,9 +18,9 @@ spec:
     volumeAttributes:
       numberOfReplicas: '1'
       staleReplicaTimeout: '2880'
-    volumeHandle: mariadb-nextcloud
+    volumeHandle: nextcloud-mariadb
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: cloud
-    name: mariadb-nextcloud
+    name: nextcloud-mariadb

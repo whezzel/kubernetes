@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mariadb-nextcloud
+  name: nextcloud-mariadb
   namespace: cloud
   labels:
-    app: mariadb-nextcloud
+    app: nextcloud-mariadb
 #  annotations:
 #    keel.sh/policy: force
 #    keel.sh/match-tag: "true"
@@ -15,18 +15,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mariadb-nextcloud
+      app: nextcloud-mariadb
   template:
     metadata:
-      name: mariadb-nextcloud
+      name: nextcloud-mariadb
       labels:
-        app: mariadb-nextcloud
+        app: nextcloud-mariadb
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
-        - name: mariadb-nextcloud
-          image: linuxserver/mariadb:latest
+        - name: nextcloud-mariadb
+          image: lscr.io/linuxserver/mariadb:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3306
@@ -40,24 +38,21 @@ spec:
               value: "1000"
 #          envFrom:
 #            - secretRef:
-#                name: mariadb-nextcloud
+#                name: nextcloud-mariadb
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: mariadb-nextcloud
+            - name: nextcloud-mariadb
               mountPath: /config
           resources:
             requests:
-              memory: "1G"
-              cpu: "2"
-            limits:
-              memory: "2Gi"
-              cpu: "4"
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
-        - name: mariadb-nextcloud
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: nextcloud-mariadb
           persistentVolumeClaim:
-            claimName: mariadb-nextcloud
+            claimName: nextcloud-mariadb
