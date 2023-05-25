@@ -5,6 +5,7 @@ metadata:
   name: nodered
   namespace: homeassistant
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: nodered
   ports:

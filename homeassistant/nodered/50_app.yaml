@@ -22,8 +22,6 @@ spec:
       labels:
         app: nodered
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: nodered
           image: nodered/node-red:latest
@@ -46,15 +44,12 @@ spec:
               mountPath: /data
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "350Mi"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: nodered
           persistentVolumeClaim:
             claimName: nodered
