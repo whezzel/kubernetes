@@ -18,6 +18,8 @@ spec:
       app: esphome
   template:
     metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: default/macvlan-conf
       name: esphome
       labels:
         app: esphome
@@ -26,7 +28,7 @@ spec:
         kubernetes.io/hostname: archserv01
       containers:
         - name: esphome
-          image: esphome/esphome:latest
+          image: ghcr.io/esphome/esphome:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 6052
@@ -39,7 +41,7 @@ spec:
             - name: "PGID"
               value: "1000"
             - name: "ESPHOME_DASHBOARD_USE_PING"
-              value: "true"
+              value: "false"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -48,15 +50,15 @@ spec:
               mountPath: /config
           resources:
             requests:
-              memory: "2Gi"
-              cpu: "2"
+              memory: "400Mi"
+              cpu: "1"
             limits:
               memory: "4Gi"
               cpu: "4"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: esphome
           persistentVolumeClaim:
             claimName: esphome
