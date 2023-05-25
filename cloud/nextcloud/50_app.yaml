@@ -22,19 +22,12 @@ spec:
       labels:
         app: nextcloud
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: nextcloud
           image: nextcloud:latest
           imagePullPolicy: Always
-          lifecycle:
-            postStart:
-              exec:
-                command: ['sh', '-c', "apt update && apt install -y libmagickcore-6.q16-3-extra"]
           ports:
               - containerPort: 80
-                #hostPort: 8081
                 name: http
           volumeMounts:
             - name: localtime
@@ -58,25 +51,22 @@ spec:
             - name: nas
               mountPath: /mnt/netstorage
           env:
-#            - name: APACHE_DISABLE_REWRITE_IP
-#              value: "1"
             - name: TRUSTED_PROXIES
               value: "10.42.0.0/16 10.43.0.0/16"
+            - name: OVERWRITEPROTOCOL
+              value: "https"
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "2"
-            limits:
-              memory: "2Gi"
-              cpu: "4"
+              memory: "512Mi"
+              cpu: "1"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: nextcloud
           persistentVolumeClaim:
             claimName: nextcloud
         - name: nas
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/
