@@ -22,26 +22,23 @@ spec:
       labels:
         app: frigate
     spec:
+      runtimeClassName: nvidia
       nodeSelector:
         kubernetes.io/hostname: archserv01
       containers:
         - name: frigate
-          lifecycle:
-            postStart:
-              exec:
-                command: ['sh', '-c', "apt update; apt install libnvidia-encode-510 -y"]
           securityContext:
             privileged: true
-          #image: blakeblackshear/frigate:stable-amd64
-          image: blakeblackshear/frigate:stable-amd64nvidia
+          image: ghcr.io/blakeblackshear/frigate:stable
+#          image: blakeblackshear/frigate:stable-amd64nvidia
           imagePullPolicy: Always
           env:
-            - name: TZ
-              value: America/Chicago
             - name: NVIDIA_VISIBLE_DEVICES
               value: all
             - name: NVIDIA_DRIVER_CAPABILITIES
-              value: compute,utility,video
+              value: all
+            - name: TZ
+              value: America/Chicago
           envFrom:
             - secretRef:
                 name: frigate
@@ -49,9 +46,8 @@ spec:
             - name: http
               containerPort: 5000
               protocol: TCP
-              hostPort: 5000
-            - name: rtmp
-              containerPort: 1935
+            - name: rtsp
+              containerPort: 8554
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -70,6 +66,12 @@ spec:
             failureThreshold: 5
             timeoutSeconds: 10
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: dev-usb
+              mountPath: /dev/usb
+              readOnly: true
             - name: config
               mountPath: /config
             - name: nas-frigate
@@ -78,7 +80,17 @@ spec:
               mountPath: /mnt/db
             - name: dshm
               mountPath: /dev/shm
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "4"
       volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: dev-usb
+          hostPath:
+            path: /dev/usb
         - name: config
           configMap:
             name: frigate
@@ -87,7 +99,7 @@ spec:
             claimName: frigate
         - name: nas-frigate
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/frigate
         - name: dshm
           emptyDir:
