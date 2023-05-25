@@ -9,6 +9,6 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 50Gi
+      storage: 2Gi
   volumeName: nextcloud
   storageClassName: longhorn

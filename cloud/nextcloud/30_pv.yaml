@@ -6,7 +6,7 @@ metadata:
   namespace: cloud
 spec:
   capacity:
-    storage: 50Gi
+    storage: 2Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
