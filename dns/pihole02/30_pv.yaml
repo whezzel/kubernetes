@@ -6,7 +6,7 @@ metadata:
   namespace: dns
 spec:
   capacity:
-    storage: 5Gi
+    storage: 2Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce

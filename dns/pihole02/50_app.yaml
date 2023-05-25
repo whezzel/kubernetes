@@ -6,11 +6,11 @@ metadata:
   namespace: dns
   labels:
     app: pihole02
-#  annotations:
-#    keel.sh/policy: force
-#    keel.sh/match-tag: "true"
-#    keel.sh/trigger: poll
-#    keel.sh/pollSchedule: "@every 12h"
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
 spec:
   replicas: 1
   selector:
@@ -23,11 +23,11 @@ spec:
         app: pihole02
     spec:
       nodeSelector:
-        kubernetes.io/hostname: archpi03
+        kubernetes.io/hostname: archserv05
       containers:
         - name: pihole02
-          image: docker.io/pihole/pihole:latest
-          imagePullPolicy: IfNotPresent
+          image: pihole/pihole:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http
@@ -47,21 +47,15 @@ spec:
             - name: "PGID"
               value: "1000"
             - name: "PIHOLE_DNS_"
-              value: "10.0.2.20;10.0.2.10;2600:1700:3c00:635f:2::20;2600:1700:3c00:635f:2::10"
-#            - name: "PIHOLE_DNS_"
-#              value: "1.1.1.1;1.0.0.1"
+              value: "10.69.20.11;10.69.20.12"
             - name: "DNS_FQDN_REQUIRED"
               value: "false"
-#            - name: "DNS_FQDN_REQUIRED"
-#              value: "true"
             - name: "DNSSEC"
               value: "false"
             - name: "CUSTOM_CACHE_SIZE"
               value: "0"
             - name: "DNS_BOGUS_PRIV"
               value: "false"
-#            - name: "DNS_BOGUS_PRIV"
-#              value: "true"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -76,9 +70,6 @@ spec:
             requests:
               memory: "512Mi"
               cpu: "100m"
-#            limits:
-#              memory: "256Mi"
-#              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:

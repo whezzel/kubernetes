@@ -5,41 +5,10 @@ metadata:
   name: pihole02-web
   namespace: dns
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: pihole02
   ports:
     - protocol: TCP
       port: 80
       targetPort: http
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: pihole-udp
-#  namespace: dns
-#spec:
-#  selector:
-#    app: pihole
-#  ports:
-#    - protocol: UDP
-#      name: dns-udp
-#      port: 5353
-#      targetPort: dns-udp
-#  type: LoadBalancer
-#  sessionAffinity: ClientIP
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: pihole-tcp
-#  namespace: dns
-#spec:
-#  selector:
-#    app: pihole
-#  ports:
-#    - protocol: TCP
-#      name: dns-tcp
-#      port: 5353
-#      targetPort: dns-tcp
-#  type: LoadBalancer
-#  sessionAffinity: ClientIP
