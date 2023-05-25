@@ -64,14 +64,11 @@ spec:
           resources:
             requests:
               memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: hostfs
           hostPath:
             path: /
@@ -82,10 +79,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: telegraf-archpi01
+  name: telegraf-archserv02
   namespace: logging
   labels:
-    app: telegraf-archpi01
+    app: telegraf-archserv02
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
@@ -95,269 +92,29 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: telegraf-archpi01
+      app: telegraf-archserv02
   template:
     metadata:
-      name: telegraf-archpi01
+      name: telegraf-archserv02
       labels:
-        app: telegraf-archpi01
+        app: telegraf-archserv02
     spec:
       nodeSelector:
-        kubernetes.io/hostname: archpi01
-      securityContext:
-        runAsUser: 999
-        runAsGroup: 973
-        fsGroup: 999
-      containers:
-        - name: telegraf-archpi01
-          image: library/telegraf:latest
-          imagePullPolicy: Always
-          env:
-            - name: ARCHPI01_INFLUXDB_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: telegraf-secrets
-                  key: ARCHPI01_INFLUXDB_TOKEN
-            - name: HOST_ETC
-              value: "/hostfs/etc"
-            - name: HOST_PROC
-              value: "/hostfs/proc"
-            - name: HOST_SYS
-              value: "/hostfs/sys"
-            - name: HOST_VAR
-              value: "/hostfs/var"
-            - name: HOST_RUN
-              value: "/hostfs/run"
-            - name: HOST_MOUNT_PREFIX
-              value: "/hostfs"
-          volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
-            - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
-              readOnly: true
-              subPath: telegraf.conf
-            - name: hostfs
-              mountPath: /hostfs
-              readOnly: true
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
-      volumes:
-        - name: localtime
-          hostPath:
-            path: /etc/localtime
-        - name: hostfs
-          hostPath:
-            path: /
-        - name: telegraf
-          configMap:
-            name: telegraf-archpi01
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: telegraf-archpi02
-  namespace: logging
-  labels:
-    app: telegraf-archpi02
-  annotations:
-    keel.sh/policy: force
-    keel.sh/match-tag: "true"
-    keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: telegraf-archpi02
-  template:
-    metadata:
-      name: telegraf-archpi02
-      labels:
-        app: telegraf-archpi02
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: archpi02
-      securityContext:
-        runAsUser: 999
-        runAsGroup: 973
-        fsGroup: 999
-      containers:
-        - name: telegraf-archpi02
-          image: library/telegraf:latest
-          imagePullPolicy: Always
-          env:
-            - name: ARCHPI02_INFLUXDB_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: telegraf-secrets
-                  key: ARCHPI02_INFLUXDB_TOKEN
-            - name: HOST_ETC
-              value: "/hostfs/etc"
-            - name: HOST_PROC
-              value: "/hostfs/proc"
-            - name: HOST_SYS
-              value: "/hostfs/sys"
-            - name: HOST_VAR
-              value: "/hostfs/var"
-            - name: HOST_RUN
-              value: "/hostfs/run"
-            - name: HOST_MOUNT_PREFIX
-              value: "/hostfs"
-          volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
-            - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
-              readOnly: true
-              subPath: telegraf.conf
-            - name: hostfs
-              mountPath: /hostfs
-              readOnly: true
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
-      volumes:
-        - name: localtime
-          hostPath:
-            path: /etc/localtime
-        - name: hostfs
-          hostPath:
-            path: /
-        - name: telegraf
-          configMap:
-            name: telegraf-archpi02
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: telegraf-archpi03
-  namespace: logging
-  labels:
-    app: telegraf-archpi03
-  annotations:
-    keel.sh/policy: force
-    keel.sh/match-tag: "true"
-    keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: telegraf-archpi03
-  template:
-    metadata:
-      name: telegraf-archpi03
-      labels:
-        app: telegraf-archpi03
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: archpi03
-      securityContext:
-        runAsUser: 999
-        runAsGroup: 973
-        fsGroup: 999
-      containers:
-        - name: telegraf-archpi03
-          image: library/telegraf:latest
-          imagePullPolicy: Always
-          env:
-            - name: ARCHPI03_INFLUXDB_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: telegraf-secrets
-                  key: ARCHPI03_INFLUXDB_TOKEN
-            - name: HOST_ETC
-              value: "/hostfs/etc"
-            - name: HOST_PROC
-              value: "/hostfs/proc"
-            - name: HOST_SYS
-              value: "/hostfs/sys"
-            - name: HOST_VAR
-              value: "/hostfs/var"
-            - name: HOST_RUN
-              value: "/hostfs/run"
-            - name: HOST_MOUNT_PREFIX
-              value: "/hostfs"
-          volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
-            - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
-              readOnly: true
-              subPath: telegraf.conf
-            - name: hostfs
-              mountPath: /hostfs
-              readOnly: true
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
-      volumes:
-        - name: localtime
-          hostPath:
-            path: /etc/localtime
-        - name: hostfs
-          hostPath:
-            path: /
-        - name: telegraf
-          configMap:
-            name: telegraf-archpi03
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: telegraf-nas01
-  namespace: logging
-  labels:
-    app: telegraf-nas01
-  annotations:
-    keel.sh/policy: force
-    keel.sh/match-tag: "true"
-    keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: telegraf-nas01
-  template:
-    metadata:
-      name: telegraf-nas01
-      labels:
-        app: telegraf-nas01
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: nas01
+        kubernetes.io/hostname: archserv02
       securityContext:
         runAsUser: 999
         runAsGroup: 964
         fsGroup: 999
       containers:
-        - name: telegraf-nas01
+        - name: telegraf-archserv02
           image: library/telegraf:latest
           imagePullPolicy: Always
           env:
-            - name: NAS01_INFLUXDB_TOKEN
+            - name: ARCHSERV02_INFLUXDB_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: telegraf-secrets
-                  key: NAS01_INFLUXDB_TOKEN
+                  key: ARCHSERV02_INFLUXDB_TOKEN
             - name: HOST_ETC
               value: "/hostfs/etc"
             - name: HOST_PROC
@@ -384,17 +141,245 @@ spec:
           resources:
             requests:
               memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: hostfs
           hostPath:
             path: /
         - name: telegraf
           configMap:
-            name: telegraf-nas01
+            name: telegraf-archserv02
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-archserv03
+  namespace: logging
+  labels:
+    app: telegraf-archserv03
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-archserv03
+  template:
+    metadata:
+      name: telegraf-archserv03
+      labels:
+        app: telegraf-archserv03
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv03
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 973
+        fsGroup: 999
+      containers:
+        - name: telegraf-archserv03
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: ARCHSERV03_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegraf-secrets
+                  key: ARCHSERV03_INFLUXDB_TOKEN
+            - name: HOST_ETC
+              value: "/hostfs/etc"
+            - name: HOST_PROC
+              value: "/hostfs/proc"
+            - name: HOST_SYS
+              value: "/hostfs/sys"
+            - name: HOST_VAR
+              value: "/hostfs/var"
+            - name: HOST_RUN
+              value: "/hostfs/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/hostfs"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: telegraf
+              mountPath: "/etc/telegraf/telegraf.conf"
+              readOnly: true
+              subPath: telegraf.conf
+            - name: hostfs
+              mountPath: /hostfs
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: hostfs
+          hostPath:
+            path: /
+        - name: telegraf
+          configMap:
+            name: telegraf-archserv03
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-archserv04
+  namespace: logging
+  labels:
+    app: telegraf-archserv04
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-archserv04
+  template:
+    metadata:
+      name: telegraf-archserv04
+      labels:
+        app: telegraf-archserv04
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv04
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 973
+        fsGroup: 999
+      containers:
+        - name: telegraf-archserv04
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: ARCHSERV04_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegraf-secrets
+                  key: ARCHSERV04_INFLUXDB_TOKEN
+            - name: HOST_ETC
+              value: "/hostfs/etc"
+            - name: HOST_PROC
+              value: "/hostfs/proc"
+            - name: HOST_SYS
+              value: "/hostfs/sys"
+            - name: HOST_VAR
+              value: "/hostfs/var"
+            - name: HOST_RUN
+              value: "/hostfs/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/hostfs"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: telegraf
+              mountPath: "/etc/telegraf/telegraf.conf"
+              readOnly: true
+              subPath: telegraf.conf
+            - name: hostfs
+              mountPath: /hostfs
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: hostfs
+          hostPath:
+            path: /
+        - name: telegraf
+          configMap:
+            name: telegraf-archserv04
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-archserv05
+  namespace: logging
+  labels:
+    app: telegraf-archserv05
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-archserv05
+  template:
+    metadata:
+      name: telegraf-archserv05
+      labels:
+        app: telegraf-archserv05
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv05
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 973
+        fsGroup: 999
+      containers:
+        - name: telegraf-archserv05
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: ARCHSERV05_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegraf-secrets
+                  key: ARCHSERV05_INFLUXDB_TOKEN
+            - name: HOST_ETC
+              value: "/hostfs/etc"
+            - name: HOST_PROC
+              value: "/hostfs/proc"
+            - name: HOST_SYS
+              value: "/hostfs/sys"
+            - name: HOST_VAR
+              value: "/hostfs/var"
+            - name: HOST_RUN
+              value: "/hostfs/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/hostfs"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: telegraf
+              mountPath: "/etc/telegraf/telegraf.conf"
+              readOnly: true
+              subPath: telegraf.conf
+            - name: hostfs
+              mountPath: /hostfs
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: hostfs
+          hostPath:
+            path: /
+        - name: telegraf
+          configMap:
+            name: telegraf-archserv05

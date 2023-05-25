@@ -51,7 +51,7 @@ data:
       [[inputs.mem]]
       [[inputs.net]]
         #ignore_protocol_stats = true
-        #interfaces = ["eno[1-4]"]
+        interfaces = ["eno1","eno2","eno3","eno4","bond0","br0-bond0"]
       [[inputs.processes]]
       [[inputs.sensors]]
       [[inputs.swap]]
@@ -71,7 +71,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: telegraf-archpi01
+  name: telegraf-archserv03
   namespace: logging
 data:
   telegraf.conf: |
@@ -92,11 +92,11 @@ data:
       # logfile_rotation_interval = "0d"
       # logfile_rotation_max_size = "0MB"
       # logfile_rotation_max_archives = 5
-      hostname = "archpi01.whezzel.com"
+      hostname = "archserv03.whezzel.com"
       omit_hostname = false
      [[outputs.influxdb_v2]]
         urls = ["http://influxdb.logging:80"]
-        token = "${ARCHPI01_INFLUXDB_TOKEN}"
+        token = "${ARCHSERV03_INFLUXDB_TOKEN}"
         organization = "whezzel.com"
         bucket = "telegraf"
         insecure_skip_verify = true
@@ -123,13 +123,13 @@ data:
       [[inputs.swap]]
       [[inputs.system]]
       #[[inputs.hddtemp]]
-      #  address = "archpi01.whezzel.com:7634"
+      #  address = "archserv03.whezzel.com:7634"
       #  devices = ["*"]
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: telegraf-archpi02
+  name: telegraf-archserv04
   namespace: logging
 data:
   telegraf.conf: |
@@ -150,11 +150,11 @@ data:
       # logfile_rotation_interval = "0d"
       # logfile_rotation_max_size = "0MB"
       # logfile_rotation_max_archives = 5
-      hostname = "archpi02.whezzel.com"
+      hostname = "archserv04.whezzel.com"
       omit_hostname = false
      [[outputs.influxdb_v2]]
         urls = ["http://influxdb.logging:80"]
-        token = "${ARCHPI02_INFLUXDB_TOKEN}"
+        token = "${ARCHSERV04_INFLUXDB_TOKEN}"
         organization = "whezzel.com"
         bucket = "telegraf"
         insecure_skip_verify = true
@@ -181,13 +181,13 @@ data:
       [[inputs.swap]]
       [[inputs.system]]
       #[[inputs.hddtemp]]
-      #  address = "archpi02.whezzel.com:7634"
+      #  address = "archserv04.whezzel.com:7634"
       #  devices = ["*"]
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: telegraf-archpi03
+  name: telegraf-archserv05
   namespace: logging
 data:
   telegraf.conf: |
@@ -208,11 +208,11 @@ data:
       # logfile_rotation_interval = "0d"
       # logfile_rotation_max_size = "0MB"
       # logfile_rotation_max_archives = 5
-      hostname = "archpi02.whezzel.com"
+      hostname = "archserv05.whezzel.com"
       omit_hostname = false
      [[outputs.influxdb_v2]]
         urls = ["http://influxdb.logging:80"]
-        token = "${ARCHPI03_INFLUXDB_TOKEN}"
+        token = "${ARCHSERV05_INFLUXDB_TOKEN}"
         organization = "whezzel.com"
         bucket = "telegraf"
         insecure_skip_verify = true
@@ -239,13 +239,13 @@ data:
       [[inputs.swap]]
       [[inputs.system]]
       #[[inputs.hddtemp]]
-      #  address = "archpi03.whezzel.com:7634"
+      #  address = "archserv05.whezzel.com:7634"
       #  devices = ["*"]
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: telegraf-nas01
+  name: telegraf-archserv02
   namespace: logging
 data:
   telegraf.conf: |
@@ -266,11 +266,11 @@ data:
       # logfile_rotation_interval = "0d"
       # logfile_rotation_max_size = "0MB"
       # logfile_rotation_max_archives = 5
-      hostname = "nas01.whezzel.com"
+      hostname = "archserv02.whezzel.com"
       omit_hostname = false
      [[outputs.influxdb_v2]]
         urls = ["http://influxdb.logging:80"]
-        token = "${NAS01_INFLUXDB_TOKEN}"
+        token = "${ARCHSERV02_INFLUXDB_TOKEN}"
         organization = "whezzel.com"
         bucket = "telegraf"
         insecure_skip_verify = true
@@ -305,5 +305,5 @@ data:
      #  # gather_views = false
      #  # timeout = "4s"
       [[inputs.hddtemp]]
-        address = "nas01.whezzel.com:7634"
+        address = "archserv02.whezzel.com:7634"
         devices = ["*"]
