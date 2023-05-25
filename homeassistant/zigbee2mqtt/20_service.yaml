@@ -5,25 +5,10 @@ metadata:
   name: zigbee2mqtt
   namespace: homeassistant
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: zigbee2mqtt
   ports:
     - protocol: TCP
       port: 80
       targetPort: http
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: zigbee2mqtt-tcp
-#  namespace: homeassistant
-#spec:
-#  selector:
-#    app: zigbee2mqtt
-#  ports:
-#    - protocol: TCP
-#      name: websocket
-#      port: 3000
-#      targetPort: websocket
-#  type: LoadBalancer
-#  sessionAffinity: ClientIP
