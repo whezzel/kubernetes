@@ -5,6 +5,7 @@ metadata:
   name: mosquitto-tcp
   namespace: homeassistant
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: mosquitto
   ports:
