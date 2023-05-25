@@ -18,15 +18,13 @@ spec:
       app: lidarr
   template:
     metadata:
+      name: lidarr
       labels:
         app: lidarr
-      name: lidarr
     spec:
-      nodeSelector:
-        capacity: high
       containers:
         - name: lidarr
-          image: linuxserver/lidarr:latest
+          image: lscr.io/linuxserver/lidarr:develop
           imagePullPolicy: Always
           ports:
             - containerPort: 8686
@@ -62,8 +60,6 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
-            - name: DOCKER_MODS
-              value: "ghcr.io/gilbn/theme.park:lidarr"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -74,18 +70,15 @@ spec:
               mountPath: /config
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "256Mi"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/media
         - name: lidarr
           persistentVolumeClaim:
