@@ -5,6 +5,7 @@ metadata:
   name: frigate
   namespace: cctv
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: frigate
   ports:
@@ -12,7 +13,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: http
-    - name: rtmp
+    - name: rtsp
       protocol: TCP
-      port: 1935
-      targetPort: rtmp
+      port: 8554
+      targetPort: rtsp
