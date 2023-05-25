@@ -5,6 +5,7 @@ metadata:
   name: rtlamr2mqtt
   namespace: homeassistant
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: rtlamr2mqtt
   ports:

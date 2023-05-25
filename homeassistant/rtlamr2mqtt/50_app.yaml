@@ -23,12 +23,12 @@ spec:
         app: rtlamr2mqtt
     spec:
       nodeSelector:
-        kubernetes.io/hostname: archpi01
+        kubernetes.io/hostname: archserv03
       containers:
         - name: rtlamr2mqtt
           securityContext:
             privileged: true
-          image: allangood/rtlamr2mqtt:1.7.2
+          image: allangood/rtlamr2mqtt:latest
           imagePullPolicy: Always
           env:
             - name: "TZ"
@@ -37,10 +37,10 @@ spec:
               value: "1000"
             - name: "PGID"
               value: "1000"
-            #- name: "LISTEN_ONLY"
-            #  value: "yes"
-            #- name: "RTL_MSGTYPE"
-            #  value: "all"
+          #  - name: "LISTEN_ONLY"
+          #    value: "yes"
+          #  - name: "RTL_MSGTYPE"
+          #    value: "all"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -50,18 +50,16 @@ spec:
               readOnly: true
             - name: rtlamr2mqtt-yaml
               mountPath: "/etc/rtlamr2mqtt.yaml"
+              readOnly: true
               subPath: rtlamr2mqtt.yaml
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "1"
-            limits:
-              memory: "2Gi"
-              cpu: "2"
+              memory: "128Mi"
+              cpu: "800m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: usb
           hostPath:
             path: /dev/bus/usb
