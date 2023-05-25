@@ -5,6 +5,7 @@ metadata:
   name: nextcloud
   namespace: cloud
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: nextcloud
   ports:
