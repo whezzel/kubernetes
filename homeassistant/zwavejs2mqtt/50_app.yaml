@@ -23,7 +23,7 @@ spec:
         app: zwavejs2mqtt
     spec:
       nodeSelector:
-        kubernetes.io/hostname: archpi01
+        kubernetes.io/hostname: archserv03
       containers:
         - name: zwavejs2mqtt
           securityContext:
@@ -45,21 +45,16 @@ spec:
             - name: dev
               mountPath: /dev
               readOnly: true
-#            - name: zwave
-#              mountPath: /dev/zwave
             - name: zwavejs2mqtt
               mountPath: /usr/src/app/store
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
               memory: "256Mi"
-              cpu: "500m"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: dev
           hostPath:
             path: /dev
