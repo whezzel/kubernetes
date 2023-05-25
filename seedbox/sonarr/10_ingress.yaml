@@ -32,7 +32,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-headers@kubernetescrd
 spec:
   tls:
-  - secretName: whezzel.com-tls
+    - secretName: whezzel.com-tls
   rules:
     - host: sonarr.whezzel.com
       http:

@@ -5,6 +5,7 @@ metadata:
   name: sonarr
   namespace: seedbox
 spec:
+  ipFamilyPolicy: PreferDualStack
   selector:
     app: sonarr
   ports:
