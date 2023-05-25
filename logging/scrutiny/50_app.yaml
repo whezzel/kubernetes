@@ -1,0 +1,346 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-master-web
+  namespace: logging
+  labels:
+    app: scrutiny-master-web
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-master-web
+  template:
+    metadata:
+      name: scrutiny-master-web
+      labels:
+        app: scrutiny-master-web
+    spec:
+      containers:
+        - name: scrutiny-master-web
+          image: ghcr.io/analogj/scrutiny:master-web
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SCRUTINY_WEB_INFLUXDB_HOST
+              value: "influxdb.logging"
+            - name: SCRUTINY_WEB_INFLUXDB_PORT
+              value: "80"
+            - name: SCRUTINY_WEB_INFLUXDB_TOKEN
+              value: "cej-JmPc3MajbW3hR-OIgUVmKtUeun_uHHEFed7_TpZqhpegaqBy_XkbNE1oR-1tJgw6Qntnxm6xNrGMd8NZxQ=="
+            - name: SCRUTINY_WEB_INFLUXDB_ORG
+              value: "whezzel.com"
+            - name: SCRUTINY_WEB_INFLUXDB_BUCKET
+              value: "scrutiny"
+            - name: SCRUTINY_NOTIFY_URLS
+              value: "gotify://gotify.email/AfhL.dgYJqB9UHm?disabletls=yes"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: scrutiny
+              mountPath: /opt/scrutiny/config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: scrutiny
+          persistentVolumeClaim:
+            claimName: scrutiny
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-archserv01
+  namespace: logging
+  labels:
+    app: scrutiny-collector-archserv01
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-archserv01
+  template:
+    metadata:
+      name: scrutiny-collector-archserv01
+      labels:
+        app: scrutiny-collector-archserv01
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv01
+      containers:
+        - name: scrutiny-collector-archserv01
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-archserv01
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-archserv02
+  namespace: logging
+  labels:
+    app: scrutiny-collector-archserv02
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-archserv02
+  template:
+    metadata:
+      name: scrutiny-collector-archserv02
+      labels:
+        app: scrutiny-collector-archserv02
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv02
+      containers:
+        - name: scrutiny-collector-archserv02
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-archserv02
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-archserv03
+  namespace: logging
+  labels:
+    app: scrutiny-collector-archserv03
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-archserv03
+  template:
+    metadata:
+      name: scrutiny-collector-archserv03
+      labels:
+        app: scrutiny-collector-archserv03
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv03
+      containers:
+        - name: scrutiny-collector-archserv03
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-archserv03
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-archserv04
+  namespace: logging
+  labels:
+    app: scrutiny-collector-archserv04
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-archserv04
+  template:
+    metadata:
+      name: scrutiny-collector-archserv04
+      labels:
+        app: scrutiny-collector-archserv04
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv04
+      containers:
+        - name: scrutiny-collector-archserv04
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-archserv04
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-archserv05
+  namespace: logging
+  labels:
+    app: scrutiny-collector-archserv05
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-archserv05
+  template:
+    metadata:
+      name: scrutiny-collector-archserv05
+      labels:
+        app: scrutiny-collector-archserv05
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: archserv05
+      containers:
+        - name: scrutiny-collector-archserv05
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-archserv05

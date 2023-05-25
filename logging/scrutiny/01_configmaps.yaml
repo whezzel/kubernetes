@@ -1,0 +1,223 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-collector-archserv01
+  namespace: logging
+data:
+  collector.yaml: |
+    version: 1
+    host:
+      id: "archserv01"
+    devices:
+      - device: /dev/sdm
+        ignore: true
+      - device: /dev/sdn
+        ignore: true
+      - device: /dev/sdo
+        ignore: true
+      - device: /dev/sdp
+        ignore: true
+      - device: /dev/sdq
+        ignore: true
+      - device: /dev/sdr
+        ignore: true
+      - device: /dev/sds
+        ignore: true
+      - device: /dev/sdt
+        ignore: true
+      - device: /dev/sdu
+        ignore: true
+      - device: /dev/sdv
+        ignore: true
+      - device: /dev/sdw
+        ignore: true
+      - device: /dev/sdx
+        ignore: true
+      - device: /dev/sdy
+        ignore: true
+      - device: /dev/sdz
+        ignore: true
+      - device: /dev/sdaa
+        ignore: true
+      - device: /dev/sdab
+        ignore: true
+      - device: /dev/sdac
+        ignore: true
+      - device: /dev/sdad
+        ignore: true
+      - device: /dev/sdae
+        ignore: true
+      - device: /dev/sdaf
+        ignore: true
+      - device: /dev/sdag
+        ignore: true
+    api:
+      endpoint: 'http://scrutiny.logging:80'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-collector-archserv02
+  namespace: logging
+data:
+  collector.yaml: |
+    version: 1
+    host:
+      id: "archserv02"
+    devices:
+      - device: /dev/sdo
+        ignore: true
+      - device: /dev/sdp
+        ignore: true
+      - device: /dev/sdq
+        ignore: true
+      - device: /dev/sdr
+        ignore: true
+      - device: /dev/sds
+        ignore: true
+      - device: /dev/sdt
+        ignore: true
+      - device: /dev/sdu
+        ignore: true
+      - device: /dev/sdv
+        ignore: true
+      - device: /dev/sdw
+        ignore: true
+      - device: /dev/sdx
+        ignore: true
+      - device: /dev/sdy
+        ignore: true
+      - device: /dev/sdz
+        ignore: true
+      - device: /dev/sdaa
+        ignore: true
+      - device: /dev/sdab
+        ignore: true
+      - device: /dev/sdac
+        ignore: true
+      - device: /dev/sdad
+        ignore: true
+      - device: /dev/sdae
+        ignore: true
+      - device: /dev/sdaf
+        ignore: true
+      - device: /dev/sdag
+        ignore: true
+    api:
+      endpoint: 'http://scrutiny.logging:80'
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-collector-archserv03
+  namespace: logging
+data:
+  collector.yaml: |
+    version: 1
+    host:
+      id: "archserv03"
+    devices:
+      - device: /dev/sdb
+        ignore: true
+      - device: /dev/sdc
+        ignore: true
+      - device: /dev/sdd
+        ignore: true
+      - device: /dev/sde
+        ignore: true
+      - device: /dev/sdf
+        ignore: true
+      - device: /dev/sdg
+        ignore: true
+      - device: /dev/sdh
+        ignore: true
+      - device: /dev/sdi
+        ignore: true
+      - device: /dev/sdj
+        ignore: true
+      - device: /dev/sdk
+        ignore: true
+      - device: /dev/sdl
+        ignore: true
+      - device: /dev/sdm
+        ignore: true
+    api:
+      endpoint: 'http://scrutiny.logging:80'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-collector-archserv04
+  namespace: logging
+data:
+  collector.yaml: |
+    version: 1
+    host:
+      id: "archserv04"
+    devices:
+      - device: /dev/sdb
+        ignore: true
+      - device: /dev/sdc
+        ignore: true
+      - device: /dev/sdd
+        ignore: true
+      - device: /dev/sde
+        ignore: true
+      - device: /dev/sdf
+        ignore: true
+      - device: /dev/sdg
+        ignore: true
+      - device: /dev/sdh
+        ignore: true
+      - device: /dev/sdi
+        ignore: true
+      - device: /dev/sdj
+        ignore: true
+      - device: /dev/sdk
+        ignore: true
+      - device: /dev/sdl
+        ignore: true
+      - device: /dev/sdm
+        ignore: true
+    api:
+      endpoint: 'http://scrutiny.logging:80'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-collector-archserv05
+  namespace: logging
+data:
+  collector.yaml: |
+    version: 1
+    host:
+      id: "archserv05"
+    devices:
+      - device: /dev/sdb
+        ignore: true
+      - device: /dev/sdc
+        ignore: true
+      - device: /dev/sdd
+        ignore: true
+      - device: /dev/sde
+        ignore: true
+      - device: /dev/sdf
+        ignore: true
+      - device: /dev/sdg
+        ignore: true
+      - device: /dev/sdh
+        ignore: true
+      - device: /dev/sdi
+        ignore: true
+      - device: /dev/sdj
+        ignore: true
+      - device: /dev/sdk
+        ignore: true
+      - device: /dev/sdl
+        ignore: true
+      - device: /dev/sdm
+        ignore: true
+    api:
+      endpoint: 'http://scrutiny.logging:80'
