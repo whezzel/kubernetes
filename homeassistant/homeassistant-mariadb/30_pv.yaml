@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mariadb-homeassistant
+  name: homeassistant-mariadb
   namespace: homeassistant
 spec:
   capacity:
@@ -18,9 +18,9 @@ spec:
     volumeAttributes:
       numberOfReplicas: '1'
       staleReplicaTimeout: '2880'
-    volumeHandle: mariadb-homeassistant
+    volumeHandle: homeassistant-mariadb
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: homeassistant
-    name: mariadb-homeassistant
+    name: homeassistant-mariadb

@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mariadb
+  name: homeassistant-mariadb
   namespace: homeassistant
   labels:
-    app: mariadb
+    app: homeassistant-mariadb
 #  annotations:
 #    keel.sh/policy: force
 #    keel.sh/match-tag: "true"
@@ -15,22 +15,21 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mariadb
+      app: homeassistant-mariadb
   template:
     metadata:
-      name: mariadb
+      name: homeassistant-mariadb
       labels:
-        app: mariadb
+        app: homeassistant-mariadb
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
-        - name: mariadb
-          image: linuxserver/mariadb:latest
+        - name: homeassistant-mariadb
+          image: lscr.io/linuxserver/mariadb:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3306
-              name: mariadb-tcp
+              hostPort: 3306
+              name: mariadb
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -40,24 +39,21 @@ spec:
               value: "1000"
           envFrom:
             - secretRef:
-                name: mariadb
+                name: homeassistant-mariadb
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: mariadb
+            - name: homeassistant-mariadb
               mountPath: /config
           resources:
             requests:
-              memory: "1G"
-              cpu: "2"
-            limits:
-              memory: "2Gi"
-              cpu: "4"
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
-        - name: mariadb
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: homeassistant-mariadb
           persistentVolumeClaim:
-            claimName: mariadb-homeassistant
+            claimName: homeassistant-mariadb
