@@ -22,8 +22,6 @@ spec:
       labels:
         app: grafana
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: grafana
           image: grafana/grafana:latest
@@ -81,13 +79,10 @@ spec:
             requests:
               memory: "128Mi"
               cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: grafana
           persistentVolumeClaim:
             claimName: grafana

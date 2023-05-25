@@ -6,7 +6,7 @@ metadata:
   namespace: logging
 spec:
   capacity:
-    storage: 5Gi
+    storage: 128Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
