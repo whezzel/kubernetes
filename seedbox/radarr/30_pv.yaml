@@ -3,10 +3,9 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: radarr
-  namespace: seedbox
 spec:
   capacity:
-    storage: 5Gi
+    storage: 2Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -23,4 +22,4 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: seedbox
-    name: radarr
+    name: radarr-radarr-0

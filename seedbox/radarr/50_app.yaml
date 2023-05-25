@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: radarr
   namespace: seedbox
@@ -12,49 +12,49 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/pollSchedule: "@every 12h"
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: radarr
+  serviceName: "radarr"
+  replicas: 1
+  minReadySeconds: 10
   template:
     metadata:
+      name: radarr
       labels:
         app: radarr
-      name: radarr
     spec:
-      nodeSelector:
-        capacity: high
       containers:
         - name: radarr
-          image: linuxserver/radarr:latest
+          image: lscr.io/linuxserver/radarr:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 7878
               name: http
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 5
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 5
-          startupProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 3
-            failureThreshold: 5
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#              scheme: HTTP
+#            initialDelaySeconds: 5
+#            periodSeconds: 3
+#            failureThreshold: 5
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#              scheme: HTTP
+#            initialDelaySeconds: 5
+#            periodSeconds: 3
+#            failureThreshold: 5
+#          startupProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#              scheme: HTTP
+#            initialDelaySeconds: 30
+#            periodSeconds: 3
+#            failureThreshold: 5
           env:
             - name: TZ
               value: "America/Chicago"
@@ -62,8 +62,6 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
-            - name: DOCKER_MODS
-              value: "ghcr.io/gilbn/theme.park:radarr"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -74,19 +72,22 @@ spec:
               mountPath: /config
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "256Mi"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/media
-        - name: radarr
-          persistentVolumeClaim:
-            claimName: radarr
+  volumeClaimTemplates:
+    - metadata:
+        name: radarr
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "longhorn"
+        resources:
+          requests:
+            storage: 5Gi
