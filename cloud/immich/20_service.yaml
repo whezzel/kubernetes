@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich
+  namespace: cloud
+spec:
+  ipFamilyPolicy: PreferDualStack
+  selector:
+    app: immich
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http

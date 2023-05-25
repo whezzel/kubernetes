@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+  namespace: cloud
+  annotations:
+    keel.sh/match-tag: "true"
+    keel.sh/policy: force
+    keel.sh/pollSchedule: '@every 24h'
+    keel.sh/trigger: poll
+  labels:
+    app: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich
+  template:
+    metadata:
+      name: immich
+      labels:
+        app: immich
+    spec:
+      containers:
+        - name: immich
+          image: ghcr.io/imagegenius/immich:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              name: http
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+            - name: "DOCKER_MODS"
+              value: "imagegenius/mods:universal-redis"
+          envFrom:
+            - secretRef:
+                name: immich
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: photos
+              mountPath: /photos
+#          resources:
+#            requests:
+#              memory: "1G"
+#              cpu: "1"
+#            limits:
+#              memory: "2Gi"
+#              cpu: "4"
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: immich
+        - name: photos
+          nfs:
+            server: archserv02.whezzel.com
+            path: /mnt/netstorage/photos
