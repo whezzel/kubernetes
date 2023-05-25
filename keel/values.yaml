@@ -26,7 +26,7 @@ polling:
 helmProvider:
   enabled: false
   # set to version "v3" for Helm v3
-  version: "v2"
+  version: "v3"
   tillerNamespace: "kube-system"
   # optional Tiller address (if portforwarder tunnel doesn't work),
   # if you are using default configuration, setting it to
@@ -60,7 +60,7 @@ ecr:
 # Remote webhook endpoint for notification delivery
 webhook:
   enabled: true
-  endpoint: "https://nodered.whezzel.com/webhook/gotify"
+  endpoint: "http://nodered.homeassistant/hooks/keelsh"
 
 # Slack Notification
 # bot name (default keel) must exist!
