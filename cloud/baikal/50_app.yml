@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: baikal
+  namespace: cloud
+  labels:
+    app: baikal
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: baikal
+  template:
+    metadata:
+      name: baikal
+      labels:
+        app: baikal
+    spec:
+      containers:
+        - name: baikal
+          image: ckulka/baikal:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: baikal
+              mountPath: /var/www/baikal/Specific
+              subPath: Specific
+            - name: baikal
+              mountPath: /var/www/baikal/config
+              subPath: config
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: baikal
+          persistentVolumeClaim:
+            claimName: baikal
