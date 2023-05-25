@@ -9,7 +9,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-https-redirect@kubernetescrd
 spec:
   rules:
-    - host: bitwarden.whezzel.com
+    - host: vaultwarden.whezzel.com
       http:
         paths:
           - path: /
@@ -41,7 +41,7 @@ spec:
   tls:
   - secretName: whezzel.com-tls
   rules:
-    - host: bitwarden.whezzel.com
+    - host: vaultwarden.whezzel.com
       http:
         paths:
           - path: /

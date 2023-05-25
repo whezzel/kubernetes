@@ -22,8 +22,6 @@ spec:
       labels:
         app: vaultwarden
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: vaultwarden
           image: vaultwarden/server:latest
@@ -62,6 +60,8 @@ spec:
               value: "true"
             - name: WEB_VAULT_ENABLED
               value: "true"
+            - name: SIGNUPS_ALLOWED
+              value: "false"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -72,14 +72,11 @@ spec:
           resources:
             requests:
               memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+              cpu: "100m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: vaultwarden
           persistentVolumeClaim:
             claimName: vaultwarden
