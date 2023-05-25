@@ -60,26 +60,24 @@ spec:
       labels:
         app: external-dns
     spec:
-      nodeSelector:
-        dnscap: 'yes'
       serviceAccountName: external-dns
       containers:
       - name: external-dns
-        image: k8s.gcr.io/external-dns/external-dns:v0.10.2
+        image: registry.k8s.io/external-dns/external-dns:v0.10.2
         args:
         - --registry=txt
         - --txt-prefix=external-dns-
-        - --txt-owner-id=k8s
+        - --txt-owner-id=k3s
         - --provider=rfc2136
         - --rfc2136-host=$(RFC2136_HOST)
         - --rfc2136-port=53
         - --rfc2136-zone=$(RFC2136_ZONE)
         - --rfc2136-tsig-secret=$(RFC2136_TSIG_SECRET)
         - --rfc2136-tsig-secret-alg=hmac-sha512
-        - --rfc2136-tsig-keyname=rndc-key
+        - --rfc2136-tsig-keyname=k3s-external-dns
         - --rfc2136-tsig-axfr
         - --source=ingress
         - --domain-filter=$(DOMAIN_FILTER)
         envFrom:
           - secretRef:
-              name: dns-secrets
+              name: external-dns-secrets
