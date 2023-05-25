@@ -18,43 +18,41 @@ spec:
       app: bazarr
   template:
     metadata:
+      name: bazarr
       labels:
         app: bazarr
-      name: bazarr
     spec:
-      nodeSelector:
-        capacity: high
       containers:
         - name: bazarr
-          image: linuxserver/bazarr:latest
+          image: lscr.io/linuxserver/bazarr:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 6767
               name: http
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 5
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 5
-          startupProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 50
-            periodSeconds: 3
-            failureThreshold: 5
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#              scheme: HTTP
+#            initialDelaySeconds: 5
+#            periodSeconds: 3
+#            failureThreshold: 5
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#              scheme: HTTP
+#            initialDelaySeconds: 5
+#            periodSeconds: 3
+#            failureThreshold: 5
+#          startupProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#              scheme: HTTP
+#            initialDelaySeconds: 50
+#            periodSeconds: 3
+#            failureThreshold: 5
           env:
             - name: TZ
               value: "America/Chicago"
@@ -74,18 +72,15 @@ spec:
               mountPath: /config
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
               memory: "512Mi"
-              cpu: "500m"
+              cpu: "250m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/media
         - name: bazarr
           persistentVolumeClaim:

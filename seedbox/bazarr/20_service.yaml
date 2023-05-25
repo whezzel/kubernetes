@@ -5,6 +5,7 @@ metadata:
   name: bazarr
   namespace: seedbox
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: bazarr
   ports:
