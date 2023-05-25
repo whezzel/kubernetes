@@ -1,0 +1,13 @@
+image:
+  #imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+
+ingress:
+  enabled: false
+
+postgresql:
+  existingSecret: wiki-js
+  persistence:
+    enabled: true
+    existingClaim: wiki-js-postgresql
+    size: 10Gi
