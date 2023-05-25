@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ha-core
+  name: homeassistant
   namespace: homeassistant
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
-  volumeName: ha-core
+      storage: 256Mi
+  volumeName: homeassistant
   storageClassName: longhorn

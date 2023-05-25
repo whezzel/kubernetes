@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: ha-core
+  name: homeassistant
   namespace: homeassistant
 spec:
   capacity:
-    storage: 5Gi
+    storage: 256Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
@@ -18,9 +18,9 @@ spec:
     volumeAttributes:
       numberOfReplicas: '1'
       staleReplicaTimeout: '2880'
-    volumeHandle: ha-core
+    volumeHandle: homeassistant
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: homeassistant
-    name: ha-core
+    name: homeassistant

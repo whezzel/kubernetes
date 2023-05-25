@@ -2,34 +2,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ha-core
+  name: homeassistant
   namespace: homeassistant
   labels:
-    app: ha-core
+    app: homeassistant
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "0 9 * * *"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ha-core
+      app: homeassistant
   template:
     metadata:
-      name: ha-core
+      annotations:
+        k8s.v1.cni.cncf.io/networks: default/macvlan-conf
+      name: homeassistant
       labels:
-        app: ha-core
+        app: homeassistant
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
+      #nodeSelector:
+      #  kubernetes.io/hostname: archserv01
       containers:
-        - name: ha-core
+        - name: homeassistant
           image: homeassistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123
+              #hostPort: 8123
               name: http
           env:
             - name: "TZ"
@@ -42,19 +45,22 @@ spec:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
-            - name: ha-core
+            - name: homeassistant
               mountPath: /config
+            - name: nas-media
+              mountPath: /media
           resources:
             requests:
               memory: "1Gi"
-              cpu: "1"
-            limits:
-              memory: "2Gi"
-              cpu: "2"
+              cpu: "250m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
-        - name: ha-core
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: homeassistant
           persistentVolumeClaim:
-            claimName: ha-core
+            claimName: homeassistant
+        - name: nas-media
+          nfs:
+            server: archserv02.whezzel.com
+            path: /mnt/netstorage/media

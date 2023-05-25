@@ -2,28 +2,28 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ha-core-http
+  name: homeassistant-http
   namespace: homeassistant
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-https-redirect@kubernetescrd
 spec:
   rules:
-    - host: ha-core.whezzel.com
+    - host: homeassistant.whezzel.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: ha-core
+                name: homeassistant
                 port:
                   number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ha-core-https
+  name: homeassistant-https
   namespace: homeassistant
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -34,13 +34,13 @@ spec:
   tls:
   - secretName: whezzel.com-tls
   rules:
-    - host: ha-core.whezzel.com
+    - host: homeassistant.whezzel.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: ha-core
+                name: homeassistant
                 port:
                   number: 80
