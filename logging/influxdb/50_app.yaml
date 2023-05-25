@@ -22,8 +22,6 @@ spec:
       labels:
         app: influxdb
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: influxdb
           image: library/influxdb:latest
@@ -52,14 +50,11 @@ spec:
           resources:
             requests:
               memory: "512Mi"
-              cpu: "1"
-            limits:
-              memory: "1Gi"
-              cpu: "2"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: influxdb
           persistentVolumeClaim:
             claimName: influxdb
