@@ -5,6 +5,7 @@ metadata:
   name: syncthing
   namespace: cloud
 spec:
+  ipFamilyPolicy: PreferDualStack
   selector:
     app: syncthing
   ports:
@@ -15,9 +16,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: syncthing-udp
+  name: syncthing-lb
   namespace: cloud
 spec:
+  ipFamilyPolicy: PreferDualStack
   selector:
     app: syncthing
   ports:
@@ -29,18 +31,6 @@ spec:
       name: sync-udp
       port: 22000
       targetPort: sync-udp
-  type: LoadBalancer
-  sessionAffinity: ClientIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: syncthing-tcp
-  namespace: cloud
-spec:
-  selector:
-    app: syncthing
-  ports:
     - protocol: TCP
       name: sync-tcp
       port: 22000

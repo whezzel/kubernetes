@@ -22,11 +22,9 @@ spec:
       labels:
         app: syncthing
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: syncthing
-          image: linuxserver/syncthing
+          image: lscr.io/linuxserver/syncthing:latest
           imagePullPolicy: Always
           env:
             - name: TZ
@@ -47,7 +45,26 @@ spec:
             - containerPort: 22000
               name: sync-udp
               protocol: UDP
+          livenessProbe:
+            httpGet:
+              path: /rest/noauth/health
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+          #readinessProbe:
+          #  httpGet:
+          #    path: /rest/noauth/health
+          #    port: http
+          #    scheme: HTTP
+          #  initialDelaySeconds: 10
+          #  failureThreshold: 5
+          #  timeoutSeconds: 10
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: syncthing
               mountPath: /config
               subPath: config
@@ -56,15 +73,15 @@ spec:
           resources:
             requests:
               memory: "512Mi"
-              cpu: "500m"
-            limits:
-              memory: "1Gi"
-              cpu: "1"
+              cpu: "250m"
       volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
         - name: syncthing
           persistentVolumeClaim:
             claimName: syncthing
         - name: nas-syncthing
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/backups
