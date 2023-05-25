@@ -18,15 +18,16 @@ spec:
       app: jellyfin
   template:
     metadata:
+      name: jellyfin
       labels:
         app: jellyfin
-      name: jellyfin
     spec:
+      runtimeClassName: nvidia
       nodeSelector:
-        capacity: high
+        kubernetes.io/hostname: archserv01
       containers:
         - name: jellyfin
-          image: linuxserver/jellyfin:latest
+          image: lscr.io/linuxserver/jellyfin:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8096
@@ -40,37 +41,30 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
-#            - name: DOCKER_MODS
-#              value: "ghcr.io/gilbn/theme.park:jellyfin"
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: all
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
             - name: nas-media
               mountPath: /media
-            - name: nas-ssl
-              mountPath: /ssl
             - name: jellyfin-config
               mountPath: /config
           resources:
             requests:
-              memory: "4Gi"
-              cpu: "2000m"
-            limits:
               memory: "8Gi"
-              cpu: "4000m"
+              cpu: "2"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: archserv02.whezzel.com
             path: /mnt/netstorage/media
-        - name: nas-ssl
-          nfs:
-            server: nas01.whezzel.com
-            path: /mnt/netstorage/ssl
         - name: jellyfin-config
           persistentVolumeClaim:
             claimName: jellyfin

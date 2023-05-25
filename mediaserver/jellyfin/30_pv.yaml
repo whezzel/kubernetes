@@ -6,7 +6,7 @@ metadata:
   namespace: mediaserver
 spec:
   capacity:
-    storage: 20Gi
+    storage: 12Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce

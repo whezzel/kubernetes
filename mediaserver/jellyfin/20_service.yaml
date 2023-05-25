@@ -4,9 +4,8 @@ kind: Service
 metadata:
   name: jellyfin
   namespace: mediaserver
-  annotations:
-    metallb.universe.tf/address-pool: default
 spec:
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: jellyfin
   ports:
