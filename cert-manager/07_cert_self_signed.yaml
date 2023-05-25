@@ -1,0 +1,41 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: self-signed-tls
+  namespace: cert-manager
+spec:
+  secretName: self-signed-tls
+  issuerRef:
+    name: self-signed
+  dnsNames:
+  - "*.cctv.svc.cluster.local"
+  - "*.cctv"
+  - "*.chat.svc.cluster.local"
+  - "*.chat"
+  - "*.cloud.svc.cluster.local"
+  - "*.cloud"
+  - "*.database.svc.cluster.local"
+  - "*.database"
+  - "*.dns.svc.cluster.local"
+  - "*.dns"
+  - "*.email.svc.cluster.local"
+  - "*.email"
+  - "*.games.svc.cluster.local"
+  - "*.games"
+  - "*.homeassistant.svc.cluster.local"
+  - "*.homeassistant"
+  - "*.logging.svc.cluster.local"
+  - "*.logging"
+  - "*.longhorn.svc.cluster.local"
+  - "*.longhorn"
+  - "*.mediaserver.svc.cluster.local"
+  - "*.mediaserver"
+  - "*.passman.svc.cluster.local"
+  - "*.passman"
+  - "*.seedbox.svc.cluster.local"
+  - "*.seedbox"
+  - "*.tracking.svc.cluster.local"
+  - "*.tracking"
+  - "*.wifi.svc.cluster.local"
+  - "*.wifi"

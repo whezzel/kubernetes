@@ -10,10 +10,10 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod-key
-    solvers:    
+    solvers:
     - dns01:
         cloudflare:
           email: whezzel@gmail.com
           apiTokenSecretRef:
-            name: cloudflare-api-token-secret
+            name: cert-manager-secrets
             key: api-token

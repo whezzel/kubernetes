@@ -10,10 +10,10 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-staging-key
-    solvers:    
+    solvers:
     - dns01:
         cloudflare:
           email: whezzel@gmail.com
           apiTokenSecretRef:
-            name: cloudflare-api-token-secret
+            name: cert-manager-secrets
             key: api-token
