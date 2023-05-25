@@ -9,6 +9,6 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 2Gi
   storageClassName: longhorn
   volumeName: pihole01
