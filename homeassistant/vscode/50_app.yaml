@@ -18,18 +18,19 @@ spec:
       app: vscode
   template:
     metadata:
+      name: vscode
       labels:
         app: vscode
     spec:
-      nodeSelector:
-        capacity: high
       containers:
         - name: vscode
-          image: linuxserver/code-server:latest
+          image: lscr.io/linuxserver/code-server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
               name: http
+            - containerPort: 22
+              name: ssh
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -41,47 +42,48 @@ spec:
               value: "ssh -4"
             - name: "DEFAULT_WORKSPACE"
               value: "/mnt"
-#            - name: "PROXY_DOMAIN"
-#              value: "whezzel.com"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
               readOnly: true
             - name: vscode
               mountPath: /config
+              subPath: config
+            - name: vscode
+              mountPath: /var/cache/apt
+              subPath: cache
             - name: esphome
               mountPath: /mnt/esphome
-            - name: ha-core
-              mountPath: /mnt/ha-core
+            - name: homeassistant
+              mountPath: /mnt/homeassistant
             - name: nodered
               mountPath: /mnt/nodered
             - name: vscode
               mountPath: /mnt/vscode
-            - name: ssh-config-d
-              mountPath: /etc/ssh/ssh_config.d
+              subPath: config
+            - name: ssh-config
+              mountPath: "/etc/ssh/ssh_config"
+              subPath: ssh_config
           resources:
             requests:
-              memory: "128Mi"
+              memory: "400Mi"
               cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: esphome
           persistentVolumeClaim:
             claimName: esphome
-        - name: ha-core
+        - name: homeassistant
           persistentVolumeClaim:
-            claimName: ha-core
+            claimName: homeassistant
         - name: nodered
           persistentVolumeClaim:
             claimName: nodered
         - name: vscode
           persistentVolumeClaim:
             claimName: vscode
-        - name: ssh-config-d
-          secret:
-            secretName: ssh-config-d
+        - name: ssh-config
+          configMap:
+            name: ssh-config
