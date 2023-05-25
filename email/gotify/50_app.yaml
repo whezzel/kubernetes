@@ -22,11 +22,9 @@ spec:
       labels:
         app: gotify
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: gotify
-          image: gotify/server:latest
+          image: ghcr.io/gotify/server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -42,15 +40,12 @@ spec:
               mountPath: /app/data
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "50Mi"
+              cpu: "50m"
       volumes:
         - name: localtime
           hostPath:
-            path: /etc/localtime
+            path: /usr/share/zoneinfo/America/Chicago
         - name: gotify
           persistentVolumeClaim:
             claimName: gotify

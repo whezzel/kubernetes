@@ -22,8 +22,6 @@ spec:
       labels:
         app: smtp-relay
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
       containers:
         - name: smtp-relay
           image: namshi/smtp:latest
@@ -37,8 +35,5 @@ spec:
                 name: email-secrets
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: "80Mi"
+              cpu: "100m"
