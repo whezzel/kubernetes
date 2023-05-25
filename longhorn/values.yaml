@@ -2,13 +2,17 @@ csi:
   kubeletRootDir: /var/lib/kubelet
 
 defaultSettings:
-  backupTarget: nfs://nas01.whezzel.com:/mnt/netstorage/backups/longhorn
-  replicaSoftAntiAffinity: true
+  backupTarget: nfs://archserv02.whezzel.com:/mnt/netstorage/backups/longhorn
+  replicaSoftAntiAffinity: false
   replicaZoneSoftAntiAffinity: true
-  defaultReplicaCount: 1
+  defaultReplicaCount: 3
   defaultLonghornStaticStorageClass: longhorn
   guaranteedEngineCPU: 0.20
-  defaultDataLocality: best-effort
+  defaultDataLocality: disabled
+  #defaultDataLocality: best-effort
+  replicaAutoBalance: best-effort
+  orphanAutoDeletion: true
+
 
 service:
   ui:
