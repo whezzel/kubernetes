@@ -26,11 +26,11 @@ spec:
         - name: dufs
           image: sigoden/dufs:latest
           imagePullPolicy: Always
-          command:
-            - /bin/dufs
           args:
-            - /data
             - -A
+            - --port
+            - "5000"
+            - /data
           ports:
             - containerPort: 5000
               name: http
