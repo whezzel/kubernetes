@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dufs
+  namespace: cloud
+  labels:
+    app: dufs
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dufs
+  template:
+    metadata:
+      name: dufs
+      labels:
+        app: dufs
+    spec:
+      containers:
+        - name: dufs
+          image: sigoden/dufs:latest
+          imagePullPolicy: Always
+          command:
+            - /bin/dufs
+          args:
+            - /data
+            - -A
+          ports:
+            - containerPort: 5000
+              name: http
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: dufs
+              mountPath: /data
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: dufs
+          nfs:
+            server: archserv02.whezzel.com
+            path: /mnt/netstorage/dufs
