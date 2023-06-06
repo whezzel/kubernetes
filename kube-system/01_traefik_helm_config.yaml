@@ -5,11 +5,17 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    deployment:
+      replicas: 5
     service:
       spec:
         externalTrafficPolicy: Local
     logs:
       access:
-        enabled: false
+        enabled: true
     additionalArguments:
       - "--serverstransport.insecureskipverify=true"
+      - "--entryPoints.web.forwardedHeaders.trustedIPs=10.69.20.2,10.69.20.3"
+      - "--entryPoints.websecure.forwardedHeaders.trustedIPs=10.69.20.2,10.69.20.3"
+      - "--entryPoints.web.proxyProtocol.trustedIPs=10.69.20.2,10.69.20.3"
+      - "--entryPoints.websecure.proxyProtocol.trustedIPs=10.69.20.2,10.69.20.3"
