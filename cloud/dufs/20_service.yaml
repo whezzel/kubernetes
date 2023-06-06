@@ -5,7 +5,7 @@ metadata:
   name: dufs
   namespace: cloud
 spec:
-  ipFamilyPolicy: PreferDualStack
+#  ipFamilyPolicy: PreferDualStack
   selector:
     app: dufs
   ports:
