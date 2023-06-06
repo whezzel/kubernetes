@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: murmur-lb
   namespace: chat
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: mumble.whezzel.com
 spec:
 #  ipFamilyPolicy: PreferDualStack
   selector:
@@ -19,3 +21,4 @@ spec:
       targetPort: murmur-tcp
   type: LoadBalancer
   sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
