@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orbital-sync
+  namespace: dns
+  labels:
+    app: orbital-sync
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orbital-sync
+  template:
+    metadata:
+      name: orbital-sync
+      labels:
+        app: orbital-sync
+    spec:
+      containers:
+        - name: orbital-sync
+          image: mattwebbio/orbital-sync:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: orbital-sync-secrets
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PRIMARY_HOST_BASE_URL"
+              value: "http://pihole01-web"
+            - name: "PRIMARY_HOST_PATH"
+              value: "/admin"
+            - name: "SECONDARY_HOST_1_BASE_URL"
+              value: "http://pihole02-web"
+            - name: "SECONDARY_HOST_1_PATH"
+              value: "/admin"
+            - name: "UPDATE_GRAVITY"
+              value: "false"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
