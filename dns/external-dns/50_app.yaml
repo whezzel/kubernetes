@@ -63,7 +63,7 @@ spec:
       serviceAccountName: external-dns
       containers:
       - name: external-dns
-        image: registry.k8s.io/external-dns/external-dns:v0.10.2
+        image: registry.k8s.io/external-dns/external-dns:v0.13.5
         args:
         - --registry=txt
         - --txt-prefix=external-dns-
@@ -77,6 +77,7 @@ spec:
         - --rfc2136-tsig-keyname=k3s-external-dns
         - --rfc2136-tsig-axfr
         - --source=ingress
+        - --source=service
         - --domain-filter=$(DOMAIN_FILTER)
         envFrom:
           - secretRef:
