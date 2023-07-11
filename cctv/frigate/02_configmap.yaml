@@ -18,16 +18,11 @@ data:
        coral:
          type: edgetpu
          device: usb
-      #cpu1:
-      #  type: cpu
-      #  num_threads: 3
     database:
       path: /mnt/db/frigate.db
-      # Optional: Object configuration
     objects:
       track:
         - person
-        #- car
         - cat
         - dog
     birdseye:
@@ -35,58 +30,29 @@ data:
       mode: continuous
     record:
       enabled: True
-      retain:
-        days: 7
-        mode: motion
-      events:
-        retain:
-          default: 14
-          mode: active_objects
-          objects:
-            car: 7
-            cat: 2
-            dog: 2
     snapshots:
       enabled: True
       bounding_box: True
-      retain:
-        default: 14
-        objects:
-          car: 7
-          cat: 2
-          dog: 2
     cameras:
       cam1:
         ffmpeg:
           hwaccel_args: preset-nvidia-h264
-          #input_args:
-          #  - -c:v
-          #  - h264_cuvid
-          #  - -rtsp_transport
-          #  - tcp
+          input_args:
+            - -rtsp_transport
+            - tcp
           inputs:
             - path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam1.whezzel.com:554/cam/realmonitor?channel=1&subtype=0'
+              input_args: preset-rtsp-restream
               roles:
                 - record
-            #    - rtmp
                 - detect
-            #- path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam1.whezzel.com:554/cam/realmonitor?channel=1&subtype=1'
-            #  roles:
-            #    - detect
         record:
           enabled: True
         snapshots:
           enabled: True
           bounding_box: True
         detect:
-          #width: 640
-          #height: 480
-          #width: 2304
-          #height: 1296
           fps: 10
-    #    motion:
-    #      mask:
-    #        - 640,0,640,236,0,232,0,0
         objects:
           filters:
             person:
@@ -97,62 +63,45 @@ data:
       cam2:
         ffmpeg:
           hwaccel_args: preset-nvidia-h264
-          #input_args:
-          #  - -c:v
-          #  - h264_cuvid
-          #  - -rtsp_transport
-          #  - tcp
+          input_args:
+            - -rtsp_transport
+            - tcp
           inputs:
             - path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam2.whezzel.com:554/cam/realmonitor?channel=1&subtype=0'
+              input_args: preset-rtsp-restream
               roles:
                 - record
-            #    - rtmp
                 - detect
-            #- path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam2.whezzel.com:554/cam/realmonitor?channel=1&subtype=1'
-            #  roles:
-            #    - detect
         record:
           enabled: True
         snapshots:
           enabled: True
           bounding_box: True
         detect:
-          #width: 640
-          #height: 480
-          #width: 2304
-          #height: 1296
           fps: 10
       cam3:
         ffmpeg:
           hwaccel_args: preset-nvidia-h264
-          #input_args:
-          #  - -c:v
-          #  - h264_cuvid
-          #  - -rtsp_transport
-          #  - tcp
+          input_args:
+            - -rtsp_transport
+            - tcp
           inputs:
             - path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam3.whezzel.com:554/cam/realmonitor?channel=1&subtype=0'
+              input_args: preset-rtsp-restream
               roles:
                 - record
-            #    - rtmp
+                - rtsp
                 - detect
-            #- path: 'rtsp://{FRIGATE_RTSP_USERNAME}:{FRIGATE_RTSP_PASSWORD}@cam3.whezzel.com:554/cam/realmonitor?channel=1&subtype=1'
-            #  roles:
-            #    - detect
         record:
           enabled: True
         snapshots:
           enabled: True
           bounding_box: True
         detect:
-          #width: 640
-          #height: 480
-          #width: 2304
-          #height: 1296
           fps: 10
         objects:
           filters:
             person:
               mask:
-               - 296,64,297,81,280,84,279,65
-               - 331,310,351,309,350,266,327,266
+                - 653,532,710,530,715,431,650,427
+                - 556,197,605,195,601,133,551,135
