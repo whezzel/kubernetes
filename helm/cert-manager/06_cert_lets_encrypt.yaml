@@ -9,6 +9,12 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: Issuer
+  keystores:
+    pkcs12:
+      create: true
+      passwordSecretRef:
+        key: pkcs12-pass
+        name: cert-manager-secrets
   dnsNames:
   - whezzel.com
   - '*.whezzel.com'

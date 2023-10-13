@@ -1,0 +1,4 @@
+installCRDs: true
+#featureGates: "AdditionalCertificateOutputFormats=true"
+#webhook:
+#  featureGates: "AdditionalCertificateOutputFormats=true"
