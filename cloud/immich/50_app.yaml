@@ -46,13 +46,10 @@ spec:
               mountPath: /config
             - name: photos
               mountPath: /photos
-#          resources:
-#            requests:
-#              memory: "1G"
-#              cpu: "1"
-#            limits:
-#              memory: "2Gi"
-#              cpu: "4"
+          resources:
+            requests:
+              memory: "1G"
+              cpu: "2"
       volumes:
         - name: config
           persistentVolumeClaim:

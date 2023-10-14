@@ -3,7 +3,12 @@ image:
           imagePullPolicy: IfNotPresent
 
 ingress:
-  enabled: false
+  enabled: true
+  hosts:
+    - host: wiki.whezzel.com
+      paths:
+        - path: "/"
+          pathType: Prefix
 
 postgresql:
   existingSecret: wiki-js

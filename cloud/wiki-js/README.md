@@ -1,52 +1,20 @@
-# [Wiki.js](https://js.wiki/)
+## **Deploy WikiJS**
 
-The most **powerful** and extensible **open source** Wiki software
-
-Sources:
+The most powerful and extensible open source Wiki software.
 
 - https://docs.requarks.io/
 - https://docs.requarks.io/install/kubernetes
 
-## Install Wiki.js
-
-Install wiki.js using combination of `helm` and manifests from local computer.
-
-### Apply manifests
-
-```sh
-kubectl apply -f wiki-js/
+**Deploy Manifests to support helm chart:**
+```bash
+kubectl apply -Rf ~/repos/k3s/cloud/wiki-js
 ```
 
-### Add the Wiki.js Helm Repository
-
-```sh
-helm repo add requarks https://charts.js.wiki
+**Deploy Wiki JS using helm:**
+```bash
+helm upgrade --install wiki-js wiki \
+    --repo https://charts.js.wiki \
+    --namespace cloud \
+    --create-namespace \
+    --values ~/repos/k3s/cloud/wiki-js/values.yaml
 ```
-
-### Install helm chart
-
-```sh
-helm install wiki-js \
-  requarks/wiki \
-  --namespace cloud \
-  --create-namespace \
-  --values ./values.yaml
-```
-
-## Uninstall Wiki.js
-
-```sh
-helm uninstall -n cloud wiki-js
-kubectl delete -f wiki-js/
-```
-
-## Upgrade Wiki.js
-
-1. Run *[Uninstall Wiki.js](#uninstall-wikijs)* step.
-2. Upgrade the install Wiki.js helm repository.
-
-    ```sh
-    helm repo update requarks
-    ```
-
-3. Run *[Install helm chart](#install-helm-chart)* step.

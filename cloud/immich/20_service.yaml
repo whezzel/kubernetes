@@ -9,6 +9,7 @@ spec:
   selector:
     app: immich
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: http

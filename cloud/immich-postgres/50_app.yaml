@@ -49,13 +49,10 @@ spec:
             - name: immich-postgres
               mountPath: /var/lib/postgresql/data
               subPath: pgdata
-#          resources:
-#            requests:
-#              memory: "1G"
-#              cpu: "1"
-#            limits:
-#              memory: "2Gi"
-#              cpu: "4"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: localtime
           hostPath:
