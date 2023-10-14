@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-export CHANNEL="v1.24.13+k3s1"
-#export CHANNEL="latest"
+#export CHANNEL="v1.27.4+k3s1"
+export CHANNEL="latest"
 export MASTER_1="archserv01.whezzel.com"
 export MASTER_2="archserv02.whezzel.com"
 export MASTER_3="archserv03.whezzel.com"
@@ -17,11 +17,12 @@ k3sup install \
   --local-path "$HOME/.kube/config" \
   --merge \
   --context prod \
-  --k3s-version $CHANNEL \
+  --k3s-channel $CHANNEL \
   --print-command \
   --print-config \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
+#  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --node-ip 10.69.2.11,2600:1700:3c00:635f:2::11 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --node-ip 10.69.2.11,2600:1700:3c00:635f:2::11 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-ipv6-masq --node-ip 10.69.2.11,2600:1700:3c00:635f:2::11 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
@@ -32,10 +33,11 @@ k3sup join \
   --user $USER \
   --server-user $USER \
   --server-host $MASTER_1 \
-  --k3s-version $CHANNEL \
+  --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
+#  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --node-ip 10.69.2.12,2600:1700:3c00:635f:2::12 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --node-ip 10.69.2.12,2600:1700:3c00:635f:2::12 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-ipv6-masq --node-ip 10.69.2.12,2600:1700:3c00:635f:2::12 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
@@ -46,10 +48,11 @@ k3sup join \
   --user $USER \
   --server-user $USER \
   --server-host $MASTER_1 \
-  --k3s-version $CHANNEL \
+  --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
+#  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --node-ip 10.69.2.13,2600:1700:3c00:635f:2::13 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --node-ip 10.69.2.13,2600:1700:3c00:635f:2::13 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
 #  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-ipv6-masq --node-ip 10.69.2.13,2600:1700:3c00:635f:2::13 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
@@ -60,7 +63,7 @@ k3sup join \
   --user $USER \
   --server-user $USER \
   --server-host $MASTER_1 \
-  --k3s-version $CHANNEL \
+  --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" #\
 #  --k3s-extra-args '--node-ip 10.69.2.14,2600:1700:3c00:635f:2::14'
@@ -71,7 +74,7 @@ k3sup join \
   --user $USER \
   --server-user $USER \
   --server-host $MASTER_1 \
-  --k3s-version $CHANNEL \
+  --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" #\
 #  --k3s-extra-args '--node-ip 10.69.2.15,2600:1700:3c00:635f:2::15'
