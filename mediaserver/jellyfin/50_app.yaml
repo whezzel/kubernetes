@@ -24,7 +24,7 @@ spec:
     spec:
       runtimeClassName: nvidia
       nodeSelector:
-        kubernetes.io/hostname: archserv01
+        nvidia.com/gpu.present: 'true'
       containers:
         - name: jellyfin
           image: lscr.io/linuxserver/jellyfin:latest
@@ -32,8 +32,6 @@ spec:
           ports:
             - containerPort: 8096
               name: http
-            - containerPort: 8920
-              name: https
           env:
             - name: TZ
               value: America/Chicago
@@ -55,7 +53,7 @@ spec:
               mountPath: /config
           resources:
             requests:
-              memory: "8Gi"
+              memory: "4Gi"
               cpu: "2"
       volumes:
         - name: localtime
