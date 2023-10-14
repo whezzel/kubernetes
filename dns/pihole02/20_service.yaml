@@ -9,6 +9,30 @@ spec:
   selector:
     app: pihole02
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole02-lb
+  namespace: dns
+  labels:
+    svccontroller.k3s.cattle.io/lbpool: 'pihole02'
+spec:
+  selector:
+    app: pihole02
+  ports:
+    - protocol: TCP
+      name: dns-tcp
+      port: 53
+      targetPort: dns-tcp
+    - protocol: UDP
+      name: dns-udp
+      port: 53
+      targetPort: dns-udp
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  externalTrafficPolicy: Local

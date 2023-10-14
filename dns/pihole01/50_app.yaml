@@ -32,11 +32,11 @@ spec:
             - containerPort: 80
               name: http
             - containerPort: 53
-              hostPort: 53
+            #  hostPort: 53
               protocol: TCP
               name: dns-tcp
             - containerPort: 53
-              hostPort: 53
+            #  hostPort: 53
               protocol: UDP
               name: dns-udp
           env:
@@ -55,6 +55,8 @@ spec:
             - name: "CUSTOM_CACHE_SIZE"
               value: "0"
             - name: "DNS_BOGUS_PRIV"
+              value: "false"
+            - name: "IPv6"
               value: "false"
           volumeMounts:
             - name: localtime
