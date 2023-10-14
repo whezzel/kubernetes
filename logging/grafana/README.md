@@ -8,7 +8,7 @@
 
 `mkdir /mnt/temp`
 
-`mount -o loop /var/lib/longhorn/replicas/path/to/.img /mnt/temp/`
+`mount -o loop /dev/longhorn/grafana /mnt/temp/`
 
 ### Copy existing data to volume
 or

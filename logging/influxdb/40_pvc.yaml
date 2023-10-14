@@ -6,9 +6,9 @@ metadata:
   namespace: logging
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 20Gi
+      storage: 60Gi
   volumeName: influxdb
   storageClassName: longhorn

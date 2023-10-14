@@ -6,10 +6,10 @@ metadata:
   namespace: logging
 spec:
   capacity:
-    storage: 20Gi
+    storage: 60Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:
