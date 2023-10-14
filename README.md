@@ -11,11 +11,7 @@ pacman -S nfs-utils
 **Install and enable iscsi**
 ```bash
 pacman -S open-iscsi
-systemctl enable --now iscsi.service
-```
-If you plan to use a Nvidia gpu in your workloads, you will need to install the Nvidia container runtime available on the AUR. Containerd will auto detect the nvidia runtime:
-```bash
-yay -S nvidia-container-toolkit nvidia-container-runtime
+systemctl enable --now iscsid.service
 ```
 **Setup CNI plugins for vanilla flannel**
 - https://github.com/containernetworking/plugins
@@ -46,6 +42,7 @@ Here is an example of the script I run to deploy K3s with 3x master nodes and 2x
 #!/bin/bash
 set -e
 
+#export CHANNEL="v1.27.4+k3s1"
 export CHANNEL="latest"
 export MASTER_1="archserv01.whezzel.com"
 export MASTER_2="archserv02.whezzel.com"
@@ -65,7 +62,7 @@ k3sup install \
   --print-command \
   --print-config \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --node-ip 10.69.2.20,2600:1700:3c00:635f:2::20 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
 
 k3sup join \
   --server \
@@ -76,7 +73,7 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --node-ip 10.69.2.10,2600:1700:3c00:635f:2::10 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
 
 k3sup join \
   --server \
@@ -87,7 +84,7 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --node-ip 10.69.2.2,2600:1700:3c00:635f:2::2 --cluster-cidr 10.42.0.0/16,2001:cafe:42::/56 --service-cidr 10.43.0.0/16,2001:cafe:43::1/112'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
 
 k3sup join \
  --server-host archserv01.whezzel.com \
@@ -97,8 +94,7 @@ k3sup join \
   --server-host $MASTER_1 \
   --k3s-channel $CHANNEL \
   --print-command \
-  --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--node-ip 10.69.2.3,2600:1700:3c00:635f:2::3'
+  --ssh-key "/home/zach/.ssh/root.id_rsa"
 
 k3sup join \
   --server-host archserv01.whezzel.com \
@@ -108,8 +104,8 @@ k3sup join \
   --server-host $MASTER_1 \
   --k3s-channel $CHANNEL \
   --print-command \
-  --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--node-ip 10.69.2.4,2600:1700:3c00:635f:2::4'
+  --ssh-key "/home/zach/.ssh/root.id_rsa"
+
 ```
 
 ## **Deploy Flannel**
@@ -136,7 +132,7 @@ Here is an example of mine. I have enabled IPv6:
 
 **Deploy this manifest**
 ```bash
-kubectl deploy ./kube-flannel.yml
+kubectl apply ./kube-flannel.yml
 ```
 
 ## **Deploy Multus**
@@ -182,38 +178,16 @@ spec:
 
 ```
 
-## **Modify traefik deployment**
-Certain services only expose a https port. For those services you either need to add a valid cert to the service, or you need to tell traefik not to verify self-signed certs. I decided to not verify self-signed certs (this is a security risk).
-
-**Edit traefik deployment:**
-```bash
-kubectl edit -n kube-system deployments traefik
-```
-**Add the following option to the args section (around line 50). The leading hyphen is required:**
-```
-- --serverstransport.insecureskipverify=true
-```
-## **Modify traefik service**
-By default, traefik doesn't pass the client IP to backend services, so in logs you only see the internal k8s IPs. Setting the `externalTrafficPolicy` to `local` gets traefik to pass the client ip to backend services.
-```bash
-kubectl edit -n kube-system service traefik
-```
-
 ## **Deploy Cert Manager**
 
 Cert Manager obviously manages our certificates. I use it to request and automatically renew LetsEncrypt certs for my domain.
 
  - https://cert-manager.io/docs/installation/helm/
 
-**Add the Cert Manager repo to helm, and update your repo list:**
-```bash
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-```
 **Deploy Cert Manager using helm:**
 ```bash
-helm upgrade --install cert-manager \
-    jetstack/cert-manager \
+helm upgrade --install cert-manager cert-manager \
+    --repo https://charts.jetstack.io \
     --namespace cert-manager \
     --create-namespace \
     --set installCRDs=true \
@@ -221,23 +195,51 @@ helm upgrade --install cert-manager \
 ```
 **Apply your issuers, and certs from local manifests:**
 ```bash
-kubectl apply -f cert-manager
+kubectl apply -f ~/repos/k3s/helm/cert-manager
+```
+
+## **Deploy ingress-nginx**
+We disabled the traefik ingress controller when deploying k3s, so we will need to deploy a different ingress controller. I chose ingress-inginx.
+
+ - https://kubernetes.github.io/ingress-nginx/deploy/
+
+**Deploy ingress-nginx using helm:**
+```bash
+helm upgrade --install nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --namespace nginx \
+    --create-namespace \
+    --values ~/repos/k3s/helm/nginx/values.yaml
+```
+**Here is an example of my values.yaml file**
+```yaml
+---
+controller:
+  replicaCount: 5
+  service:
+    externalTrafficPolicy: "Local"
+    ports:
+      http: 80
+      https: 443
+  extraArgs:
+    default-ssl-certificate: "cert-manager/whezzel.com-tls"
+  config:
+    compute-full-forwarded-for: "false"
+    use-forwarded-headers: "true"
+  ingressClassResource:
+    default: true
 ```
 
 # Deploy kubed
 Cert Manager stores the certficates as secrets, and screts are only accessible in the namespace they belong to. Kubed allows us to copy secrets to other namespaces automatically.
 - https://appscode.com/products/kubed/v0.12.0/setup/install/
 
-**Add the kubed repo to helm, and update your repo list:**
-```bash
-helm repo add appscode https://charts.appscode.com/stable/
-helm repo update
-```
 **Deploy kubed using helm:**
 ```
-helm upgrade --install kubed \
-    appscode/kubed \
-    --namespace kube-system \
+helm upgrade --install kubed kubed \
+    --repo https://charts.appscode.com/stable/ \
+    --namespace kubed \
+    --create-namespace \
     --set apiserver.enabled=false \
     --set config.clusterName=prod
 ```
@@ -246,68 +248,92 @@ helm upgrade --install kubed \
 
 Annotate the secret you want to sync:
 ```bash
-kubectl annotate secrets -n cert-manager whezzel.com-tls kubed.appscode.com/sync="app=kubed"
+kubectl annotate secrets -n cert-manager <SECRET_NAME> kubed.appscode.com/sync="app=kubed"
 ```
 and the namespaces we want to sync it to:
 ```bash
-kubectl label namespace homeassistant app=kubed
+kubectl label namespace <NAMESPACE> app=kubed
 ```
 
 ## **Deploy keel.sh**
 Manually updating workloads is annoying, but keel.sh allows us to automate that.
 - https://keel.sh/docs/#deploying-with-helm
 
-**Add the keel.sh repo to helm, and update your repo list:**
-```bash
-helm repo add keel https://charts.keel.sh
-helm repo update
-```
 **Deploy keel.sh using helm:**
 ```bash
-helm upgrade --install keel \
-    keel/keel \
+helm upgrade --install keel keel \
+    --repo https://charts.keel.sh \
     --namespace=keel \
     --create-namespace \
     --set "nodeSelector\.kubernetes\.io\/arch"=amd64 \
-    --values ~/repos/k3s/keel/values.yaml
+    --values ~/repos/k3s/helm/keel/values.yaml
 ```
 
 ## **Deploy Longhorn**
 Longhorn is a distributed storage solution. It allows us to create storage volumes with replicas for resiliency. It allows storage to stay available even if one of your nodes goes down.
+
 - https://longhorn.io/docs/latest/deploy/install/install-with-helm/
 
-**Add the longhorn repo to helm, and update your repo list:**
-```bash
-helm repo add longhorn https://charts.longhorn.io
-helm repo update
-```
 **Deploy longhorn using helm:**
 ```bash
-helm upgrade --install longhorn \
-    longhorn/longhorn \
+helm upgrade --install longhorn longhorn \
+    --repo https://charts.longhorn.io \
     --namespace longhorn-system \
     --create-namespace \
-    --values ~/repos/k3s/longhorn/values.yaml
+    --values ~/repos/k3s/helm/longhorn/values.yaml
 ```
-**Deploy ingress for longhorn so you can access the webui**
+
+**Deploy support manifests**
 ```bash
 k apply -Rf ~/repos/k3s/longhorn/01_ingress.yaml
 ```
-## **Deploy traefik middlewares**
-Traefik middlewares are neccessary for things like automatically redirecting http traffic to https endpoints.
-```bash
-kubectl apply manifests in kube-system namespace
+
+**Example values.yaml:**
 ```
+csi:
+  kubeletRootDir: /var/lib/kubelet
+
+defaultSettings:
+  backupTarget: nfs://archserv02.whezzel.com:/mnt/netstorage/backups/longhorn
+  replicaSoftAntiAffinity: false
+  replicaZoneSoftAntiAffinity: true
+  defaultReplicaCount: 5
+  defaultLonghornStaticStorageClass: longhorn
+  guaranteedEngineCPU: 0.20
+  #defaultDataLocality: disabled
+  defaultDataLocality: best-effort
+  replicaAutoBalance: best-effort
+  orphanAutoDeletion: true
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  host: longhorn.whezzel.com
+  annotations:
+    # annotations for authelia
+    nginx.ingress.kubernetes.io/auth-method: GET
+    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/verify
+    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
+    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+    nginx.ingress.kubernetes.io/auth-snippet: |
+      proxy_set_header X-Forwarded-Method $request_method;
+```
+
+
 ## **Deploy Nvidia GPU Operator**
 - https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html#install-helm
 
+You will need to install the Nvidia container runtime available on the AUR. Containerd will auto detect the nvidia runtime:
+```bash
+yay -S nvidia-container-runtime
+```
 Scroll down to "Bare-metal/Passthrough with pre-installed drivers and NVIDIA Container Toolkit"
 ```bash
-helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
-helm repo update
-helm upgrade --install --wait gpu-operator \
-     -n gpu-operator --create-namespace \
-      nvidia/gpu-operator -f gpu-operator/values.yaml
+helm upgrade --install gpu-operator gpu-operator \
+    --repo https://helm.ngc.nvidia.com/nvidia \
+    --namespace gpu-operator \
+    --create-namespace \
+    --values ~/repos/k3s/helm/gpu-operator/values.yaml
 ```
 Contents of my `values.yaml`
 ```yaml
