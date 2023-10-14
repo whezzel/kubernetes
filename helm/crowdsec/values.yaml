@@ -1,0 +1,187 @@
+---
+container_runtime: containerd
+image:
+  repository: crowdsecurity/crowdsec
+  pullPolicy: IfNotPresent
+  tag: "latest"
+config:
+  #parsers:
+  #  s00-raw: {}
+  #  s01-parse:
+  #    gotify-logs.yaml: |
+  #      ---
+  #      filter: evt.Parsed.program == "gotify"
+  #      debug: false
+  #      onsuccess: next_stage
+  #      name: whezzel/gotify-logs
+  #      description: parser for Gotify server
+  #      pattern_syntax:
+  #        OLD_TIMESTAMP: '^\[GIN\] %{YEAR:year}/%{MONTHDAY:month}/%{DAY2:day} - %{TIME:time}'
+  #        NEW_TIMESTAMP: '^%{YEAR:year}-%{MONTHDAY:month}-%{DAY2:day}T%{TIME:time}%{ISO8601_TIMEZONE}'
+  #        SEPERATOR: '%{SPACE}[|]%{SPACE}'
+  #      nodes:
+  #        - grok:
+  #            pattern: '%{OLD_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
+  #            # example: [GIN] 2022/02/07 - 10:49:33 | 401 |     505.317µs |       156.146.39.213 | POST     "/client"
+  #            apply_on: message
+  #            statics:
+  #              - meta: log_type
+  #                value: gotify_failed_auth
+  #              - target: StrTime
+  #                expression: |-
+  #                  evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
+  #        - grok:
+  #            pattern: '%{NEW_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
+  #            # example: 2023-10-08T14:02:49-05:00 | 401 |    5.719155ms |  156.146.39.213 | POST     "/client"
+  #            apply_on: message
+  #            statics:
+  #              - meta: log_type
+  #                value: gotify_failed_auth
+  #              - target: StrTime
+  #                expression: |-
+  #                  evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
+  #      statics:
+  #        - meta: source_ip
+  #          expression: evt.Parsed.source_ip
+  #        - meta: http_status
+  #          expression: evt.Parsed.http_status
+  #      ...
+  #  s02-enrich: {}
+  #scenarios:
+  #  gotify-bf.yaml: |
+  #    type: leaky
+  #    name: whezzel/gotify-bf
+  #    description: "Detect bruteforce"
+  #    filter: "evt.Meta.log_type  == 'gotify_failed_auth'"
+  #    groupby: "evt.Meta.source_ip"
+  #    capacity: 4
+  #    leakspeed: "10s"
+  #    blackhole: 1m
+  #    labels:
+  #      service: gotify
+  #      behavior: "http:bruteforce"
+  #      classification:
+  #        - attack.T1110
+  #      spoofable: 0
+  #      confidence: 3
+  #      label: "Gotify Bruteforce"
+  #      remediation: true
+  postoverflows: {}
+  simmulation: {}
+  console: {}
+  capi_whitelists.yaml: ""
+  profiles.yaml: |
+    name: default_ip_remediation
+    filters:
+     - Alert.Remediation == true && Alert.GetScope() == "Ip"
+    decisions:
+     - type: ban
+       duration: 4h
+    duration_expr: Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 24)
+    notifications:
+     - http_gotify   # Set the required http parameters in /etc/crowdsec/notifications/http.yaml before enabling this.
+    on_success: break
+  notifications:
+    http-gotify.yaml: |
+      type: http          # Don't change
+      name: http_gotify # Must match the registered plugin in the profile
+      log_level: info
+      format: |
+        {{ range . -}}
+        {{ $alert := . -}}
+        {
+          "extras": {
+            "client::display": {
+            "contentType": "text/markdown"
+          }
+        },
+        "priority": 3,
+        {{range .Decisions -}}
+        "title": "Crowdsec",
+        "message": "{{.Type }} {{ .Value }} for {{.Duration}}  \n{{.Scenario}}  \n[crowdsec cti](https://app.crowdsec.net/cti/{{.Value -}})  \n[shodan](https://shodan.io/host/{{.Value -}})"
+        {{end -}}
+        }
+        {{ end -}}
+      url: http://gotify.email.svc.cluster.local/message
+      method: POST
+      headers:
+        X-Gotify-Key: AhvQ2l4Bwle8t99
+        Content-Type: application/json
+lapi:
+  env:
+    - name: DISABLE_ONLINE_API
+      value: "true"
+  dashboard:
+    enabled: false
+    ingress:
+      enabled: false
+      ingressClassName: "nginx"
+      host: "crowdsec.whezzel.com"
+  persistentVolume:
+    data:
+      enabled: true
+      accessModes:
+        - ReadWriteOnce
+      existingClaim: "crowdsec-data"
+      size: 1Gi
+    config:
+      enabled: false
+  resources:
+    limits:
+      memory: 1G
+    requests:
+      cpu: 150m
+      memory: 100Mi
+  service:
+    type: LoadBalancer
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: crowdsec-api.whezzel.com
+    externalTrafficPolicy: Local
+agent:
+  acquisition:
+    - namespace: "auth"
+      podName: "authelia-*"
+      program: "authelia"
+    - namespace: "dns"
+      podName: "bind-*"
+      program: "bind"
+    - namespace: "cloud"
+      podName: "immich-*"
+      program: "immich"
+    - namespace: "email"
+      podName: "gotify-*"
+      program: "gotify"
+    - namespace: "mediaserver"
+      podName: "jellyfin-*"
+      program: "jellyfin"
+    - namespace: "nginx"
+      podName: "nginx-ingress-nginx-controller-*"
+      program: "nginx"
+    - namespace: "passman"
+      podName: "vaultwarden-*"
+      program: "vaultwarden"
+    - namespace: "logging"
+      podName: "grafana-*"
+      program: "grafana"
+    - namespace: "homeassistant"
+      podName: "homeassistant-*"
+      program: "home-assistant"
+    - namespace: "email"
+      podName: "mailue-*"
+      program: "mailu-admin"
+    - namespace: "cloud"
+      podName: "baikal-*"
+      program: "baikal"
+  env:
+    - name: COLLECTIONS
+      value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant mwinters-stuff/mailu-admin andreasbrett/baikal"
+    #- name: SCENARIOS
+    #  value: "baudneo/gotify-bf"
+    #- name: PARSERS
+    #  value: ""
+    - name: DISABLE_ONLINE_API
+      value: "true"
+    - name: LEVEL_DEBUG
+      value: "false"
+    - name: LEVEL_TRACE
+      value: "false"
