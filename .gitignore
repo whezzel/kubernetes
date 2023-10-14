@@ -8,8 +8,5 @@
 k3s.code-workspace
 temp*
 arch/
-glusterfs/
-nginx/
-traefik/
-metallb/
-kube-system/
+kube-flannel/
+multus-cni/
