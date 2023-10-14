@@ -9,20 +9,22 @@ spec:
   selector:
     app: vaultwarden
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: http
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: vaultwarden-websocket
-  namespace: passman
-spec:
-#  ipFamilyPolicy: PreferDualStack
-  selector:
-    app: vaultwarden
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: websocket
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: vaultwarden-websocket
+#  namespace: passman
+#spec:
+##  ipFamilyPolicy: PreferDualStack
+#  selector:
+#    app: vaultwarden
+#  ports:
+#    - name: websocket
+#      protocol: TCP
+#      port: 80
+#      targetPort: websocket
