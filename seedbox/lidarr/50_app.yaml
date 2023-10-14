@@ -29,30 +29,6 @@ spec:
           ports:
             - containerPort: 8686
               name: http
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 5
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 5
-          startupProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 3
-            failureThreshold: 5
           env:
             - name: TZ
               value: "America/Chicago"

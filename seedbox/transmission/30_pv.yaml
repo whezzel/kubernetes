@@ -5,10 +5,10 @@ metadata:
   name: transmission
 spec:
   capacity:
-    storage: 128Mi
+    storage: 512Mi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:

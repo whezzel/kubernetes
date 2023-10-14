@@ -5,10 +5,10 @@ metadata:
   name: prowlarr
 spec:
   capacity:
-    storage: 512Mi
+    storage: 2Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:
@@ -22,4 +22,4 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: seedbox
-    name: prowlarr-prowlarr-0
+    name: prowlarr

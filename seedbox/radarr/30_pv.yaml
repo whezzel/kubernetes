@@ -5,10 +5,10 @@ metadata:
   name: radarr
 spec:
   capacity:
-    storage: 2Gi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:
@@ -22,4 +22,4 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     namespace: seedbox
-    name: radarr-radarr-0
+    name: radarr

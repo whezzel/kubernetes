@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sonarr-sonarr-0
+  name: sonarr
   namespace: seedbox
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
   volumeName: sonarr
   storageClassName: longhorn
