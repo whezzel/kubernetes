@@ -9,7 +9,8 @@ spec:
   selector:
     app: zwavejs2mqtt
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: http
 ---
@@ -29,3 +30,4 @@ spec:
       targetPort: websocket
   type: LoadBalancer
   sessionAffinity: ClientIP
+  externalTrafficPolicy: Local

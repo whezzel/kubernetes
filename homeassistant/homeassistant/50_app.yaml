@@ -24,15 +24,12 @@ spec:
       labels:
         app: homeassistant
     spec:
-      #nodeSelector:
-      #  kubernetes.io/hostname: archserv01
       containers:
         - name: homeassistant
           image: homeassistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123
-              #hostPort: 8123
               name: http
           env:
             - name: "TZ"
@@ -47,8 +44,8 @@ spec:
               readOnly: true
             - name: homeassistant
               mountPath: /config
-            - name: nas-media
-              mountPath: /media
+          #  - name: nas-media
+          #    mountPath: /media
           resources:
             requests:
               memory: "1Gi"
@@ -60,7 +57,7 @@ spec:
         - name: homeassistant
           persistentVolumeClaim:
             claimName: homeassistant
-        - name: nas-media
-          nfs:
-            server: archserv02.whezzel.com
-            path: /mnt/netstorage/media
+        #- name: nas-media
+        #  nfs:
+        #    server: archserv02.whezzel.com
+        #    path: /mnt/netstorage/media
