@@ -2,11 +2,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frigate-http
+  name: frigate
   namespace: cctv
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-https-redirect@kubernetescrd
+    nginx.ingress.kubernetes.io/auth-method: GET
+    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/verify
+    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
+    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+    nginx.ingress.kubernetes.io/auth-snippet: |
+      proxy_set_header X-Forwarded-Method $request_method;
 spec:
   rules:
     - host: frigate.whezzel.com
@@ -18,28 +22,4 @@ spec:
               service:
                 name: frigate
                 port:
-                  number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: frigate-https
-  namespace: cctv
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-headers@kubernetescrd
-spec:
-  tls:
-  - secretName: whezzel.com-tls
-  rules:
-    - host: frigate.whezzel.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frigate
-                port:
-                  number: 80
+                  name: http

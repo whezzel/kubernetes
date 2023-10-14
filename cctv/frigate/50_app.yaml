@@ -30,7 +30,6 @@ spec:
           securityContext:
             privileged: true
           image: ghcr.io/blakeblackshear/frigate:stable
-#          image: blakeblackshear/frigate:stable-amd64nvidia
           imagePullPolicy: Always
           env:
             - name: NVIDIA_VISIBLE_DEVICES
