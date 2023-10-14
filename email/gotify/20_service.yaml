@@ -9,6 +9,7 @@ spec:
   selector:
     app: gotify
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: http

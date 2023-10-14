@@ -32,6 +32,8 @@ spec:
           env:
             - name: TZ
               value: "America/Chicago"
+            - name: GOTIFY_EXTENDEDLOGFORMAT
+              value: "true"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
