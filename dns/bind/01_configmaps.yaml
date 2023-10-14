@@ -35,7 +35,7 @@ data:
         allow-recursion { internal; };
         allow-transfer { internal; };
         allow-query { internal; };
-        allow-update { key rndc-key; key opnsense01; key opnsense02; key arch01_internal; key k3s-external-dns; key internal; };
+        allow-update { key rndc-key; key opnsense; key arch01_internal; key k3s-external-dns; key internal; };
         recursion yes;
         notify explicit;
         zone "localhost" { type primary; file "/var/lib/bind/localhost.db"; };
