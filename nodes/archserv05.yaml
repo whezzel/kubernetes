@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: archserv05
+  labels:
+    svccontroller.k3s.cattle.io/enablelb: 'true'
+    svccontroller.k3s.cattle.io/lbpool: 'pihole02'
