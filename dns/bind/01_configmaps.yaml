@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bind-dns-config
+  namespace: dns
+data:
+  named.conf: |
+    acl "internal" { localhost; 10.42.0.0/16; 10.69.0.0/16; };
+    acl "external" { 0.0.0.0/0; };
+    acl "opnsense" { 10.69.20.2; 10.69.20.3; };
+
+    options {
+        directory "/var/lib/bind/working";
+        dnssec-validation auto;
+        hostname none;
+        max-cache-size 1%;
+        notify no;
+        prefetch 0;
+        querylog no;
+        recursion yes;
+        version none;
+        statistics-file "/var/lib/bind/stats/named.stats";
+        listen-on port 53 { any; };
+        listen-on-v6 port 53 { none; };
+    };
+
+    include "/etc/bind/rndc-keys.conf";
+
+    controls { inet 0.0.0.0 port 953 allow { 127.0.0.1; } keys { "rndc-key"; }; };
+    statistics-channels { inet 0.0.0.0 port 8053; };
+
+    view "internal" {
+        match-clients { !key external; !key arch01_external; !key Ggm0G6qvMys=; internal; };
+        allow-recursion { internal; };
+        allow-transfer { internal; };
+        allow-query { internal; };
+        allow-update { key rndc-key; key opnsense01; key opnsense02; key arch01_internal; key k3s-external-dns; key internal; };
+        recursion yes;
+        notify explicit;
+        zone "localhost" { type primary; file "/var/lib/bind/localhost.db"; };
+        zone "127.in-addr.arpa" { type primary; file "/var/lib/bind/127.in-addr.arpa.db"; };
+        zone "whezzel.com" { type primary; file "/var/lib/bind/internal/whezzel.com.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "2.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/2.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "20.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/20.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "40.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/40.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "41.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/41.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "42.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/42.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "43.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/43.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "44.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/44.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "50.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/50.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "99.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/99.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "100.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/100.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+    };
+
+    view "external" {
+        match-clients { !key internal; !key arch01_internal; any; };
+        allow-transfer { key rndc-key; key external; };
+        allow-query { any; };
+        allow-update { none; };
+        recursion no;
+        notify explicit;
+        zone "whezzel.xyz" { type primary; file "/var/lib/bind/external/whezzel.xyz.db"; dnssec-policy default; inline-signing true; also-notify { 10.69.20.2 key external; 10.69.20.3 key external; }; allow-update { key rndc-key; key arch01_external; key Ggm0G6qvMys=; }; };
+    };
+
+    logging {
+        channel stdout { stderr; severity info; print-category no; print-severity no; print-time yes; };
+        category security { stdout; };
+        category dnssec { stdout; };
+        category default { stdout; };
+        category queries { stdout; };
+    };

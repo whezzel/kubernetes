@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bind
+  namespace: dns
+  labels:
+    app: bind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bind
+  template:
+    metadata:
+      name: bind
+      labels:
+        app: bind
+    spec:
+      #securityContext:
+      #  fsGroup: 105
+      containers:
+        - name: bind
+          image: internetsystemsconsortium/bind9:9.19
+          imagePullPolicy: IfNotPresent
+          command: ["named"]
+          args:
+            - "-f"
+            - "-c"
+            - "/etc/bind/named.conf"
+            - "-4"
+            - "-u"
+            - "bind"
+          ports:
+            - containerPort: 53
+              protocol: UDP
+              name: dns-udp
+            - containerPort: 53
+              protocol: TCP
+              name: dns-tcp
+            - containerPort: 953
+              protocol: TCP
+              name: dns-rndc
+            - containerPort: 8053
+              protocol: TCP
+              name: dns-stats
+          volumeMounts:
+            - name: bind-dns-config
+              mountPath: "/etc/bind/named.conf"
+              readOnly: false
+              subPath: named.conf
+            - name: bind-rndc-key
+              mountPath: "/etc/bind/rndc.key"
+              readOnly: true
+              subPath: rndc.key
+            - name: bind-rndc-keys
+              mountPath: "/etc/bind/rndc-keys.conf"
+              readOnly: true
+              subPath: rndc-keys.conf
+            - name: bind
+              mountPath: /var/lib/bind
+              subPath: lib
+            - name: bind
+              mountPath: /var/log/bind
+              subPath: log
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "100m"
+      volumes:
+        - name: bind
+          persistentVolumeClaim:
+            claimName: bind
+        - name: bind-dns-config
+          configMap:
+            name: bind-dns-config
+        - name: bind-rndc-key
+          secret:
+            secretName: bind-rndc-key
+        - name: bind-rndc-keys
+          secret:
+            secretName: bind-rndc-keys

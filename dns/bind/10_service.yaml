@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bind-lb
+  namespace: dns
+  labels:
+    svccontroller.k3s.cattle.io/lbpool: 'bind-master'
+spec:
+  selector:
+    app: bind
+  ports:
+    - protocol: TCP
+      name: dns-tcp
+      port: 53
+      targetPort: dns-tcp
+    - protocol: UDP
+      name: dns-udp
+      port: 53
+      targetPort: dns-udp
+    - protocol: TCP
+      name: dns-rndc
+      port: 953
+      targetPort: dns-rndc
+    - protocol: TCP
+      name: dns-stats
+      port: 8053
+      targetPort: dns-stats
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
