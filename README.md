@@ -109,30 +109,37 @@ k3sup join \
 ```
 
 ## **Deploy Flannel**
-- https://github.com/flannel-io/flannel
 
-**Download latest manifest:**
+Flannel is a CNI for kubernetes
+
+ - https://github.com/flannel-io/flannel
+ - https://github.com/flannel-io/flannel/tree/master/chart
+
+
+
+**Create and apply supporting manifests:**
 ```bash
-wget https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
-```
-Edit the manifest we just downloaded. Find the definition for `net-conf.json` (around line 90 in v0.21.2). Change the ip subnets to match the subnets you selected when running the k3sup script above.
+touch ~/repos/k3s/helm/flannel/00_namespace.yaml
+cat > ~/repos/k3s/helm/flannel/00_namespace.yaml <<'EOF'
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flannel
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+EOF
 
-Here is an example of mine. I have enabled IPv6:
-```yaml
-  net-conf.json: |
-    {
-      "Network": "10.42.0.0/16",
-      "Backend": {
-        "Type": "vxlan"
-      },
-      "EnableIPv6": true,
-      "IPv6Network": "2001:cafe:42:0::/56"
-    }
+kubectl apply -f ~/repos/k3s/helm/flannel/00_namespace.yaml
 ```
 
-**Deploy this manifest**
+**Deploy Flannel using helm:**
 ```bash
-kubectl apply ./kube-flannel.yml
+helm upgrade --install flannel flannel \
+    --repo https://flannel-io.github.io/flannel/ \
+    --namespace flannel \
+    --create-namespace \
+    --values ~/repos/k3s/helm/flannel/values.yaml
 ```
 
 ## **Deploy Multus**
