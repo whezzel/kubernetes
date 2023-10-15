@@ -9,7 +9,6 @@ Flannel is a CNI for kubernetes
 
 **Create and apply supporting manifests:**
 ```bash
-touch ~/repos/k3s/helm/flannel/00_namespace.yaml
 cat > ~/repos/k3s/helm/flannel/00_namespace.yaml <<'EOF'
 ---
 apiVersion: v1
