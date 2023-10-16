@@ -3,22 +3,9 @@ Longhorn is a distributed storage solution. It allows us to create storage volum
 
 - https://longhorn.io/docs/latest/deploy/install/install-with-helm/
 
-**Deploy longhorn using helm:**
-```bash
-helm upgrade --install longhorn longhorn \
-    --repo https://charts.longhorn.io \
-    --namespace longhorn-system \
-    --create-namespace \
-    --values ~/repos/k3s/helm/longhorn/values.yaml
-```
-
-**Deploy support manifests**
-```bash
-k apply -Rf ~/repos/k3s/longhorn/01_ingress.yaml
-```
-
 **Example values.yaml:**
-```
+```bash
+cat > ~/repos/k3s/longhorn/values.yaml <<'EOF'
 csi:
   kubeletRootDir: /var/lib/kubelet
 
@@ -38,12 +25,19 @@ ingress:
   enabled: true
   ingressClassName: nginx
   host: longhorn.whezzel.com
-  annotations:
-    # annotations for authelia
-    nginx.ingress.kubernetes.io/auth-method: GET
-    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/verify
-    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
-    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
-    nginx.ingress.kubernetes.io/auth-snippet: |
-      proxy_set_header X-Forwarded-Method $request_method;
+EOF
+```
+
+**Deploy longhorn using helm:**
+```bash
+helm upgrade --install longhorn longhorn \
+    --repo https://charts.longhorn.io \
+    --namespace longhorn \
+    --create-namespace \
+    --values ~/repos/k3s/helm/longhorn/values.yaml
+```
+
+**Deploy supporting manifests**
+```bash
+k apply -Rf ~/repos/k3s/longhorn/
 ```

@@ -18,18 +18,11 @@ systemctl enable --now iscsid.service
 ```bash
 mkdir -p /opt/cni/bin
 cd /opt/cni/bin
-```
-**For amd64:**
-```bash
-wget https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz
-```
-**For arm64:**
-```bash
-wget https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-arm64-v1.2.0.tgz
+wget https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-amd64-v1.3.0.tgz
 ```
 **Extract the cni plugins**
 ```bash
-tar -xvf cni-plugins-linux-{amd64|arm64}-v1.2.0.tgz
+tar -xvf cni-plugins-linux-amd64-v1.3.0.tgz
 ```
 
 # **Deploy K3s using `k3sup` script**
@@ -62,7 +55,7 @@ k3sup install \
   --print-command \
   --print-config \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb'
 
 k3sup join \
   --server \
@@ -73,7 +66,7 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb'
 
 k3sup join \
   --server \
@@ -84,7 +77,7 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb'
 
 k3sup join \
  --server-host archserv01.whezzel.com \
@@ -105,7 +98,6 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa"
-
 ```
 
 ## **Deploy Flannel**
@@ -115,11 +107,16 @@ Flannel is a CNI for kubernetes
  - https://github.com/flannel-io/flannel
  - https://github.com/flannel-io/flannel/tree/master/chart
 
-
-
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/flannel/values.yaml <<'EOF'
+---
+podCidr: "10.42.0.0/16"
+podCidrv6: ""
+EOF
+```
 **Create and apply supporting manifests:**
 ```bash
-touch ~/repos/k3s/helm/flannel/00_namespace.yaml
 cat > ~/repos/k3s/helm/flannel/00_namespace.yaml <<'EOF'
 ---
 apiVersion: v1
@@ -129,7 +126,8 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: privileged
 EOF
-
+```
+```bash
 kubectl apply -f ~/repos/k3s/helm/flannel/00_namespace.yaml
 ```
 
@@ -141,48 +139,165 @@ helm upgrade --install flannel flannel \
     --create-namespace \
     --values ~/repos/k3s/helm/flannel/values.yaml
 ```
+## **Deploy MetalLB**
+
+MetalLB is a loadbalancer for bare metal kubernetes
+
+ - https://metallb.universe.tf/installation/
+
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/metallb/values.yaml <<'EOF'
+---
+loadBalancerClass: "metallb"
+speaker:
+  enabled: true
+  frr:
+    enabled: true
+
+EOF
+```
+
+**Create and Deploy Metallb namespace:**
+```bash
+cat > ~/repos/k3s/helm/metallb/00_namespace.yaml <<'EOF'
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: metallb
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
+EOF
+```
+```bash
+kubectl apply -f ~/repos/k3s/helm/metallb/00_namespace.yaml
+```
+
+**Deploy MetalLB using helm:**
+```bash
+helm upgrade --install metallb metallb \
+    --repo https://metallb.github.io/metallb \
+    --namespace metallb \
+    --create-namespace \
+    --values ~/repos/k3s/helm/metallb/values.yaml
+```
+
+**Create and Deploy metallb ip address pool:**
+```bash
+cat > ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml <<'EOF'
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: pool106952
+  namespace: metallb
+spec:
+  addresses:
+  - 10.69.21.0/24
+
+EOF
+```
+```bash
+kubectl apply -f ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml
+```
+
+**Create and Deploy metallb bgp peer:**
+```bash
+cat > ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml <<'EOF'
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: opnsense01
+  namespace: metallb
+spec:
+  myASN: 64514
+  peerASN: 64512
+  peerAddress: 10.69.20.2
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: opnsense02
+  namespace: metallb
+spec:
+  myASN: 64514
+  peerASN: 64512
+  peerAddress: 10.69.20.3
+EOF
+```
+```bash
+kubectl apply -f ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml
+```
+
+**Create and Deploy metallb bgp advertisements:**
+```bash
+cat > ~/repos/k3s/helm/metallb/03_bgpadvertisement.yaml.yaml <<'EOF'
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: bgpadv
+  namespace: metallb
+spec:
+  ipAddressPools:
+  - pool106952
+EOF
+```
+```bash
+kubectl apply -f ~/repos/k3s/helm/metallb/03_bgpadvertisement.yaml.yaml
+```
 
 ## **Deploy Multus**
 Multus allows us to add additional network interfaces to workloads. This can be used to attach workloads to additional networks. The main reason I use it is to allow workloads access to my lan for multicast traffic. Multicast traffic is necessary for specific workloads like homeassistant and esphome to discover new devices on the network.
-- https://github.com/k8snetworkplumbingwg/multus-cni/blob/master/docs/quickstart.md
 
-**Clone the multus repo:**
-```bash
-git clone https://github.com/k8snetworkplumbingwg/multus-cni.git && cd multus-cni
-```
-**Deploy multus manifest:**
-```bash
-kubectl apply -f ~/repos/k3s/multus-cni/deployments/multus-daemonset-thick.yml
-```
-**Deploy multus interface definition:**
-```bash
-kubectl apply -f ~/repos/k3s/default/01_cni_conf.yaml
-```
-**Here is an example of my interface definition. It only has routes for multicast traffic. Adjust as necessary:**
+- https://artifacthub.io/packages/helm/bitnami/multus-cni
+
+**Deploy Helm chart:**
 ```yaml
+helm upgrade --install multus oci://registry-1.docker.io/bitnamicharts/multus-cni \
+    --namespace multus \
+    --create-namespace
+```
+
+**Create and Deploy multus interface definition:**
+```bash
+cat > ~/repos/k3s/helm/multus/01_cni_conf.yaml <<'EOF'
+---
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
   name: macvlan-conf
+  namespace: multus
 spec:
-  config: '{
+  config: |
+    {
       "cniVersion": "0.3.0",
       "type": "macvlan",
       "mode": "bridge",
-      "ipam": {
-        "type": "host-local",
-        "subnet": "10.69.2.0/23",
-        "rangeStart": "10.69.3.1",
-        "rangeEnd": "10.69.3.254",
-        "routes": [
-          {
-            "dst": "224.0.0.0/24"
-          }
-        ],
-        "gateway": "10.69.2.1"
-      }
-    }'
-
+    	"ipam": {
+    		"type": "host-local",
+    		"ranges": [
+    			[
+    				{
+    					"subnet": "10.69.50.0/24",
+    					"rangeStart": "10.69.50.200",
+    					"rangeEnd": "10.69.50.254"
+    				}
+    			]
+    		],
+    		"routes": [
+          { "dst": "224.0.0.0/24", "gw": "10.69.50.1" },
+          { "dst": "255.255.255.255/32", "gw": "10.69.50.1" }
+        ]
+    	}
+    }
+EOF
+```
+```bash
+kubectl apply -f ~/repos/k3s/helm/multus/01_cni_conf.yaml
 ```
 
 ## **Deploy Cert Manager**
@@ -191,14 +306,22 @@ Cert Manager obviously manages our certificates. I use it to request and automat
 
  - https://cert-manager.io/docs/installation/helm/
 
+
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/cert-manager/values.yaml <<'EOF'
+installCRDs: true
+dns01RecursiveNameservers: "8.8.8.8:53,1.1.1.1:53"
+dns01RecursiveNameserversOnly: true
+EOF
+```
 **Deploy Cert Manager using helm:**
 ```bash
 helm upgrade --install cert-manager cert-manager \
     --repo https://charts.jetstack.io \
     --namespace cert-manager \
     --create-namespace \
-    --set installCRDs=true \
-    --set 'extraArgs={--dns01-recursive-nameservers-only,--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
+    --values ~/repos/k3s/helm/cert-manager/values.yaml
 ```
 **Apply your issuers, and certs from local manifests:**
 ```bash
@@ -210,16 +333,9 @@ We disabled the traefik ingress controller when deploying k3s, so we will need t
 
  - https://kubernetes.github.io/ingress-nginx/deploy/
 
-**Deploy ingress-nginx using helm:**
+**Example values.yaml:**
 ```bash
-helm upgrade --install nginx ingress-nginx \
-    --repo https://kubernetes.github.io/ingress-nginx \
-    --namespace nginx \
-    --create-namespace \
-    --values ~/repos/k3s/helm/nginx/values.yaml
-```
-**Here is an example of my values.yaml file**
-```yaml
+cat > ~/repos/k3s/helm/nginx/values.yaml <<'EOF'
 ---
 controller:
   replicaCount: 5
@@ -235,14 +351,26 @@ controller:
     use-forwarded-headers: "true"
   ingressClassResource:
     default: true
+  allowSnippetAnnotations: true
+EOF
+```
+
+**Deploy ingress-nginx using helm:**
+```bash
+helm upgrade --install nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --namespace nginx \
+    --create-namespace \
+    --values ~/repos/k3s/helm/nginx/values.yaml
 ```
 
 # Deploy kubed
 Cert Manager stores the certficates as secrets, and screts are only accessible in the namespace they belong to. Kubed allows us to copy secrets to other namespaces automatically.
+
 - https://appscode.com/products/kubed/v0.12.0/setup/install/
 
 **Deploy kubed using helm:**
-```
+```bash
 helm upgrade --install kubed kubed \
     --repo https://charts.appscode.com/stable/ \
     --namespace kubed \
@@ -264,39 +392,38 @@ kubectl label namespace <NAMESPACE> app=kubed
 
 ## **Deploy keel.sh**
 Manually updating workloads is annoying, but keel.sh allows us to automate that.
+
 - https://keel.sh/docs/#deploying-with-helm
 
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/keel/values.yaml <<'EOF'
+webhook:
+  enabled: true
+  endpoint: "http://nodered.homeassistant/hooks/ndN656rVjA6E5V26nxXgGmRHo99Cm7wg"
+nodeSelector:
+  kubernetes.io/arch: amd64
+EOF
+```
 **Deploy keel.sh using helm:**
 ```bash
 helm upgrade --install keel keel \
     --repo https://charts.keel.sh \
     --namespace=keel \
     --create-namespace \
-    --set "nodeSelector\.kubernetes\.io\/arch"=amd64 \
     --values ~/repos/k3s/helm/keel/values.yaml
 ```
+
 
 ## **Deploy Longhorn**
 Longhorn is a distributed storage solution. It allows us to create storage volumes with replicas for resiliency. It allows storage to stay available even if one of your nodes goes down.
 
 - https://longhorn.io/docs/latest/deploy/install/install-with-helm/
 
-**Deploy longhorn using helm:**
-```bash
-helm upgrade --install longhorn longhorn \
-    --repo https://charts.longhorn.io \
-    --namespace longhorn-system \
-    --create-namespace \
-    --values ~/repos/k3s/helm/longhorn/values.yaml
-```
-
-**Deploy support manifests**
-```bash
-k apply -Rf ~/repos/k3s/longhorn/01_ingress.yaml
-```
 
 **Example values.yaml:**
-```
+```bash
+cat > ~/repos/k3s/longhorn/values.yaml <<'EOF'
 csi:
   kubeletRootDir: /var/lib/kubelet
 
@@ -316,20 +443,39 @@ ingress:
   enabled: true
   ingressClassName: nginx
   host: longhorn.whezzel.com
-  annotations:
-    # annotations for authelia
-    nginx.ingress.kubernetes.io/auth-method: GET
-    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/verify
-    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
-    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
-    nginx.ingress.kubernetes.io/auth-snippet: |
-      proxy_set_header X-Forwarded-Method $request_method;
+EOF
 ```
 
+**Deploy longhorn using helm:**
+```bash
+helm upgrade --install longhorn longhorn \
+    --repo https://charts.longhorn.io \
+    --namespace longhorn \
+    --create-namespace \
+    --values ~/repos/k3s/helm/longhorn/values.yaml
+```
+
+**Deploy supporting manifests**
+```bash
+k apply -Rf ~/repos/k3s/longhorn/
+```
 
 ## **Deploy Nvidia GPU Operator**
 - https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html#install-helm
 
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/gpu-operator/values.yaml <<'EOF'
+operator:
+  defaultRuntime: containerd
+
+driver:
+  enabled: false
+
+toolkit:
+  enabled: false
+EOF
+```
 You will need to install the Nvidia container runtime available on the AUR. Containerd will auto detect the nvidia runtime:
 ```bash
 yay -S nvidia-container-runtime
@@ -341,17 +487,6 @@ helm upgrade --install gpu-operator gpu-operator \
     --namespace gpu-operator \
     --create-namespace \
     --values ~/repos/k3s/helm/gpu-operator/values.yaml
-```
-Contents of my `values.yaml`
-```yaml
-operator:
-  defaultRuntime: containerd
-
-driver:
-  enabled: false
-
-toolkit:
-  enabled: false
 ```
 
 # **Troubeshooting**

@@ -1,6 +1,19 @@
 ## **Deploy Nvidia GPU Operator**
 - https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html#install-helm
 
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/gpu-operator/values.yaml <<'EOF'
+operator:
+  defaultRuntime: containerd
+
+driver:
+  enabled: false
+
+toolkit:
+  enabled: false
+EOF
+```
 You will need to install the Nvidia container runtime available on the AUR. Containerd will auto detect the nvidia runtime:
 ```bash
 yay -S nvidia-container-runtime
@@ -12,15 +25,4 @@ helm upgrade --install gpu-operator gpu-operator \
     --namespace gpu-operator \
     --create-namespace \
     --values ~/repos/k3s/helm/gpu-operator/values.yaml
-```
-Contents of my `values.yaml`
-```yaml
-operator:
-  defaultRuntime: containerd
-
-driver:
-  enabled: false
-
-toolkit:
-  enabled: false
 ```

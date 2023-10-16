@@ -4,6 +4,15 @@ Cert Manager obviously manages our certificates. I use it to request and automat
 
  - https://cert-manager.io/docs/installation/helm/
 
+
+**Example values.yaml:**
+```bash
+cat > ~/repos/k3s/helm/cert-manager/values.yaml <<'EOF'
+installCRDs: true
+dns01RecursiveNameservers: "8.8.8.8:53,1.1.1.1:53"
+dns01RecursiveNameserversOnly: true
+EOF
+```
 **Deploy Cert Manager using helm:**
 ```bash
 helm upgrade --install cert-manager cert-manager \
@@ -11,11 +20,6 @@ helm upgrade --install cert-manager cert-manager \
     --namespace cert-manager \
     --create-namespace \
     --values ~/repos/k3s/helm/cert-manager/values.yaml
-```
-Example values.yaml
-```yaml
-installCRDs: true
-featureGates: "AdditionalCertificateOutputFormats=true"
 ```
 **Apply your issuers, and certs from local manifests:**
 ```bash

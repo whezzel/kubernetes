@@ -3,16 +3,9 @@ We disabled the traefik ingress controller when deploying k3s, so we will need t
 
  - https://kubernetes.github.io/ingress-nginx/deploy/
 
-**Deploy ingress-nginx using helm:**
+**Example values.yaml:**
 ```bash
-helm upgrade --install nginx ingress-nginx \
-    --repo https://kubernetes.github.io/ingress-nginx \
-    --namespace nginx \
-    --create-namespace \
-    --values ~/repos/k3s/helm/nginx/values.yaml
-```
-**Here is an example of my values.yaml file**
-```yaml
+cat > ~/repos/k3s/helm/nginx/values.yaml <<'EOF'
 ---
 controller:
   replicaCount: 5
@@ -29,4 +22,14 @@ controller:
   ingressClassResource:
     default: true
   allowSnippetAnnotations: true
+EOF
+```
+
+**Deploy ingress-nginx using helm:**
+```bash
+helm upgrade --install nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --namespace nginx \
+    --create-namespace \
+    --values ~/repos/k3s/helm/nginx/values.yaml
 ```
