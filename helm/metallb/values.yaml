@@ -1,0 +1,6 @@
+---
+loadBalancerClass: ""
+speaker:
+  enabled: true
+  frr:
+    enabled: true
