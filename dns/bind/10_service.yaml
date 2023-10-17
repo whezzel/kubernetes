@@ -29,3 +29,4 @@ spec:
   type: LoadBalancer
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
+  loadBalancerIP: 10.69.21.10
