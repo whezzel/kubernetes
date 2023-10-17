@@ -7,7 +7,8 @@ Multus allows us to add additional network interfaces to workloads. This can be 
 ```yaml
 helm upgrade --install multus oci://registry-1.docker.io/bitnamicharts/multus-cni \
     --namespace multus \
-    --create-namespace
+    --create-namespace \
+    --values ~/repos/k3s/helm/multus/values.yaml
 ```
 
 **Create and Deploy multus interface definition:**

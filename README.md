@@ -214,7 +214,7 @@ metadata:
   name: opnsense01
   namespace: metallb
 spec:
-  myASN: 64514
+  myASN: 64513
   peerASN: 64512
   peerAddress: 10.69.20.2
 ---
@@ -224,7 +224,7 @@ metadata:
   name: opnsense02
   namespace: metallb
 spec:
-  myASN: 64514
+  myASN: 64513
   peerASN: 64512
   peerAddress: 10.69.20.3
 EOF
@@ -256,7 +256,7 @@ Multus allows us to add additional network interfaces to workloads. This can be 
 - https://artifacthub.io/packages/helm/bitnami/multus-cni
 
 **Deploy Helm chart:**
-```yaml
+```bash
 helm upgrade --install multus oci://registry-1.docker.io/bitnamicharts/multus-cni \
     --namespace multus \
     --create-namespace
