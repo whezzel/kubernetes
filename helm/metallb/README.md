@@ -73,7 +73,7 @@ metadata:
   name: opnsense01
   namespace: metallb
 spec:
-  myASN: 64514
+  myASN: 64513
   peerASN: 64512
   peerAddress: 10.69.20.2
 ---
@@ -83,7 +83,7 @@ metadata:
   name: opnsense02
   namespace: metallb
 spec:
-  myASN: 64514
+  myASN: 64513
   peerASN: 64512
   peerAddress: 10.69.20.3
 EOF
