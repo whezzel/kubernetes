@@ -6,7 +6,7 @@ metadata:
   namespace: cloud
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 512Mi

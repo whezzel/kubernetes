@@ -9,7 +9,7 @@ spec:
     storage: 60Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:

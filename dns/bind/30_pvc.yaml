@@ -6,7 +6,7 @@ metadata:
   namespace: dns
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi
