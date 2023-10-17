@@ -18,8 +18,8 @@ spec:
       app: syncthing
   template:
     metadata:
-      annotations:
-        k8s.v1.cni.cncf.io/networks: default/macvlan-conf
+      #annotations:
+      #  k8s.v1.cni.cncf.io/networks: multus/macvlan-conf
       name: syncthing
       labels:
         app: syncthing

@@ -52,15 +52,15 @@ spec:
             - name: vscode
               mountPath: /var/cache/apt
               subPath: cache
-            - name: esphome
-              mountPath: /mnt/esphome
-            - name: homeassistant
-              mountPath: /mnt/homeassistant
-            - name: nodered
-              mountPath: /mnt/nodered
-            - name: vscode
-              mountPath: /mnt/vscode
-              subPath: config
+            #- name: esphome
+            #  mountPath: /mnt/esphome
+            #- name: homeassistant
+            #  mountPath: /mnt/homeassistant
+            #- name: nodered
+            #  mountPath: /mnt/nodered
+            #- name: vscode
+            #  mountPath: /mnt/vscode
+            #  subPath: config
             - name: ssh-config
               mountPath: "/etc/ssh/ssh_config"
               subPath: ssh_config
@@ -72,15 +72,15 @@ spec:
         - name: localtime
           hostPath:
             path: /usr/share/zoneinfo/America/Chicago
-        - name: esphome
-          persistentVolumeClaim:
-            claimName: esphome
-        - name: homeassistant
-          persistentVolumeClaim:
-            claimName: homeassistant
-        - name: nodered
-          persistentVolumeClaim:
-            claimName: nodered
+        #- name: esphome
+        #  persistentVolumeClaim:
+        #    claimName: esphome
+        #- name: homeassistant
+        #  persistentVolumeClaim:
+        #    claimName: homeassistant
+        #- name: nodered
+        #  persistentVolumeClaim:
+        #    claimName: nodered
         - name: vscode
           persistentVolumeClaim:
             claimName: vscode

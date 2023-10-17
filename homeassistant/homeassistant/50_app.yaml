@@ -18,8 +18,8 @@ spec:
       app: homeassistant
   template:
     metadata:
-      annotations:
-        k8s.v1.cni.cncf.io/networks: default/macvlan-conf
+      #annotations:
+      #  k8s.v1.cni.cncf.io/networks: multus/macvlan-conf
       name: homeassistant
       labels:
         app: homeassistant
