@@ -11,6 +11,7 @@ controller:
   replicaCount: 5
   service:
     externalTrafficPolicy: "Local"
+    loadBalancerIP: 10.69.21.20
     ports:
       http: 80
       https: 443
