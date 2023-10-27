@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy
+  namespace: email
+  labels:
+    app: ntfy
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy
+  template:
+    metadata:
+      name: ntfy
+      labels:
+        app: ntfy
+    spec:
+      containers:
+        - name: ntfy
+          image: binwiederhier/ntfy:latest
+          imagePullPolicy: Always
+          command: ["ntfy"]
+          args: ["serve"]
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: NTFY_BASE_URL
+              value: "https://ntfy.whezzel.com"
+            - name: NTFY_CACHE_FILE
+              value: "/var/cache/ntfy/cache.db"
+            - name: NTFY_CACHE_DURATION
+              value: "24h"
+            - name: NTFY_AUTH_FILE
+              value: "/var/cache/ntfy/user.db"
+            - name: NTFY_BEHIND_PROXY
+              value: "true"
+            - name: NTFY_ATTACHMENT_CACHE_DIR
+              value: "/var/cache/ntfy/attachments"
+            - name: NTFY_WEB_ROOT
+              value: "/"
+            - name: NTFY_ENABLE_LOGIN
+              value: "true"
+            - name: NTFY_AUTH_DEFAULT_ACCESS
+              value: "deny-all"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: ntfy
+              mountPath: /var/cache/ntfy
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: ntfy
+          persistentVolumeClaim:
+            claimName: ntfy
