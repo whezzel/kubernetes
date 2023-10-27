@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vscode
+  namespace: homeassistant
+  labels:
+    app: vscode
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vscode
+  template:
+    metadata:
+      name: vscode
+      labels:
+        app: vscode
+    spec:
+      containers:
+        - name: vscode
+          image: lscr.io/linuxserver/code-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8443
+              name: http
+            - containerPort: 22
+              name: ssh
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "0"
+            - name: "PGID"
+              value: "0"
+            - name: "GIT_SSH_COMMAND"
+              value: "ssh -4"
+            - name: "DEFAULT_WORKSPACE"
+              value: "/mnt"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: vscode
+              mountPath: /config
+              subPath: config
+            - name: vscode
+              mountPath: /var/cache/apt
+              subPath: cache
+            - name: esphome
+              mountPath: /mnt/esphome
+            - name: homeassistant
+              mountPath: /mnt/homeassistant
+            #- name: nodered
+            #  mountPath: /mnt/nodered
+            #- name: vscode
+            #  mountPath: /mnt/vscode
+            #  subPath: config
+            - name: ssh-config
+              mountPath: "/etc/ssh/ssh_config"
+              subPath: ssh_config
+          resources:
+            requests:
+              memory: "400Mi"
+              cpu: "250m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: esphome
+          persistentVolumeClaim:
+            claimName: esphome
+        - name: homeassistant
+          persistentVolumeClaim:
+            claimName: homeassistant
+        #- name: nodered
+        #  persistentVolumeClaim:
+        #    claimName: nodered
+        - name: vscode
+          persistentVolumeClaim:
+            claimName: vscode
+        - name: ssh-config
+          configMap:
+            name: ssh-config

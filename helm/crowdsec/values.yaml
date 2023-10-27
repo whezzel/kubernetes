@@ -95,7 +95,7 @@ config:
             "contentType": "text/markdown"
           }
         },
-        "priority": 3,
+        "priority": 5,
         {{range .Decisions -}}
         "title": "Crowdsec",
         "message": "{{.Type }} {{ .Value }} for {{.Duration}}  \n{{.Scenario}}  \n[crowdsec cti](https://app.crowdsec.net/cti/{{.Value -}})  \n[shodan](https://shodan.io/host/{{.Value -}})"
@@ -121,7 +121,7 @@ lapi:
     data:
       enabled: true
       accessModes:
-        - ReadWriteOnce
+        - ReadWriteMany
       existingClaim: "crowdsec-data"
       size: 1Gi
     config:

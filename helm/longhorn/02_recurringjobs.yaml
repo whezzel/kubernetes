@@ -3,7 +3,7 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: daily
-  namespace: longhorn-system
+  namespace: longhorn
 spec:
   concurrency: 1
   cron: 0 0 * * *
@@ -17,7 +17,7 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: hourly
-  namespace: longhorn-system
+  namespace: longhorn
 spec:
   concurrency: 1
   cron: 0 * * * *
@@ -31,7 +31,7 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: monthly
-  namespace: longhorn-system
+  namespace: longhorn
 spec:
   concurrency: 1
   cron: 0 0 1 * ?
@@ -45,7 +45,7 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: weekly
-  namespace: longhorn-system
+  namespace: longhorn
 spec:
   concurrency: 1
   cron: 0 0 ? * SUN
@@ -59,7 +59,7 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: yearly
-  namespace: longhorn-system
+  namespace: longhorn
 spec:
   concurrency: 1
   cron: 0 0 1 1 ?

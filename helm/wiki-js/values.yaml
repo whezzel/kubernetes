@@ -16,3 +16,4 @@ postgresql:
     enabled: true
     existingClaim: wiki-js-postgresql
     size: 10Gi
+    accessMode: ReadWriteMany
