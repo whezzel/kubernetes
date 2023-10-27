@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authelia-mariadb
+  namespace: auth
+  labels:
+    app: authelia-mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authelia-mariadb
+  template:
+    metadata:
+      name: authelia-mariadb
+      labels:
+        app: authelia-mariadb
+    spec:
+      containers:
+        - name: authelia-mariadb
+          image: lscr.io/linuxserver/mariadb:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+              name: mariadb
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+          #envFrom:
+          #  - secretRef:
+          #      name: authelia-mariadb
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: authelia-mariadb
+              mountPath: /config
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: authelia-mariadb
+          persistentVolumeClaim:
+            claimName: authelia-mariadb

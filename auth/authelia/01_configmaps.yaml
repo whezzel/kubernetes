@@ -1,0 +1,158 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authelia-config
+  namespace: auth
+data:
+  configuration.yml: |
+    ---
+    ###############################################################
+    #                   Authelia configuration                    #
+    ###############################################################
+
+    theme: dark
+
+    # jwt_secret: a_very_important_secret # Set via AUTHELIA_JWT_SECRET variable
+    default_redirection_url: https://whezzel.com/
+
+    log:
+      level: debug
+
+    server:
+      host: 0.0.0.0
+      port: 9091
+      tls:
+        key: ""
+        certificate: ""
+
+    totp:
+      issuer: whezzel.com
+      period: 30
+      skew: 1
+
+    authentication_backend:
+      password_reset:
+        disable: false
+      file:
+        path: /etc/authelia/users.yaml
+        password:
+          algorithm: argon2id
+          iterations: 1
+          key_length: 32
+          salt_length: 16
+          memory: 1024
+          parallelism: 8
+
+    access_control:
+      default_policy: deny
+      rules:
+
+        - domain:
+            - "authelia.whezzel.com"
+          policy: bypass
+
+        - domain:
+            - "*.whezzel.com"
+          resources:
+            - "^/api([/?].*)?$"
+            - "^/hooks.*$"
+            - "^/rest.*$"
+            - "^/dav.php.*$"
+          policy: bypass
+
+        #- domain:
+        #    - "transmission.whezzel.com"
+        #  resources:
+        #    - "^/.*$"
+        #    - "^/rpc.*$"
+        #    - "^/web.*$"
+        #  policy: one_factor
+
+        - domain:
+            - "vaultwarden.whezzel.com"
+            - "baikal.whezzel.com"
+          resources:
+            - "^*/admin.*$"
+          policy: two_factor
+
+        - domain:
+            - "vaultwarden.whezzel.com"
+            - "jellyfin.whezzel.com"
+          policy: bypass
+
+        - domain: "*.whezzel.com"
+          subject:
+            - "group:admins"
+          policy: one_factor
+
+    session:
+      name: authelia_session
+      # secret: insecure_session_secret # Set via AUTELIA_SESSION_SECRET variable
+      expiration: 1h
+      inactivity: 5m
+      remember_me_duration: 2M
+      domain: whezzel.com
+
+      redis:
+        host: authelia-redis.auth.svc.cluster.local
+        port: 6379
+        # password: redis_pass # Set via AUTHELIA_SESSION_REDIS_PASSWORD variable
+        database_index: 0
+
+    regulation:
+      max_retries: 3
+      find_time: 2m
+      ban_time: 5m
+
+    storage:
+      # encryption_key: 20_character_string # Set via AUTHELIA_STORAGE_ENCRYPTION_KEY variable
+      mysql:
+        host: authelia-mariadb.auth.svc.cluster.local
+        port: 3306
+        database: authelia
+        username: authelia
+        # password: mysql_pass # Set via AUTHELIA_STORAGE_MYSQL_PASSWORD variable
+
+    notifier:
+      smtp:
+        # username: test
+        # password: password # Set via AUTHELIA_NOTIFIER_SMTP_PASSWORD variable
+        host: smtp-relay.email
+        port: 25
+        sender: whezzel@gmail.com
+        #identifier: "whezzel.com"
+        startup_check_address: "whezzel@gmail.com"
+        subject: "[Authelia] {title}"
+        tls:
+          skip_verify: true
+        disable_require_tls: true
+        ## trusted_cert: ""
+
+    ntp:
+      address: "10.69.20.1:123"
+      version: 3
+      max_desync: 3s
+      disable_startup_check: false
+      disable_failure: false
+
+    identity_providers:
+      oidc:
+        clients:
+          - id: jellyfin
+            description: Jellyfin Media Server
+            # Client secret should be randomly generated
+            secret: vW4k27qrwZ7Ty7zV42Lcq6nw6Bxv25r7
+            authorization_policy: one_factor
+            redirect_uris:
+              - https://jellyfin.whezzel.com/sso/OID/redirect/Authelia
+          - id: immich
+            description: Immich Photo Backup
+            # Client secret should be randomly generated
+            secret: Yd4Jnr279bQ4LWCKHimzA8u56DVxqZz9
+            authorization_policy: one_factor
+            redirect_uris:
+              - https://immich.whezzel.com/sso/OID/redirect/Authelia
+              - app.immich:/
+              - https://immich.whezzel.com/auth/login
+              - https://immich.whezzel.com/user-settings

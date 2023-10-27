@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authelia-redis
+  namespace: auth
+  labels:
+    app: authelia-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authelia-redis
+  template:
+    metadata:
+      name: authelia-redis
+      labels:
+        app: authelia-redis
+    spec:
+      containers:
+        - name: authelia-redis
+          image: redis:latest
+          imagePullPolicy: Always
+          command: ["redis-server"]
+          args: ["/usr/local/etc/redis/redis.conf"]
+          ports:
+            - containerPort: 6379
+              name: redis
+          env:
+            - name: "TZ"
+              value: "America/Chicago"
+            - name: "PUID"
+              value: "1000"
+            - name: "PGID"
+              value: "1000"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: config
+              mountPath: /usr/local/etc/redis
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: config
+          secret:
+            secretName: authelia-redis
+        - name: data
+          persistentVolumeClaim:
+            claimName: authelia-redis
