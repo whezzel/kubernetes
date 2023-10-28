@@ -206,7 +206,7 @@ kubectl apply -f ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml
 
 **Create and Deploy metallb bgp peer:**
 ```bash
-cat > ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml <<'EOF'
+cat > ~/repos/k3s/helm/metallb/02_bgppeer.yaml <<'EOF'
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -230,12 +230,12 @@ spec:
 EOF
 ```
 ```bash
-kubectl apply -f ~/repos/k3s/helm/metallb/01_ipaddresspool.yaml
+kubectl apply -f ~/repos/k3s/helm/metallb/02_bgppeer.yaml
 ```
 
 **Create and Deploy metallb bgp advertisements:**
 ```bash
-cat > ~/repos/k3s/helm/metallb/03_bgpadvertisement.yaml.yaml <<'EOF'
+cat > ~/repos/k3s/helm/metallb/03_bgpadvertisement.yaml <<'EOF'
 apiVersion: metallb.io/v1beta1
 kind: BGPAdvertisement
 metadata:
@@ -247,7 +247,7 @@ spec:
 EOF
 ```
 ```bash
-kubectl apply -f ~/repos/k3s/helm/metallb/03_bgpadvertisement.yaml.yaml
+kubectl apply -f ~/repos/k3s/helm/metallb/03_bgpadvertisement.yaml
 ```
 
 ## **Deploy Multus**
