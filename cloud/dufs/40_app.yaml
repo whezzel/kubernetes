@@ -24,6 +24,7 @@ spec:
       labels:
         app: dufs
     spec:
+      nodeName: archserv02
       containers:
         - name: dufs
           image: sigoden/dufs:latest
