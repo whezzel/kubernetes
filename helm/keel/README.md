@@ -9,8 +9,6 @@ cat > ~/repos/k3s/helm/keel/values.yaml <<'EOF'
 webhook:
   enabled: true
   endpoint: "http://nodered.homeassistant/hooks/ndN656rVjA6E5V26nxXgGmRHo99Cm7wg"
-nodeSelector:
-  kubernetes.io/arch: amd64
 EOF
 ```
 **Deploy keel.sh using helm:**
