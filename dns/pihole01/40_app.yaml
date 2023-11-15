@@ -41,8 +41,6 @@ spec:
                 values:
                 - bind
             topologyKey: "kubernetes.io/hostname"
-      #nodeSelector:
-      #  kubernetes.io/hostname: archserv04
       containers:
         - name: pihole01
           image: pihole/pihole:latest
