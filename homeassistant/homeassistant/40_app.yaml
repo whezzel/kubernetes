@@ -12,6 +12,8 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/pollSchedule: "0 9 * * *"
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
