@@ -9,7 +9,7 @@ spec:
     storage: 12Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:
@@ -32,7 +32,7 @@ metadata:
   namespace: mediaserver
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 12Gi

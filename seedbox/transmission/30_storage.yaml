@@ -8,7 +8,7 @@ spec:
     storage: 512Mi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn
   csi:
@@ -31,7 +31,7 @@ metadata:
   namespace: seedbox
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 512Mi

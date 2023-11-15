@@ -121,7 +121,7 @@ lapi:
     data:
       enabled: true
       accessModes:
-        - ReadWriteMany
+        - ReadWriteOnce
       existingClaim: "crowdsec-data"
       size: 1Gi
     config:
