@@ -26,7 +26,7 @@ spec:
     spec:
       runtimeClassName: nvidia
       nodeSelector:
-        nvidia.com/gpu.present: 'true'
+        nvidia-present: "true"
       containers:
         - name: jellyfin
           image: lscr.io/linuxserver/jellyfin:latest
