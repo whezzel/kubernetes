@@ -12,6 +12,8 @@ metadata:
   labels:
     app: immich
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
