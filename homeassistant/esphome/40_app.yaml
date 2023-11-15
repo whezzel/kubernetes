@@ -24,8 +24,7 @@ spec:
       labels:
         app: esphome
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
+      nodeName: archserv01
       containers:
         - name: esphome
           image: ghcr.io/esphome/esphome:latest

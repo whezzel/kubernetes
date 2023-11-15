@@ -25,8 +25,7 @@ spec:
         app: frigate
     spec:
       runtimeClassName: nvidia
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
+      nodeName: archserv01
       containers:
         - name: frigate
           securityContext:

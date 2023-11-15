@@ -85,8 +85,7 @@ spec:
       labels:
         app: scrutiny-collector-archserv01
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv01
+      nodeName: archserv01
       containers:
         - name: scrutiny-collector-archserv01
           image: ghcr.io/analogj/scrutiny:master-collector
@@ -142,8 +141,7 @@ spec:
       labels:
         app: scrutiny-collector-archserv02
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv02
+      nodeName: archserv02
       containers:
         - name: scrutiny-collector-archserv02
           image: ghcr.io/analogj/scrutiny:master-collector
@@ -199,8 +197,7 @@ spec:
       labels:
         app: scrutiny-collector-archserv03
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv03
+      nodeName: archserv03
       containers:
         - name: scrutiny-collector-archserv03
           image: ghcr.io/analogj/scrutiny:master-collector
@@ -256,8 +253,7 @@ spec:
       labels:
         app: scrutiny-collector-archserv04
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv04
+      nodeName: archserv04
       containers:
         - name: scrutiny-collector-archserv04
           image: ghcr.io/analogj/scrutiny:master-collector
@@ -313,8 +309,7 @@ spec:
       labels:
         app: scrutiny-collector-archserv05
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv05
+      nodeName: archserv05
       containers:
         - name: scrutiny-collector-archserv05
           image: ghcr.io/analogj/scrutiny:master-collector

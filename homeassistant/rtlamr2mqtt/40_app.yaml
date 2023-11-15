@@ -24,8 +24,7 @@ spec:
       labels:
         app: rtlamr2mqtt
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv03
+      nodeName: archserv03
       containers:
         - name: rtlamr2mqtt
           securityContext:
