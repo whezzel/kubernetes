@@ -52,6 +52,5 @@ spec:
           hostPath:
             path: /usr/share/zoneinfo/America/Chicago
         - name: dufs
-          nfs:
-            server: archserv02.whezzel.com
-            path: /mnt/netstorage/dufs
+          hostPath:
+            path: /mnt/netstorage
