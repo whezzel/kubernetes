@@ -24,8 +24,25 @@ spec:
       labels:
         app: pihole02
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: archserv05
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pihole01
+            topologyKey: "kubernetes.io/hostname"
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - bind
+            topologyKey: "kubernetes.io/hostname"
+      #nodeSelector:
+      #  kubernetes.io/hostname: archserv05
       containers:
         - name: pihole02
           image: pihole/pihole:latest

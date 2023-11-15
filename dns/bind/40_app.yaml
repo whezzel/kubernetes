@@ -19,6 +19,23 @@ spec:
       labels:
         app: bind
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pihole01
+            topologyKey: "kubernetes.io/hostname"
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pihole02
+            topologyKey: "kubernetes.io/hostname"
       #securityContext:
       #  fsGroup: 105
       containers:
