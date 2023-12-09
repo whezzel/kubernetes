@@ -89,5 +89,5 @@ spec:
             claimName: syncthing
         - name: nas-syncthing
           nfs:
-            server: archserv02.whezzel.com
+            server: nas.whezzel.com
             path: /mnt/netstorage/backups

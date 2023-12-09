@@ -2,7 +2,7 @@ csi:
   kubeletRootDir: /var/lib/kubelet
 
 defaultSettings:
-  backupTarget: nfs://archserv02.whezzel.com:/mnt/netstorage/backups/longhorn
+  backupTarget: nfs://nas.whezzel.com:/mnt/netstorage/backups/longhorn
   replicaSoftAntiAffinity: false
   replicaZoneSoftAntiAffinity: true
   defaultReplicaCount: 5

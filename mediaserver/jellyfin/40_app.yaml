@@ -63,7 +63,7 @@ spec:
             path: /usr/share/zoneinfo/America/Chicago
         - name: nas-media
           nfs:
-            server: archserv02.whezzel.com
+            server: nas.whezzel.com
             path: /mnt/netstorage/media
         - name: jellyfin-config
           persistentVolumeClaim:
