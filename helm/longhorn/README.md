@@ -21,6 +21,10 @@ defaultSettings:
   replicaAutoBalance: best-effort
   orphanAutoDeletion: true
 
+persistence:
+  defaultClassReplicaCount: 5
+  reclaimPolicy: Retain
+
 ingress:
   enabled: true
   ingressClassName: nginx
