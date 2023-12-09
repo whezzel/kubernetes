@@ -10,6 +10,10 @@ data:
     host:
       id: "archserv01"
     devices:
+      - device: /dev/sda
+        ignore: true
+      - device: /dev/sdb
+        ignore: true
       - device: /dev/sdc
         ignore: true
       - device: /dev/sdd
@@ -29,8 +33,6 @@ data:
       - device: /dev/sdk
         ignore: true
       - device: /dev/sdl
-        ignore: true
-      - device: /dev/sdm
         ignore: true
       - device: /dev/sdm
         ignore: true
@@ -74,6 +76,20 @@ data:
     host:
       id: "archserv02"
     devices:
+      - device: /dev/sda
+        ignore: true
+      - device: /dev/sdb
+        ignore: true
+      - device: /dev/sdc
+        ignore: true
+      - device: /dev/sdd
+        ignore: true
+      - device: /dev/sde
+        ignore: true
+      - device: /dev/sdf
+        ignore: true
+      - device: /dev/sdg
+        ignore: true
       - device: /dev/sdh
         ignore: true
       - device: /dev/sdi
@@ -83,8 +99,6 @@ data:
       - device: /dev/sdk
         ignore: true
       - device: /dev/sdl
-        ignore: true
-      - device: /dev/sdm
         ignore: true
       - device: /dev/sdm
         ignore: true
