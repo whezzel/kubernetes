@@ -24,6 +24,16 @@ spec:
       labels:
         app: vscode
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - esphome
+            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: vscode
           image: lscr.io/linuxserver/code-server:latest

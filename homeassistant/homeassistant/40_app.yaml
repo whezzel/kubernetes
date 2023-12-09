@@ -26,6 +26,16 @@ spec:
       labels:
         app: homeassistant
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - esphome
+            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: homeassistant
           image: homeassistant/home-assistant:latest
