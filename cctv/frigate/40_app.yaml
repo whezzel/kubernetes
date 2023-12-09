@@ -72,12 +72,14 @@ spec:
             - name: dev-usb
               mountPath: /dev/usb
               readOnly: true
-            - name: config
+            - name: frigate
               mountPath: /config
+              subPath: config
             - name: nas-frigate
               mountPath: /media/frigate/
-            - name: db
+            - name: frigate
               mountPath: /mnt/db
+              subPath: db
             - name: dshm
               mountPath: /dev/shm
           resources:
@@ -91,15 +93,15 @@ spec:
         - name: dev-usb
           hostPath:
             path: /dev/usb
-        - name: config
-          configMap:
-            name: frigate
-        - name: db
+        #- name: config
+        #  configMap:
+        #    name: frigate
+        - name: frigate
           persistentVolumeClaim:
             claimName: frigate
         - name: nas-frigate
           nfs:
-            server: archserv02.whezzel.com
+            server: nas.whezzel.com
             path: /mnt/netstorage/frigate
         - name: dshm
           emptyDir:
