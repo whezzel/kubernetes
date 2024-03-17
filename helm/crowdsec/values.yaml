@@ -2,70 +2,70 @@
 container_runtime: containerd
 image:
   repository: crowdsecurity/crowdsec
-  pullPolicy: IfNotPresent
-  tag: "latest"
+  pullPolicy: Always
+#  tag: "dev"
 config:
-  #parsers:
-  #  s00-raw: {}
-  #  s01-parse:
-  #    gotify-logs.yaml: |
-  #      ---
-  #      filter: evt.Parsed.program == "gotify"
-  #      debug: false
-  #      onsuccess: next_stage
-  #      name: whezzel/gotify-logs
-  #      description: parser for Gotify server
-  #      pattern_syntax:
-  #        OLD_TIMESTAMP: '^\[GIN\] %{YEAR:year}/%{MONTHDAY:month}/%{DAY2:day} - %{TIME:time}'
-  #        NEW_TIMESTAMP: '^%{YEAR:year}-%{MONTHDAY:month}-%{DAY2:day}T%{TIME:time}%{ISO8601_TIMEZONE}'
-  #        SEPERATOR: '%{SPACE}[|]%{SPACE}'
-  #      nodes:
-  #        - grok:
-  #            pattern: '%{OLD_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
-  #            # example: [GIN] 2022/02/07 - 10:49:33 | 401 |     505.317µs |       156.146.39.213 | POST     "/client"
-  #            apply_on: message
-  #            statics:
-  #              - meta: log_type
-  #                value: gotify_failed_auth
-  #              - target: StrTime
-  #                expression: |-
-  #                  evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
-  #        - grok:
-  #            pattern: '%{NEW_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
-  #            # example: 2023-10-08T14:02:49-05:00 | 401 |    5.719155ms |  156.146.39.213 | POST     "/client"
-  #            apply_on: message
-  #            statics:
-  #              - meta: log_type
-  #                value: gotify_failed_auth
-  #              - target: StrTime
-  #                expression: |-
-  #                  evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
-  #      statics:
-  #        - meta: source_ip
-  #          expression: evt.Parsed.source_ip
-  #        - meta: http_status
-  #          expression: evt.Parsed.http_status
-  #      ...
-  #  s02-enrich: {}
-  #scenarios:
-  #  gotify-bf.yaml: |
-  #    type: leaky
-  #    name: whezzel/gotify-bf
-  #    description: "Detect bruteforce"
-  #    filter: "evt.Meta.log_type  == 'gotify_failed_auth'"
-  #    groupby: "evt.Meta.source_ip"
-  #    capacity: 4
-  #    leakspeed: "10s"
-  #    blackhole: 1m
-  #    labels:
-  #      service: gotify
-  #      behavior: "http:bruteforce"
-  #      classification:
-  #        - attack.T1110
-  #      spoofable: 0
-  #      confidence: 3
-  #      label: "Gotify Bruteforce"
-  #      remediation: true
+  parsers:
+    s00-raw: {}
+    s01-parse:
+      gotify-logs.yaml: |
+        ---
+        filter: evt.Parsed.program == "gotify"
+        debug: false
+        onsuccess: next_stage
+        name: whezzel/gotify-logs
+        description: parser for Gotify server
+        pattern_syntax:
+          OLD_TIMESTAMP: '^\[GIN\] %{YEAR:year}/%{MONTHDAY:month}/%{DAY2:day} - %{TIME:time}'
+          NEW_TIMESTAMP: '^%{YEAR:year}-%{MONTHDAY:month}-%{DAY2:day}T%{TIME:time}%{ISO8601_TIMEZONE}'
+          SEPERATOR: '%{SPACE}[|]%{SPACE}'
+        nodes:
+          - grok:
+              pattern: '%{OLD_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
+              # example: [GIN] 2022/02/07 - 10:49:33 | 401 |     505.317µs |       156.146.39.213 | POST     "/client"
+              apply_on: message
+              statics:
+                - meta: log_type
+                  value: gotify_failed_auth
+                - target: StrTime
+                  expression: |-
+                    evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
+          - grok:
+              pattern: '%{NEW_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
+              # example: 2023-10-08T14:02:49-05:00 | 401 |    5.719155ms |  156.146.39.213 | POST     "/client"
+              apply_on: message
+              statics:
+                - meta: log_type
+                  value: gotify_failed_auth
+                - target: StrTime
+                  expression: |-
+                    evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
+        statics:
+          - meta: source_ip
+            expression: evt.Parsed.source_ip
+          - meta: http_status
+            expression: evt.Parsed.http_status
+        ...
+    s02-enrich: {}
+  scenarios:
+    gotify-bf.yaml: |
+      type: leaky
+      name: whezzel/gotify-bf
+      description: "Detect bruteforce"
+      filter: "evt.Meta.log_type  == 'gotify_failed_auth'"
+      groupby: "evt.Meta.source_ip"
+      capacity: 4
+      leakspeed: "10s"
+      blackhole: 1m
+      labels:
+        service: gotify
+        behavior: "http:bruteforce"
+        classification:
+          - attack.T1110
+        spoofable: 0
+        confidence: 3
+        label: "Gotify Bruteforce"
+        remediation: true
   postoverflows: {}
   simmulation: {}
   console: {}
@@ -95,7 +95,7 @@ config:
             "contentType": "text/markdown"
           }
         },
-        "priority": 5,
+        "priority": 0,
         {{range .Decisions -}}
         "title": "Crowdsec",
         "message": "{{.Type }} {{ .Value }} for {{.Duration}}  \n{{.Scenario}}  \n[crowdsec cti](https://app.crowdsec.net/cti/{{.Value -}})  \n[shodan](https://shodan.io/host/{{.Value -}})"
@@ -175,10 +175,6 @@ agent:
   env:
     - name: COLLECTIONS
       value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant mwinters-stuff/mailu-admin andreasbrett/baikal"
-    #- name: SCENARIOS
-    #  value: "baudneo/gotify-bf"
-    #- name: PARSERS
-    #  value: ""
     - name: DISABLE_ONLINE_API
       value: "true"
     - name: LEVEL_DEBUG
