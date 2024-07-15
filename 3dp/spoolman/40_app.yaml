@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spoolman
+  namespace: 3dp
+  labels:
+    app: spoolman
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spoolman
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-conf
+      name: spoolman
+      labels:
+        app: spoolman
+    spec:
+      containers:
+        - name: spoolman
+          image: ghcr.io/donkie/spoolman:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: SPOOLMAN_PORT
+              value: "8000"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: spoolman
+              mountPath: /home/app/.local/share/spoolman
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/America/Chicago
+        - name: spoolman
+          persistentVolumeClaim:
+            claimName: spoolman

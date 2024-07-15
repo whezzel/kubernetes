@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fluidd
+  namespace: 3dp
+spec:
+#  ipFamilyPolicy: PreferDualStack
+  selector:
+    app: fluidd
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http

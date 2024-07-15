@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mainsail-config
+  namespace: 3dp
+data:
+  config.json: |
+    {
+      "defaultLocale": "en",
+      "defaultTheme": "dark",
+      "hostname": null,
+      "port": null,
+      "path": null,
+      "instancesDB": "json",
+      "instances": [
+        { "hostname": "voron.whezzel.com", "port": 7130 },
+        { "hostname": "ender.whezzel.com", "port": 7130 }
+      ]
+    }
