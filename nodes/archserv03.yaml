@@ -4,3 +4,8 @@ metadata:
   name: archserv03
   labels:
     nvidia-present: "false"
+    coral-present: "false"
+    zigbee-present: "true"
+    zwave-present: "true"
+    rtlsdr-present: "true"
+
