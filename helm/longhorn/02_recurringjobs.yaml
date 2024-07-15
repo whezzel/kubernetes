@@ -24,7 +24,7 @@ spec:
   groups:
   - default
   name: hourly
-  retain: 6
+  retain: 1
   task: snapshot
 ---
 apiVersion: longhorn.io/v1beta2
