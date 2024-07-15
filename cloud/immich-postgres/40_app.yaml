@@ -28,7 +28,7 @@ spec:
         - name: imagepull-secret
       containers:
         - name: immich-postgres
-          image: postgres:14
+          image: tensorchord/pgvecto-rs:pg14-v0.2.0
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
