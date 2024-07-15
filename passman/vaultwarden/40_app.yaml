@@ -64,6 +64,11 @@ spec:
               value: "true"
             - name: SIGNUPS_ALLOWED
               value: "false"
+            - name: SIGNUPS_VERIFY
+              value: "true"
+          envFrom:
+            - secretRef:
+                name: vaultwarden
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
