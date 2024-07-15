@@ -20,8 +20,8 @@ spec:
       app: esphome
   template:
     metadata:
-      #annotations:
-      #  k8s.v1.cni.cncf.io/networks: multus/macvlan-conf
+      annotations:
+        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-conf
       name: esphome
       labels:
         app: esphome
