@@ -4,13 +4,13 @@ kind: Ingress
 metadata:
   name: homeassistant
   namespace: homeassistant
-  annotations:
-    nginx.ingress.kubernetes.io/auth-method: GET
-    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/verify
-    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
-    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
-    nginx.ingress.kubernetes.io/auth-snippet: |
-      proxy_set_header X-Forwarded-Method $request_method;
+#  annotations:
+#    nginx.ingress.kubernetes.io/auth-method: GET
+#    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/verify
+#    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
+#    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+#    nginx.ingress.kubernetes.io/auth-snippet: |
+#      proxy_set_header X-Forwarded-Method $request_method;
 spec:
   ingressClassName: "nginx"
   rules:
