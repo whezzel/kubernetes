@@ -25,7 +25,9 @@ spec:
         app: frigate
     spec:
       runtimeClassName: nvidia
-      nodeName: archserv01
+      nodeSelector:
+        coral-present: "true"
+        nvidia-present: "true"
       containers:
         - name: frigate
           securityContext:

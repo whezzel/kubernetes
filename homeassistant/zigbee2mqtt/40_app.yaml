@@ -24,7 +24,8 @@ spec:
       labels:
         app: zigbee2mqtt
     spec:
-      nodeName: archserv03
+      nodeSelector:
+        zigbee-present: "true"
       containers:
         - name: zigbee2mqtt
           securityContext:

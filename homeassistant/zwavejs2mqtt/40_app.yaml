@@ -24,7 +24,8 @@ spec:
       labels:
         app: zwavejs2mqtt
     spec:
-      nodeName: archserv03
+      nodeSelector:
+        zwave-present: "true"
       containers:
         - name: zwavejs2mqtt
           securityContext:

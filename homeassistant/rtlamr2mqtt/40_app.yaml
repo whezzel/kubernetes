@@ -24,7 +24,8 @@ spec:
       labels:
         app: rtlamr2mqtt
     spec:
-      nodeName: archserv03
+      nodeSelector:
+        rtlsdr-present: "true"
       containers:
         - name: rtlamr2mqtt
           securityContext:
