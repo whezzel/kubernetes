@@ -21,7 +21,7 @@ k3sup install \
   --print-command \
   --print-config \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb --resolv-conf /run/systemd/resolve/resolv.conf'
 
 k3sup join \
   --server \
@@ -32,7 +32,7 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb --resolv-conf /run/systemd/resolve/resolv.conf'
 
 k3sup join \
   --server \
@@ -43,7 +43,7 @@ k3sup join \
   --k3s-channel $CHANNEL \
   --print-command \
   --ssh-key "/home/zach/.ssh/root.id_rsa" \
-  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb'
+  --k3s-extra-args '--write-kubeconfig-mode 664 --tls-san k3s-api.whezzel.com --tls-san archserv01.whezzel.com --flannel-backend=none --disable-network-policy --disable traefik --disable servicelb --resolv-conf /run/systemd/resolve/resolv.conf'
 
 k3sup join \
  --server-host archserv01.whezzel.com \
@@ -53,7 +53,8 @@ k3sup join \
   --server-host $MASTER_1 \
   --k3s-channel $CHANNEL \
   --print-command \
-  --ssh-key "/home/zach/.ssh/root.id_rsa"
+  --ssh-key "/home/zach/.ssh/root.id_rsa" \
+  --k3s-extra-args '--resolv-conf /run/systemd/resolve/resolv.conf'
 
 k3sup join \
   --server-host archserv01.whezzel.com \
@@ -63,4 +64,5 @@ k3sup join \
   --server-host $MASTER_1 \
   --k3s-channel $CHANNEL \
   --print-command \
-  --ssh-key "/home/zach/.ssh/root.id_rsa"
+  --ssh-key "/home/zach/.ssh/root.id_rsa" \
+  --k3s-extra-args '--resolv-conf /run/systemd/resolve/resolv.conf'
