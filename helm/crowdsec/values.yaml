@@ -3,7 +3,7 @@ container_runtime: containerd
 image:
   repository: crowdsecurity/crowdsec
   pullPolicy: Always
-#  tag: "dev"
+  tag: "latest"
 config:
   parsers:
     s00-raw: {}
