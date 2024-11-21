@@ -79,7 +79,7 @@ spec:
             - name: frigate
               mountPath: /mnt/db
               subPath: db
-            - name: dshm
+            - name: cache
               mountPath: /dev/shm
           resources:
             requests:
@@ -89,9 +89,6 @@ spec:
         - name: dev-usb
           hostPath:
             path: /dev/usb
-        #- name: config
-        #  configMap:
-        #    name: frigate
         - name: frigate
           persistentVolumeClaim:
             claimName: frigate
@@ -99,7 +96,7 @@ spec:
           nfs:
             server: nas.whezzel.com
             path: /mnt/netstorage/frigate
-        - name: dshm
+        - name: cache
           emptyDir:
             medium: Memory
             sizeLimit: 1Gi
