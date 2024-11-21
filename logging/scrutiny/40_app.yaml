@@ -36,14 +36,15 @@ spec:
               value: "influxdb.logging"
             - name: SCRUTINY_WEB_INFLUXDB_PORT
               value: "80"
-            - name: SCRUTINY_WEB_INFLUXDB_TOKEN
-              value: "cej-JmPc3MajbW3hR-OIgUVmKtUeun_uHHEFed7_TpZqhpegaqBy_XkbNE1oR-1tJgw6Qntnxm6xNrGMd8NZxQ=="
             - name: SCRUTINY_WEB_INFLUXDB_ORG
               value: "whezzel.com"
             - name: SCRUTINY_WEB_INFLUXDB_BUCKET
               value: "scrutiny"
-            - name: SCRUTINY_NOTIFY_URLS
-              value: "gotify://gotify.email/AfhL.dgYJqB9UHm?disabletls=yes"
+#            - name: SCRUTINY_WEB_INFLUXDB_TLS_INSECURE_SKIP_VERIFY
+#              value: "true"
+          envFrom:
+            - secretRef:
+                name: scrutiny-secrets
           volumeMounts:
             - name: scrutiny
               mountPath: /opt/scrutiny/config
@@ -59,10 +60,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrutiny-collector-archserv01
+  name: scrutiny-collector-talos01
   namespace: logging
   labels:
-    app: scrutiny-collector-archserv01
+    app: scrutiny-collector-talos01
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
@@ -72,16 +73,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrutiny-collector-archserv01
+      app: scrutiny-collector-talos01
   template:
     metadata:
-      name: scrutiny-collector-archserv01
+      name: scrutiny-collector-talos01
       labels:
-        app: scrutiny-collector-archserv01
+        app: scrutiny-collector-talos01
     spec:
-      nodeName: archserv01
+      nodeSelector:
+        kubernetes.io/hostname: talos01
       containers:
-        - name: scrutiny-collector-archserv01
+        - name: scrutiny-collector-talos01
           image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: IfNotPresent
           securityContext:
@@ -104,15 +106,15 @@ spec:
             path: /run/udev
         - name: scrutiny-collector
           configMap:
-            name: scrutiny-collector-archserv01
+            name: scrutiny-collector-talos01
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrutiny-collector-archserv02
+  name: scrutiny-collector-talos02
   namespace: logging
   labels:
-    app: scrutiny-collector-archserv02
+    app: scrutiny-collector-talos02
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
@@ -122,16 +124,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrutiny-collector-archserv02
+      app: scrutiny-collector-talos02
   template:
     metadata:
-      name: scrutiny-collector-archserv02
+      name: scrutiny-collector-talos02
       labels:
-        app: scrutiny-collector-archserv02
+        app: scrutiny-collector-talos02
     spec:
-      nodeName: archserv02
+      nodeSelector:
+        kubernetes.io/hostname: talos02
       containers:
-        - name: scrutiny-collector-archserv02
+        - name: scrutiny-collector-talos02
           image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: IfNotPresent
           securityContext:
@@ -154,15 +157,15 @@ spec:
             path: /run/udev
         - name: scrutiny-collector
           configMap:
-            name: scrutiny-collector-archserv02
+            name: scrutiny-collector-talos02
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrutiny-collector-archserv03
+  name: scrutiny-collector-talos03
   namespace: logging
   labels:
-    app: scrutiny-collector-archserv03
+    app: scrutiny-collector-talos03
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
@@ -172,16 +175,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrutiny-collector-archserv03
+      app: scrutiny-collector-talos03
   template:
     metadata:
-      name: scrutiny-collector-archserv03
+      name: scrutiny-collector-talos03
       labels:
-        app: scrutiny-collector-archserv03
+        app: scrutiny-collector-talos03
     spec:
-      nodeName: archserv03
+      nodeSelector:
+        kubernetes.io/hostname: talos03
       containers:
-        - name: scrutiny-collector-archserv03
+        - name: scrutiny-collector-talos03
           image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: IfNotPresent
           securityContext:
@@ -204,15 +208,15 @@ spec:
             path: /run/udev
         - name: scrutiny-collector
           configMap:
-            name: scrutiny-collector-archserv03
+            name: scrutiny-collector-talos03
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrutiny-collector-archserv04
+  name: scrutiny-collector-talos04
   namespace: logging
   labels:
-    app: scrutiny-collector-archserv04
+    app: scrutiny-collector-talos04
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
@@ -222,16 +226,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrutiny-collector-archserv04
+      app: scrutiny-collector-talos04
   template:
     metadata:
-      name: scrutiny-collector-archserv04
+      name: scrutiny-collector-talos04
       labels:
-        app: scrutiny-collector-archserv04
+        app: scrutiny-collector-talos04
     spec:
-      nodeName: archserv04
+      nodeSelector:
+        kubernetes.io/hostname: talos04
       containers:
-        - name: scrutiny-collector-archserv04
+        - name: scrutiny-collector-talos04
           image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: IfNotPresent
           securityContext:
@@ -254,15 +259,15 @@ spec:
             path: /run/udev
         - name: scrutiny-collector
           configMap:
-            name: scrutiny-collector-archserv04
+            name: scrutiny-collector-talos04
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrutiny-collector-archserv05
+  name: scrutiny-collector-talos05
   namespace: logging
   labels:
-    app: scrutiny-collector-archserv05
+    app: scrutiny-collector-talos05
   annotations:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
@@ -272,16 +277,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrutiny-collector-archserv05
+      app: scrutiny-collector-talos05
   template:
     metadata:
-      name: scrutiny-collector-archserv05
+      name: scrutiny-collector-talos05
       labels:
-        app: scrutiny-collector-archserv05
+        app: scrutiny-collector-talos05
     spec:
-      nodeName: archserv05
+      nodeSelector:
+        kubernetes.io/hostname: talos05
       containers:
-        - name: scrutiny-collector-archserv05
+        - name: scrutiny-collector-talos05
           image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: IfNotPresent
           securityContext:
@@ -304,4 +310,4 @@ spec:
             path: /run/udev
         - name: scrutiny-collector
           configMap:
-            name: scrutiny-collector-archserv05
+            name: scrutiny-collector-talos05
