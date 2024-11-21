@@ -4,4 +4,3 @@ kind: Namespace
 metadata:
   name: external-services
   labels:
-    app: kubed
