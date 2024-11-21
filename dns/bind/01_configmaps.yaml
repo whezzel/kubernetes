@@ -19,7 +19,7 @@ data:
         notify no;
         prefetch 0;
         querylog no;
-        recursion yes;
+        recursion no;
         version none;
         statistics-file "/var/lib/bind/stats/named.stats";
         listen-on port 53 { any; };
