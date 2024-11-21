@@ -22,7 +22,7 @@ spec:
       containers:
         - name: authelia-mariadb
           image: lscr.io/linuxserver/mariadb:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306
               name: mariadb

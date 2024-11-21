@@ -27,7 +27,7 @@ spec:
       containers:
         - name: scrutiny-master-web
           image: ghcr.io/analogj/scrutiny:master-web
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http
@@ -83,7 +83,7 @@ spec:
       containers:
         - name: scrutiny-collector-archserv01
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
           volumeMounts:
@@ -133,7 +133,7 @@ spec:
       containers:
         - name: scrutiny-collector-archserv02
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
           volumeMounts:
@@ -183,7 +183,7 @@ spec:
       containers:
         - name: scrutiny-collector-archserv03
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
           volumeMounts:
@@ -233,7 +233,7 @@ spec:
       containers:
         - name: scrutiny-collector-archserv04
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
           volumeMounts:
@@ -283,7 +283,7 @@ spec:
       containers:
         - name: scrutiny-collector-archserv05
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
           volumeMounts:

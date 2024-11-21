@@ -30,7 +30,7 @@ spec:
       containers:
         - name: jellyfin
           image: lscr.io/linuxserver/jellyfin:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8096
               name: http

@@ -20,8 +20,7 @@ spec:
       enableServiceLinks: false
       containers:
         - name: authelia
-          image: authelia/authelia:4.37.5 #  <----- You should use an explicit version here docker pull
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9091
             #  hostPort: 9091

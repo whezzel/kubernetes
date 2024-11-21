@@ -29,7 +29,7 @@ spec:
       containers:
         - name: mainsail
           image: ghcr.io/mainsail-crew/mainsail:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
               name: http

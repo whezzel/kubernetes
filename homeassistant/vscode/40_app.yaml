@@ -37,7 +37,7 @@ spec:
       containers:
         - name: vscode
           image: lscr.io/linuxserver/code-server:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8443
               name: http

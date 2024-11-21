@@ -31,7 +31,7 @@ spec:
           securityContext:
             privileged: true
           image: zwavejs/zwavejs2mqtt:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8091
               name: http

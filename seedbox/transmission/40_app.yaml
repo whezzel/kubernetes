@@ -27,7 +27,7 @@ spec:
       containers:
         - name: transmission
           image: haugene/transmission-openvpn:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9091
               name: http

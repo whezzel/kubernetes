@@ -27,7 +27,7 @@ spec:
       containers:
         - name: baikal
           image: ckulka/baikal:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
               name: http

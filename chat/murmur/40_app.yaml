@@ -27,7 +27,7 @@ spec:
       containers:
         - name: murmur
           image: ghcr.io/goofball222/murmur:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 64738
               protocol: TCP

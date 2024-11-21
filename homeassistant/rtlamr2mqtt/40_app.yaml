@@ -31,7 +31,7 @@ spec:
           securityContext:
             privileged: true
           image: allangood/rtlamr2mqtt:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: "TZ"
               value: "America/Chicago"

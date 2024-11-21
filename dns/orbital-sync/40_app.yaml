@@ -25,7 +25,7 @@ spec:
       containers:
         - name: orbital-sync
           image: mattwebbio/orbital-sync:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
                 name: orbital-sync-secrets

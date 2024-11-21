@@ -33,7 +33,7 @@ spec:
           securityContext:
             privileged: true
           image: ghcr.io/blakeblackshear/frigate:stable
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: all

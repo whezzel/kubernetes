@@ -27,7 +27,7 @@ spec:
       containers:
         - name: nodered
           image: nodered/node-red:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 1880
               name: http

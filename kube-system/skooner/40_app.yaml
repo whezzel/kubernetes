@@ -25,7 +25,7 @@ spec:
       containers:
         - name: skooner
           image: ghcr.io/skooner-k8s/skooner:stable
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4654
               name: http

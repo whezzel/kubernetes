@@ -1,5 +1,4 @@
 image:
-  #imagePullPolicy: Always
           imagePullPolicy: IfNotPresent
 
 ingress:

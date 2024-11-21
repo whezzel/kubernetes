@@ -29,7 +29,7 @@ spec:
       containers:
         - name: syncthing
           image: lscr.io/linuxserver/syncthing:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           #command: ["syncthing"]
           #args: ["--reset-deltas"]
           env:

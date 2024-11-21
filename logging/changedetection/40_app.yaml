@@ -27,7 +27,7 @@ spec:
       containers:
         - name: changedetection
           image: ghcr.io/dgtlmoon/changedetection.io:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
               name: http
