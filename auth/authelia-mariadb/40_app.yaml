@@ -37,9 +37,6 @@ spec:
           #  - secretRef:
           #      name: authelia-mariadb
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: authelia-mariadb
               mountPath: /config
           resources:
