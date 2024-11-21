@@ -46,7 +46,46 @@ config:
           - meta: http_status
             expression: evt.Parsed.http_status
         ...
-    s02-enrich: {}
+    s02-enrich:
+      geoip-enrich.yaml: |
+        filter: |
+          let ipv6Check = IsIPV6(evt.Meta.source_ip);
+          "source_ip" in evt.Meta &&
+          (
+            not ipv6Check &&
+            not (IpInRange(evt.Meta.source_ip, "127.0.0.0/8") || IpInRange(evt.Meta.source_ip, "192.168.0.0/16") || IpInRange(evt.Meta.source_ip, "172.16.0.0/12") || IpInRange(evt.Meta.source_ip, "10.0.0.0/8"))
+          ) ||
+          (
+            ipv6Check &&
+            not (IpInRange(evt.Meta.source_ip, "::1/128") || IpInRange(evt.Meta.source_ip, "fd00::/8") || IpInRange(evt.Meta.source_ip, "fc00::/7"))
+          )
+
+        name: crowdsecurity/geoip-enrich
+        description: "Populate event with geoloc info : as, country, coords, source range."
+        data:
+          - source_url: https://hub-data.crowdsec.net/mmdb/GeoLite2-City.mmdb
+            dest_file: GeoLite2-City.mmdb
+          - source_url: https://hub-data.crowdsec.net/mmdb/GeoLite2-ASN.mmdb
+            dest_file: GeoLite2-ASN.mmdb
+        statics:
+          - method: GeoIpCity
+            expression: evt.Meta.source_ip
+          - meta: IsoCode
+            expression: evt.Enriched.IsoCode
+          - meta: IsInEU
+            expression: evt.Enriched.IsInEU
+          - meta: GeoCoords
+            expression: evt.Enriched.GeoCoords
+          - method: GeoIpASN
+            expression: evt.Meta.source_ip
+          - meta: ASNNumber
+            expression: evt.Enriched.ASNNumber
+          - meta: ASNOrg
+            expression: evt.Enriched.ASNOrg
+          - method: IpToRange
+            expression: evt.Meta.source_ip
+          - meta: SourceRange
+            expression: evt.Enriched.SourceRange
   scenarios:
     gotify-bf.yaml: |
       type: leaky
@@ -76,11 +115,12 @@ config:
      - Alert.Remediation == true && Alert.GetScope() == "Ip"
     decisions:
      - type: ban
-       duration: 4h
+       duration: 24h
     duration_expr: Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 24)
     notifications:
      - http_gotify   # Set the required http parameters in /etc/crowdsec/notifications/http.yaml before enabling this.
     on_success: break
+#  notifications: {}
   notifications:
     http-gotify.yaml: |
       type: http          # Don't change
@@ -111,6 +151,20 @@ lapi:
   env:
     - name: DISABLE_ONLINE_API
       value: "true"
+#    - name: HOSTNAME
+#      value: "crowdsec-lapi"
+    - name: CUSTOM_HOSTNAME
+      value: "crowdsec-lapi"
+    - name: AGENT_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: cs-agent-credentials
+          key: username
+    - name: AGENT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: cs-agent-credentials
+          key: password
   dashboard:
     enabled: false
     ingress:
@@ -142,6 +196,9 @@ agent:
     - namespace: "auth"
       podName: "authelia-*"
       program: "authelia"
+    - namespace: "auth"
+      podName: "authentik-*"
+      program: "authentik"
     - namespace: "dns"
       podName: "bind-*"
       program: "bind"
@@ -167,17 +224,27 @@ agent:
       podName: "homeassistant-*"
       program: "home-assistant"
     - namespace: "email"
-      podName: "mailue-*"
+      podName: "mailu-*"
       program: "mailu-admin"
     - namespace: "cloud"
       podName: "baikal-*"
       program: "baikal"
   env:
     - name: COLLECTIONS
-      value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant mwinters-stuff/mailu-admin andreasbrett/baikal"
+      value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant mwinters-stuff/mailu-admin andreasbrett/baikal firix/authentik"
     - name: DISABLE_ONLINE_API
       value: "true"
     - name: LEVEL_DEBUG
       value: "false"
     - name: LEVEL_TRACE
       value: "false"
+    - name: AGENT_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: cs-agent-credentials
+          key: username
+    - name: AGENT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: cs-agent-credentials
+          key: password
