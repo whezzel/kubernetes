@@ -1,6 +1,6 @@
 ---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
   namespace: cert-manager
@@ -15,5 +15,5 @@ spec:
         cloudflare:
           email: whezzel@gmail.com
           apiTokenSecretRef:
-            name: cert-manager-secrets
+            name: lets-encrypt-secrets
             key: api-token

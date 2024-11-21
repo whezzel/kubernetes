@@ -13,7 +13,7 @@ spec:
       create: true
       passwordSecretRef:
         key: pkcs12-pass
-        name: cert-manager-secrets
+        name: pkcs12-pass-secrets
   dnsNames:
   - "*.cctv.svc.cluster.local"
   - "*.cctv"

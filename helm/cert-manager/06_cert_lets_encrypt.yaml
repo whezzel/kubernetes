@@ -2,19 +2,25 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: whezzel.com-tls
+  name: whezzel-com-tls
   namespace: cert-manager
 spec:
-  secretName: whezzel.com-tls
+  secretName: whezzel-com-tls
   issuerRef:
     name: letsencrypt-prod
-    kind: Issuer
+    kind: ClusterIssuer
   keystores:
     pkcs12:
       create: true
       passwordSecretRef:
         key: pkcs12-pass
-        name: cert-manager-secrets
+        name: pkcs12-pass-secrets
   dnsNames:
   - whezzel.com
   - '*.whezzel.com'
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "3dp,auth,cctv,chat,cloud,email,games,homeassistant,logging,mediaserver,seedbox"  # Control destination namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" # Auto create reflection for matching namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "3dp,auth,cctv,chat,cloud,email,games,homeassistant,logging,mediaserver,seedbox" # Control auto-reflection namespaces
