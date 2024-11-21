@@ -16,7 +16,7 @@ spec:
     - secretName: ""
   ingressClassName: "nginx"
   rules:
-    - host: z2m.whezzel.com
+    - host: zigbee.whezzel.com
       http:
         paths:
           - path: /
