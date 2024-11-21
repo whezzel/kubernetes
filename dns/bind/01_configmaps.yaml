@@ -52,6 +52,8 @@ data:
         zone "50.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/50.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
         zone "99.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/99.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
         zone "100.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/100.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "nomacsec.com" { type forward; forward only; forwarders { 10.0.3.1; }; };
+    };
 
     view "3amigos" {
         match-clients { !key external; !key internal; 3amigos; };
