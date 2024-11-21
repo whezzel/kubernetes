@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: bind-lb
   namespace: dns
-  labels:
-    svccontroller.k3s.cattle.io/lbpool: 'bind-master'
 spec:
   selector:
     app: bind
