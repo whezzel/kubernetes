@@ -36,15 +36,16 @@ spec:
                 values:
                 - pihole02
             topologyKey: "kubernetes.io/hostname"
-      #securityContext:
-      #  fsGroup: 105
+      securityContext:
+        fsGroup: 101
       containers:
         - name: bind
-          image: internetsystemsconsortium/bind9:9.19
+          image: internetsystemsconsortium/bind9:9.20
           imagePullPolicy: IfNotPresent
           command: ["named"]
           args:
-            - "-f"
+#            - "-f"
+            - "-g"
             - "-c"
             - "/etc/bind/named.conf"
             - "-4"
