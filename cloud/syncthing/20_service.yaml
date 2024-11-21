@@ -5,7 +5,6 @@ metadata:
   name: syncthing
   namespace: cloud
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: syncthing
   ports:
@@ -22,7 +21,6 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: syncthing.whezzel.com
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: syncthing
   ports:

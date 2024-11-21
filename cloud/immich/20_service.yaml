@@ -5,7 +5,6 @@ metadata:
   name: immich
   namespace: cloud
 spec:
-  ipFamilyPolicy: PreferDualStack
   selector:
     app: immich
   ports:

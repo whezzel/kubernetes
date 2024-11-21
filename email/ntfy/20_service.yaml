@@ -5,7 +5,6 @@ metadata:
   name: ntfy
   namespace: email
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: ntfy
   ports:

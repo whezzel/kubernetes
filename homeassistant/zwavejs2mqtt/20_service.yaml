@@ -5,7 +5,6 @@ metadata:
   name: zwavejs2mqtt
   namespace: homeassistant
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: zwavejs2mqtt
   ports:
@@ -20,7 +19,6 @@ metadata:
   name: zwavejs2mqtt-tcp
   namespace: homeassistant
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: zwavejs2mqtt
   ports:

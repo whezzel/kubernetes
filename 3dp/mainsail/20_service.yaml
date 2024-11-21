@@ -5,7 +5,6 @@ metadata:
   name: mainsail
   namespace: 3dp
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: mainsail
   ports:

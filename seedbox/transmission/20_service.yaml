@@ -5,7 +5,6 @@ metadata:
   name: transmission
   namespace: seedbox
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: transmission
   ports:

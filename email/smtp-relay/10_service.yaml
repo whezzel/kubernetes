@@ -2,12 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: smtp-relay
+  name: smtp-relay-lb
   namespace: email
   annotations:
     external-dns.alpha.kubernetes.io/hostname: smtp.whezzel.com
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: smtp-relay
   ports:

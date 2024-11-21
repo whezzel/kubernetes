@@ -5,7 +5,6 @@ metadata:
   name: whoami
   namespace: kube-system
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: whoami
   ports:

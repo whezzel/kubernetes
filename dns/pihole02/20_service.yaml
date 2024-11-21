@@ -5,7 +5,6 @@ metadata:
   name: pihole02-web
   namespace: dns
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: pihole02
   ports:

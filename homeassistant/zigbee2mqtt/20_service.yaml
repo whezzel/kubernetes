@@ -5,7 +5,6 @@ metadata:
   name: zigbee2mqtt
   namespace: homeassistant
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: zigbee2mqtt
   ports:

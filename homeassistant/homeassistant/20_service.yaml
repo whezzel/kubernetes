@@ -5,7 +5,6 @@ metadata:
   name: homeassistant
   namespace: homeassistant
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: homeassistant
   ports:

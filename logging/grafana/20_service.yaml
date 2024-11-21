@@ -5,7 +5,6 @@ metadata:
   name: grafana
   namespace: logging
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: grafana
   ports:

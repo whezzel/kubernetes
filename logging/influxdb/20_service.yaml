@@ -5,7 +5,6 @@ metadata:
   name: influxdb
   namespace: logging
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: influxdb
   ports:

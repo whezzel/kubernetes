@@ -7,7 +7,6 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: mumble.whezzel.com
 spec:
-#  ipFamilyPolicy: PreferDualStack
   selector:
     app: murmur
   ports:
