@@ -3,6 +3,8 @@ image:
 
 ingress:
   enabled: true
+  tls:
+    - secretName: ""
   hosts:
     - host: wiki.whezzel.com
       paths:

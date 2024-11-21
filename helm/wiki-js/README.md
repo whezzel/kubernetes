@@ -7,7 +7,7 @@ The most powerful and extensible open source Wiki software.
 
 **Deploy Manifests to support helm chart:**
 ```bash
-kubectl apply -Rf ~/repos/k3s/cloud/wiki-js
+kubectl apply -Rf ~/repos/k3s/helm/wiki-js
 ```
 
 **Deploy Wiki JS using helm:**
@@ -16,5 +16,5 @@ helm upgrade --install wiki-js wiki \
     --repo https://charts.js.wiki \
     --namespace cloud \
     --create-namespace \
-    --values ~/repos/k3s/cloud/wiki-js/values.yaml
+    --values ~/repos/k3s/helm/wiki-js/values.yaml
 ```
