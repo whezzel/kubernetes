@@ -6,9 +6,7 @@ metadata:
   namespace: dns
 data:
   named.conf: |
-    acl "internal" { localhost; 10.42.0.0/16; 10.69.0.0/16; };
-    acl "external" { 0.0.0.0/0; };
-    acl "opnsense" { 10.69.20.2; 10.69.20.3; };
+    acl "3amigos"  { key 3amigos; 10.100.0.1; 10.100.0.3; };
 
     options {
         directory "/var/lib/bind/working";
@@ -51,6 +49,16 @@ data:
         zone "50.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/50.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
         zone "99.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/99.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
         zone "100.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/100.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+
+    view "3amigos" {
+        match-clients { !key external; !key internal; 3amigos; };
+        allow-recursion { none; };
+        allow-transfer { key 3amigos; };
+        allow-query { 3amigos; };
+        allow-update { key rndc-key; key 3amigos; };
+        recursion no;
+        notify explicit;
+        zone "whezzel.com" { type primary; file "/var/lib/bind/3amigos/whezzel.com.db"; also-notify { 10.69.20.2 key 3amigos; 10.69.20.3 key 3amigos; }; };
     };
 
     view "external" {
