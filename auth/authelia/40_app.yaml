@@ -7,6 +7,8 @@ metadata:
   labels:
     app: authelia
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -20,38 +22,35 @@ spec:
       enableServiceLinks: false
       containers:
         - name: authelia
+          #image: authelia/authelia:4.37.5 #  <----- You should use an explicit version here docker pull
+          image: authelia/authelia:4.38.17 #  <----- You should use an explicit version here docker pull
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9091
-            #  hostPort: 9091
               name: http
           volumeMounts:
             - name: config
               mountPath: "/config/configuration.yml"
               readOnly: true
               subPath: configuration.yml
-            - name: users
-              mountPath: "/etc/authelia/users.yaml"
-              readOnly: true
-              subPath: users.yaml
-            - name: oidc-issuer-key
-              mountPath: "/etc/authelia/oidc-issuer.key"
-              readOnly: true
-              subPath: oidc-issuer.key
+            - name: authelia
+              mountPath: /etc/authelia
+            - name: authelia-secrets
+              mountPath: /data/authelia/secrets
           resources:
             requests:
               memory: "512Mi"
               cpu: "500m"
           envFrom:
-            - secretRef:
+            - configMapRef:
                 name: authelia
       volumes:
+        - name: authelia
+          persistentVolumeClaim:
+            claimName: authelia
         - name: config
           configMap:
             name: authelia-config
-        - name: users
+        - name: authelia-secrets
           secret:
-            secretName: authelia-users
-        - name: oidc-issuer-key
-          secret:
-            secretName: authelia-oidc-issuer-key
+            secretName: authelia-secrets
