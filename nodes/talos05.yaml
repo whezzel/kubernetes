@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Node
 metadata:
-  name: archserv05
+  name: talos05
   labels:
     nvidia-present: "false"
     coral-present: "false"
