@@ -6,6 +6,9 @@ metadata:
   namespace: dns
 data:
   named.conf: |
+    acl "internal" { key internal; localhost; 10.244.0.0/16; 10.69.0.0/16; };
+    acl "external" { key external; 0.0.0.0/0; };
+    acl "opnsense" { key opnsense; 10.69.20.2; 10.69.20.3; };
     acl "3amigos"  { key 3amigos; 10.100.0.1; 10.100.0.3; };
 
     options {
@@ -29,11 +32,11 @@ data:
     statistics-channels { inet 0.0.0.0 port 8053; };
 
     view "internal" {
-        match-clients { !key external; !key arch01_external; !key Ggm0G6qvMys=; internal; };
+        match-clients { !key external; !key 3amigos; internal; };
         allow-recursion { internal; };
-        allow-transfer { internal; };
+        allow-transfer { key internal; key talos-external-dns; };
         allow-query { internal; };
-        allow-update { key rndc-key; key opnsense; key arch01_internal; key k3s-external-dns; key internal; };
+        allow-update { key rndc-key; key opnsense; key talos-external-dns; key internal; };
         recursion yes;
         notify explicit;
         zone "localhost" { type primary; file "/var/lib/bind/localhost.db"; };
@@ -62,7 +65,7 @@ data:
     };
 
     view "external" {
-        match-clients { !key internal; !key arch01_internal; any; };
+        match-clients { !key internal; !key 3amigos; external; };
         allow-transfer { key rndc-key; key external; };
         allow-query { any; };
         allow-update { none; };
