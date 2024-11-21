@@ -12,6 +12,8 @@ metadata:
     nginx.ingress.kubernetes.io/auth-snippet: |
       proxy_set_header X-Forwarded-Method $request_method;
 spec:
+  tls:
+    - secretName: ""
   ingressClassName: "nginx"
   rules:
     - host: vaultwarden.whezzel.com
