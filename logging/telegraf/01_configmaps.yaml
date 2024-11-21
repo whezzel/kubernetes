@@ -1,0 +1,245 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-talos01
+  namespace: logging
+data:
+  telegraf.conf: |
+    [global_tags]
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      precision = ""
+      debug = false
+      quiet = false
+      # logtarget = "file"
+      # logfile = ""
+      # logfile_rotation_interval = "0d"
+      # logfile_rotation_max_size = "0MB"
+      # logfile_rotation_max_archives = 5
+      hostname = "talos01.whezzel.com"
+      omit_hostname = false
+     [[outputs.influxdb_v2]]
+        urls = ["http://influxdb.logging:80"]
+        token = "${TALOS01_INFLUXDB_TOKEN}"
+        organization = "whezzel.com"
+        bucket = "telegraf"
+        insecure_skip_verify = true
+      [[inputs.cpu]]
+        percpu = true
+        totalcpu = true
+        collect_cpu_time = false
+        report_active = false
+      [[inputs.disk]]
+        mount_points = ["/var", "/var/mnt/longhorn00", "/var/mnt/longhorn01"]
+        ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs", "nsfs"]
+      [[inputs.diskio]]
+        devices = ["sda","nvme*n1"]
+        # skip_serial_number = false
+        # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
+        # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
+      [[inputs.kernel]]
+      [[inputs.mem]]
+      [[inputs.nstat]]
+      [[inputs.processes]]
+      [[inputs.sensors]]
+      [[inputs.swap]]
+      [[inputs.system]]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-talos02
+  namespace: logging
+data:
+  telegraf.conf: |
+    [global_tags]
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      precision = ""
+      debug = false
+      quiet = false
+      hostname = "talos02.whezzel.com"
+      omit_hostname = false
+     [[outputs.influxdb_v2]]
+        urls = ["http://influxdb.logging:80"]
+        token = "${TALOS02_INFLUXDB_TOKEN}"
+        organization = "whezzel.com"
+        bucket = "telegraf"
+        insecure_skip_verify = true
+      [[inputs.cpu]]
+        percpu = true
+        totalcpu = true
+        collect_cpu_time = false
+        report_active = false
+      [[inputs.disk]]
+        mount_points = ["/var", "/var/mnt/longhorn00", "/var/mnt/longhorn01"]
+        ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs", "nsfs"]
+      [[inputs.diskio]]
+        devices = ["sda","nvme*n1"]
+        # skip_serial_number = false
+        # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
+        # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
+      [[inputs.kernel]]
+      [[inputs.mem]]
+      [[inputs.nstat]]
+      [[inputs.processes]]
+      [[inputs.sensors]]
+      [[inputs.swap]]
+      [[inputs.system]]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-talos03
+  namespace: logging
+data:
+  telegraf.conf: |
+    [global_tags]
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      precision = ""
+      debug = false
+      quiet = false
+      hostname = "talos03.whezzel.com"
+      omit_hostname = false
+     [[outputs.influxdb_v2]]
+        urls = ["http://influxdb.logging:80"]
+        token = "${TALOS03_INFLUXDB_TOKEN}"
+        organization = "whezzel.com"
+        bucket = "telegraf"
+        insecure_skip_verify = true
+      [[inputs.cpu]]
+        percpu = true
+        totalcpu = true
+        collect_cpu_time = false
+        report_active = false
+      [[inputs.disk]]
+        mount_points = ["/var", "/var/mnt/longhorn00", "/var/mnt/longhorn01"]
+        ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs", "nsfs"]
+      [[inputs.diskio]]
+        devices = ["sda","sdb","nvme0n1"]
+        # skip_serial_number = false
+        # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
+        # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
+      [[inputs.kernel]]
+      [[inputs.mem]]
+      [[inputs.nstat]]
+      [[inputs.processes]]
+      [[inputs.sensors]]
+      [[inputs.swap]]
+      [[inputs.system]]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-talos04
+  namespace: logging
+data:
+  telegraf.conf: |
+    [global_tags]
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      precision = ""
+      debug = false
+      quiet = false
+      hostname = "talos04.whezzel.com"
+      omit_hostname = false
+     [[outputs.influxdb_v2]]
+        urls = ["http://influxdb.logging:80"]
+        token = "${TALOS04_INFLUXDB_TOKEN}"
+        organization = "whezzel.com"
+        bucket = "telegraf"
+        insecure_skip_verify = true
+      [[inputs.cpu]]
+        percpu = true
+        totalcpu = true
+        collect_cpu_time = false
+        report_active = false
+      [[inputs.disk]]
+        mount_points = ["/var", "/var/mnt/longhorn00", "/var/mnt/longhorn01"]
+        ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs", "nsfs"]
+      [[inputs.diskio]]
+        devices = ["sda","sdb","nvme0n1"]
+        # skip_serial_number = false
+        # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
+        # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
+      [[inputs.kernel]]
+      [[inputs.mem]]
+      [[inputs.nstat]]
+      [[inputs.processes]]
+      [[inputs.sensors]]
+      [[inputs.swap]]
+      [[inputs.system]]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-talos05
+  namespace: logging
+data:
+  telegraf.conf: |
+    [global_tags]
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      precision = ""
+      debug = false
+      quiet = false
+      hostname = "talos05.whezzel.com"
+      omit_hostname = false
+     [[outputs.influxdb_v2]]
+        urls = ["http://influxdb.logging:80"]
+        token = "${TALOS05_INFLUXDB_TOKEN}"
+        organization = "whezzel.com"
+        bucket = "telegraf"
+        insecure_skip_verify = true
+      [[inputs.cpu]]
+        percpu = true
+        totalcpu = true
+        collect_cpu_time = false
+        report_active = false
+      [[inputs.disk]]
+        mount_points = ["/var", "/var/mnt/longhorn00", "/var/mnt/longhorn01"]
+        ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs", "nsfs"]
+      [[inputs.diskio]]
+        devices = ["sda","sdb","nvme0n1"]
+        # skip_serial_number = false
+        # device_tags = ["ID_FS_TYPE", "ID_FS_USAGE"]
+        # name_templates = ["$ID_FS_LABEL","$DM_VG_NAME/$DM_LV_NAME"]
+      [[inputs.kernel]]
+      [[inputs.mem]]
+      [[inputs.nstat]]
+      [[inputs.processes]]
+      [[inputs.sensors]]
+      [[inputs.swap]]
+      [[inputs.system]]

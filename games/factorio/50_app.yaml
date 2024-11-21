@@ -1,0 +1,86 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: factorio
+  namespace: games
+  labels:
+    app: factorio
+  #annotations:
+  #  keel.sh/policy: force
+  #  keel.sh/match-tag: "true"
+  #  keel.sh/trigger: poll
+  #  keel.sh/pollSchedule: "@every 12h"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: factorio
+  template:
+    metadata:
+#      annotations:
+#        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-conf
+      name: factorio
+      labels:
+        app: factorio
+    spec:
+#      affinity:
+#        podAffinity:
+#          preferredDuringSchedulingIgnoredDuringExecution:
+#          - weight: 100
+#            podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                - key: app
+#                  operator: In
+#                  values:
+#                  - arch-01
+#              topologyKey: "kubernetes.io/hostname"
+#      nodeSelector:
+#        kubernetes.io/hostname: archserv01
+      containers:
+        - name: factorio
+          image: factoriotools/factorio:stable
+          #imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 34197
+              name: factorio-tcp
+              protocol: TCP
+            - containerPort: 34197
+              name: factorio-udp
+              protocol: UDP
+            - containerPort: 27015
+              name: rcon
+          env:
+            - name: GENERATE_NEW_SAVE
+              value: "false"
+            - name: LOAD_LATEST_SAVE
+              value: "true"
+            - name: SAVE_NAME
+              value: "Whezzel's World"
+            - name: TOKEN
+              value: "10cceb374a29.04561fdcbab607265b22b94f83848003"
+            - name: USERNAME
+              value: "Whezzel"
+          volumeMounts:
+            - name: factorio
+              mountPath: /factorio
+            - name: nas
+              mountPath: /netstorage
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "250m"
+      volumes:
+        - name: factorio
+          persistentVolumeClaim:
+            claimName: factorio
+        - name: nas
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/

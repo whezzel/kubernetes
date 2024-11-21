@@ -1,0 +1,113 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft
+  namespace: games
+  labels:
+    app: minecraft
+  #annotations:
+  #  keel.sh/policy: force
+  #  keel.sh/match-tag: "true"
+  #  keel.sh/trigger: poll
+  #  keel.sh/pollSchedule: "@every 12h"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-conf
+      name: minecraft
+      labels:
+        app: minecraft
+    spec:
+#      affinity:
+#        podAffinity:
+#          preferredDuringSchedulingIgnoredDuringExecution:
+#          - weight: 100
+#            podAffinityTerm:
+#              labelSelector:
+#                matchExpressions:
+#                - key: app
+#                  operator: In
+#                  values:
+#                  - arch-01
+#              topologyKey: "kubernetes.io/hostname"
+#      nodeSelector:
+#        kubernetes.io/hostname: archserv01
+      containers:
+        - name: minecraft
+          image: itzg/minecraft-server:latest
+          #imagePullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 8100
+              name: bluemap
+            - containerPort: 25565
+              name: minecraft
+#            - containerPort: 25575
+#              name: rcon
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: TYPE
+              value: "fabric"
+            - name: VERSION
+              value: "1.21.1"
+            - name: EULA
+              value: "TRUE"
+            - name: INIT_MEMORY
+              value: "4G"
+            - name: MAX_MEMORY
+              value: "8G"
+            - name: MEMORY
+              value: "8G"
+            - name: SET_CONTAINER
+              value: "true"
+            - name: CONTAINER_TIMEZONE
+              value: "America/Chicago"
+            - name: ENABLE_ROLLING_LOGS
+              value: "true"
+            #- name: DIFFICULTY
+            #  value: hard
+            #- name: SNOOPER_ENABLED
+            #  value: "false"
+            #- name: ALLOW_FLIGHT
+            #  value: "true"
+            - name: SERVER_NAME
+              value: "Whezzel's World"
+            - name: WHITELIST
+              value: "true"
+
+          volumeMounts:
+            - name: minecraft
+              mountPath: /data
+            - name: minecraft-bluemap
+              mountPath: /data/bluemap
+            - name: nas
+              mountPath: /netstorage
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "250m"
+          #  limits:
+          #    memory: "8Gi"
+          #    cpu: "8"
+      volumes:
+        - name: minecraft
+          persistentVolumeClaim:
+            claimName: minecraft
+        - name: minecraft-bluemap
+          persistentVolumeClaim:
+            claimName: minecraft-bluemap
+        - name: nas
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/

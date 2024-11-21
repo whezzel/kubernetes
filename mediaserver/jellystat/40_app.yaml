@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellystat
+  namespace: mediaserver
+  labels:
+    app: jellystat
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+#  strategy:
+#    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellystat
+  template:
+    metadata:
+      name: jellystat
+      labels:
+        app: jellystat
+    spec:
+      containers:
+        - name: jellystat
+          image: cyfershepard/jellystat:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jellystat-postgres
+                  key: DB_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jellystat-postgres
+                  key: DB_PASSWORD
+            - name: POSTGRES_IP
+              value: jellystat-postgres.mediaserver
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jellystat
+                  key: jwt_secret
+            - name: POSTGRES_DB
+              value: jellystat
+#            - name: REJECT_SELF_SIGNED_CERTIFICATES
+#              value: "true"
+#            - name: PGSSLMODE
+#              value: require
+#            - name: NODE_TLS_REJECT_UNAUTHORIZED
+#              value: "0"
