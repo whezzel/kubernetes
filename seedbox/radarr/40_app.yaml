@@ -38,9 +38,51 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
+            - name: RADARR__APP__INSTANCENAME
+              value: "Radarr"
+            - name: RADARR__APP__LAUNCHBROWSER
+              value: "False"
+            - name: RADARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-secrets
+                  key: apikey
+            - name: RADARR_AUTH_ENABLED
+              value: "True"
+            - name: RADARR__AUTH__METHOD
+              value: "External"
+            - name: RADARR__AUTH__REQUIRED
+              value: "DisabledForLocalAddresses"
+            - name: RADARR__LOG__ANALYTICSENABLED
+              value: "False"
+            - name: RADARR__LOG__LEVEL
+              value: "info"
+            - name: RADARR__UPDATE__AUTOMATICALLY
+              value: "True"
+            - name: RADARR__UPDATE__MECHANISM
+              value: "Docker"
+            - name: RADARR__SERVER__BINDADDRESS
+              value: "*"
+            - name: RADARR__SERVER__ENABLESSL
+              value: "false"
+            - name: RADARR__SERVER__PORT
+              value: "7878"
+#            - name: RADARR__SERVER__SSLCERTPATH
+#              value: "/tls/keystore.p12"
+#            - name: RADARR__SERVER__SSLCERTPASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: pkcs12-pass-secrets
+#                  key: pkcs12-pass
+            - name: RADARR__SERVER__URLBASE
+              value: "/"
+            - name: RADARR__SERVER__SSLPORT
+              value: "8787"
           volumeMounts:
             - name: nas-media
               mountPath: /media
+            - name: nas-mediacover
+              mountPath: /config/MediaCover
             - name: radarr
               mountPath: /config
           resources:
@@ -52,6 +94,10 @@ spec:
           nfs:
             server: nas.whezzel.com
             path: /mnt/netstorage/media
+        - name: nas-mediacover
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/media/movies/MediaCover
         - name: radarr
           persistentVolumeClaim:
             claimName: radarr

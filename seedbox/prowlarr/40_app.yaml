@@ -38,9 +38,51 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
+            - name: PROWLARR__APP__INSTANCENAME
+              value: "Prowlarr"
+            - name: PROWLARR__APP__LAUNCHBROWSER
+              value: "False"
+            - name: PROWLARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: prowlarr-secrets
+                  key: apikey
+            - name: PROWLARR_AUTH_ENABLED
+              value: "True"
+            - name: PROWLARR__AUTH__METHOD
+              value: "External"
+            - name: PROWLARR__AUTH__REQUIRED
+              value: "DisabledForLocalAddresses"
+            - name: PROWLARR__LOG__ANALYTICSENABLED
+              value: "False"
+            - name: PROWLARR__LOG__LEVEL
+              value: "info"
+            - name: PROWLARR__UPDATE__AUTOMATICALLY
+              value: "True"
+            - name: PROWLARR__UPDATE__MECHANISM
+              value: "Docker"
+            - name: PROWLARR__SERVER__BINDADDRESS
+              value: "*"
+            - name: PROWLARR__SERVER__ENABLESSL
+              value: "false"
+            - name: PROWLARR__SERVER__PORT
+              value: "9696"
+#            - name: PROWLARR__SERVER__SSLCERTPATH
+#              value: "/tls/keystore.p12"
+#            - name: PROWLARR__SERVER__SSLCERTPASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: pkcs12-pass-secrets
+#                  key: pkcs12-pass
+            - name: PROWLARR__SERVER__URLBASE
+              value: "/"
+            - name: PROWLARR__SERVER__SSLPORT
+              value: "6969"
           volumeMounts:
             - name: nas-media
               mountPath: /media
+            - name: nas-mediacover
+              mountPath: /config/MediaCover
             - name: prowlarr
               mountPath: /config
           resources:
@@ -52,6 +94,10 @@ spec:
           nfs:
             server: nas.whezzel.com
             path: /mnt/netstorage/media
+        - name: nas-mediacover
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/media/movies/MediaCover
         - name: prowlarr
           persistentVolumeClaim:
             claimName: prowlarr
