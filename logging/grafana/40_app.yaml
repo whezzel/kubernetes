@@ -64,6 +64,9 @@ spec:
               value: 'true'
             - name: GF_INSTALL_PLUGINS
               value: ""
+          envFrom:
+            - secretRef:
+                name: grafana-secrets
           volumeMounts:
             - name: grafana
               mountPath: /var/lib/grafana
