@@ -1,0 +1,21 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  finalizers:
+  - longhorn.io
+  name: talos05
+  namespace: longhorn
+spec:
+  allowScheduling: true
+  disks:
+    longhorn00:
+      allowScheduling: true
+      diskType: filesystem
+      evictionRequested: false
+      path: /var/mnt/longhorn00
+    longhorn01:
+      allowScheduling: true
+      diskType: filesystem
+      evictionRequested: false
+      path: /var/mnt/longhorn01
