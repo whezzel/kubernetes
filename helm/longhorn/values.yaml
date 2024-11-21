@@ -4,9 +4,12 @@ csi:
 defaultSettings:
   backupTarget: nfs://nas.whezzel.com:/mnt/netstorage/backups/longhorn
   concurrentAutomaticEngineUpgradePerNodeLimit: 5
+  concurrentReplicaRebuildPerNodeLimit: 10
   defaultDataLocality: best-effort
+  createDefaultDiskLabeledNodes: true
   defaultLonghornStaticStorageClass: longhorn
   defaultReplicaCount: 5
+  deletingConfirmationFlag: true
   guaranteedEngineCPU: 0.20
   orphanAutoDeletion: true
   replicaAutoBalance: best-effort
@@ -18,8 +21,11 @@ defaultSettings:
 persistence:
   defaultClassReplicaCount: 5
   reclaimPolicy: Retain
+  disableRevisionCounter: "false"
 
 ingress:
   enabled: true
   ingressClassName: nginx
   host: longhorn.whezzel.com
+  tls:
+    - secretName: ""
