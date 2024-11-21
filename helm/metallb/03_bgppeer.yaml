@@ -8,6 +8,7 @@ spec:
   myASN: 64513
   peerASN: 64512
   peerAddress: 10.69.20.2
+  bfdProfile: default
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -18,3 +19,4 @@ spec:
   myASN: 64513
   peerASN: 64512
   peerAddress: 10.69.20.3
+  bfdProfile: default
