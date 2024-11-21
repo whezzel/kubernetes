@@ -212,8 +212,8 @@ spec:
                 secretKeyRef:
                   name: transmission-secrets
                   key: TRANSMISSION_RPC_HOST_WHITELIST
-#            - name: TRANSMISSION_RPC_HOST_WHITELIST_ENABLED
-#              value: "true"
+            - name: TRANSMISSION_RPC_HOST_WHITELIST_ENABLED
+              value: "false"
 #            - name: TRANSMISSION_RPC_PASSWORD
 #              valueFrom:
 #                secretKeyRef:
