@@ -16,7 +16,7 @@ controller:
       http: 80
       https: 443
   extraArgs:
-    default-ssl-certificate: "cert-manager/whezzel.com-tls"
+    default-ssl-certificate: "cert-manager/whezzel-com-tls"
   config:
     compute-full-forwarded-for: "false"
     use-forwarded-headers: "true"
