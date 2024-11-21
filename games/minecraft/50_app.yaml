@@ -20,8 +20,6 @@ spec:
       app: minecraft
   template:
     metadata:
-      annotations:
-        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-conf
       name: minecraft
       labels:
         app: minecraft
