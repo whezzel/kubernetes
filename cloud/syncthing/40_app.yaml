@@ -68,9 +68,6 @@ spec:
           #  failureThreshold: 5
           #  timeoutSeconds: 10
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: syncthing
               mountPath: /config
               subPath: config
@@ -81,9 +78,6 @@ spec:
               memory: "512Mi"
               cpu: "250m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: syncthing
           persistentVolumeClaim:
             claimName: syncthing

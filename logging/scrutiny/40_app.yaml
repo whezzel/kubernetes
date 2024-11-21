@@ -45,9 +45,6 @@ spec:
             - name: SCRUTINY_NOTIFY_URLS
               value: "gotify://gotify.email/AfhL.dgYJqB9UHm?disabletls=yes"
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: scrutiny
               mountPath: /opt/scrutiny/config
           resources:
@@ -55,9 +52,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: scrutiny
           persistentVolumeClaim:
             claimName: scrutiny
@@ -93,9 +87,6 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: udev
               mountPath: /run/udev
               readOnly: true
@@ -108,9 +99,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: udev
           hostPath:
             path: /run/udev
@@ -149,9 +137,6 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: udev
               mountPath: /run/udev
               readOnly: true
@@ -164,9 +149,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: udev
           hostPath:
             path: /run/udev
@@ -205,9 +187,6 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: udev
               mountPath: /run/udev
               readOnly: true
@@ -220,9 +199,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: udev
           hostPath:
             path: /run/udev
@@ -261,9 +237,6 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: udev
               mountPath: /run/udev
               readOnly: true
@@ -276,9 +249,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: udev
           hostPath:
             path: /run/udev
@@ -317,9 +287,6 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: udev
               mountPath: /run/udev
               readOnly: true
@@ -332,9 +299,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: udev
           hostPath:
             path: /run/udev

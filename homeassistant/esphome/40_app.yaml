@@ -43,9 +43,6 @@ spec:
             - name: "ESPHOME_DASHBOARD_USE_PING"
               value: "true"
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: esphome
               mountPath: /config
           resources:
@@ -56,9 +53,6 @@ spec:
               memory: "4Gi"
               cpu: "4"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: esphome
           persistentVolumeClaim:
             claimName: esphome

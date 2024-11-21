@@ -44,9 +44,6 @@ spec:
           #  - name: "RTL_MSGTYPE"
           #    value: "all"
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: usb
               mountPath: /dev/bus/usb
               readOnly: true
@@ -59,9 +56,6 @@ spec:
               memory: "128Mi"
               cpu: "800m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: usb
           hostPath:
             path: /dev/bus/usb

@@ -55,9 +55,6 @@ spec:
             - name: NTFY_AUTH_DEFAULT_ACCESS
               value: "deny-all"
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: ntfy
               mountPath: /var/cache/ntfy
           resources:
@@ -65,9 +62,6 @@ spec:
               memory: "50Mi"
               cpu: "50m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: ntfy
           persistentVolumeClaim:
             claimName: ntfy

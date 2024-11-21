@@ -68,9 +68,6 @@ spec:
             failureThreshold: 5
             timeoutSeconds: 10
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: dev-usb
               mountPath: /dev/usb
               readOnly: true
@@ -89,9 +86,6 @@ spec:
               memory: "1Gi"
               cpu: "4"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: dev-usb
           hostPath:
             path: /dev/usb

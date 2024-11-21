@@ -36,9 +36,6 @@ spec:
             - name: "PGID"
               value: "1000"
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: config
               mountPath: /usr/local/etc/redis
             - name: data
@@ -48,9 +45,6 @@ spec:
               memory: "512Mi"
               cpu: "500m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: config
           secret:
             secretName: authelia-redis

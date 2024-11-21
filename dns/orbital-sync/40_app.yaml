@@ -42,11 +42,3 @@ spec:
               value: "/admin"
             - name: "UPDATE_GRAVITY"
               value: "false"
-          volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
-      volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago

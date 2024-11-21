@@ -51,9 +51,6 @@ spec:
             - name: "PGID"
               value: "1000"
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: homeassistant
               mountPath: /config
           #  - name: nas-media
@@ -63,9 +60,6 @@ spec:
               memory: "1Gi"
               cpu: "250m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: homeassistant
           persistentVolumeClaim:
             claimName: homeassistant

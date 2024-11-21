@@ -32,9 +32,6 @@ spec:
             - containerPort: 80
               name: http
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: baikal
               mountPath: /var/www/baikal/Specific
               subPath: Specific
@@ -46,9 +43,6 @@ spec:
               memory: "512Mi"
               cpu: "250m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: baikal
           persistentVolumeClaim:
             claimName: baikal

@@ -24,15 +24,7 @@ spec:
           ports:
             - containerPort: 80
               name: http
-          volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
           resources:
             requests:
               memory: "128Mi"
               cpu: "100m"
-      volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago

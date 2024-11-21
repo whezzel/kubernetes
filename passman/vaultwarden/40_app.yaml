@@ -70,9 +70,6 @@ spec:
             - secretRef:
                 name: vaultwarden
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: vaultwarden
               mountPath: /data
               subPath: data
@@ -81,9 +78,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: vaultwarden
           persistentVolumeClaim:
             claimName: vaultwarden

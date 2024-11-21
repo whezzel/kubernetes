@@ -40,9 +40,6 @@ spec:
 #            failureThreshold: 5
 #            timeoutSeconds: 10
           volumeMounts:
-            - name: localtime
-              mountPath: /etc/localtime
-              readOnly: true
             - name: influxdb
               mountPath: /var/lib/influxdb2
               subPath: data
@@ -54,9 +51,6 @@ spec:
               memory: "512Mi"
               cpu: "500m"
       volumes:
-        - name: localtime
-          hostPath:
-            path: /usr/share/zoneinfo/America/Chicago
         - name: influxdb
           persistentVolumeClaim:
             claimName: influxdb
