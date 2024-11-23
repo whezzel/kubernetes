@@ -6,10 +6,10 @@ metadata:
   namespace: dns
 data:
   named.conf: |
-    acl "internal" { key internal; localhost; 10.244.0.0/16; 10.69.0.0/16; };
+    acl "internal" { key internal; key arch01-internal; key external-dns-internal; localhost; 10.244.0.0/16; 10.69.0.0/16; };
     acl "external" { key external; 0.0.0.0/0; };
     acl "opnsense" { key opnsense; 10.69.20.2; 10.69.20.3; };
-    acl "3amigos"  { key 3amigos; 10.100.0.1; 10.100.0.3; };
+    acl "3amigos"  { key 3amigos; key arch01-3amigos; key external-dns-3amigos; 10.100.0.1; 10.100.0.3; };
 
     options {
         directory "/var/lib/bind/working";
@@ -32,11 +32,11 @@ data:
     statistics-channels { inet 0.0.0.0 port 8053; };
 
     view "internal" {
-        match-clients { !key external; !key 3amigos; internal; };
+        match-clients { !key 3amigos; !key arch01-3amigos; !key external-dns-3amigos; internal; };
         allow-recursion { internal; };
-        allow-transfer { key internal; key talos-external-dns; };
+        allow-transfer { key internal; key arch01-internal; key external-dns-internal; };
         allow-query { internal; };
-        allow-update { key rndc-key; key opnsense; key talos-external-dns; key internal; };
+        allow-update { key rndc-key; key opnsense; key internal; key arch01-internal; key external-dns-internal; };
         recursion yes;
         notify explicit;
         zone "localhost" { type primary; file "/var/lib/bind/localhost.db"; };
@@ -56,25 +56,25 @@ data:
     };
 
     view "3amigos" {
-        match-clients { !key external; !key internal; 3amigos; };
+        match-clients { !key internal; !key arch01-internal; !key external-dns-internal; 3amigos; };
         allow-recursion { none; };
-        allow-transfer { key 3amigos; };
+        allow-transfer { key 3amigos; key arch01-3amigos; key external-dns-3amigos; };
         allow-query { 3amigos; };
-        allow-update { key rndc-key; key 3amigos; };
+        allow-update { key rndc-key; key 3amigos; key arch01-3amigos; key external-dns-3amigos; };
         recursion no;
         notify explicit;
         zone "whezzel.com" { type primary; file "/var/lib/bind/3amigos/whezzel.com.db"; also-notify { 10.69.20.2 key 3amigos; 10.69.20.3 key 3amigos; }; };
     };
 
-    view "external" {
-        match-clients { !key internal; !key 3amigos; external; };
-        allow-transfer { key rndc-key; key external; };
-        allow-query { any; };
-        allow-update { none; };
-        recursion no;
-        notify explicit;
-        zone "whezzel.xyz" { type primary; file "/var/lib/bind/external/whezzel.xyz.db"; dnssec-policy default; inline-signing true; also-notify { 10.69.20.2 key external; 10.69.20.3 key external; }; allow-update { key rndc-key; key arch01_external; key Ggm0G6qvMys=; }; };
-    };
+    #view "external" {
+    #    match-clients { !key internal; !key 3amigos; external; };
+    #    allow-transfer { key rndc-key; key external; };
+    #    allow-query { any; };
+    #    allow-update { none; };
+    #    recursion no;
+    #    notify explicit;
+    #    zone "whezzel.xyz" { type primary; file "/var/lib/bind/external/whezzel.xyz.db"; dnssec-policy default; inline-signing true; also-notify { 10.69.20.2 key external; 10.69.20.3 key external; }; allow-update { key rndc-key; key arch01_external; key Ggm0G6qvMys=; }; };
+    #};
 
     logging {
         channel stdout { stderr; severity info; print-category no; print-severity no; print-time yes; };
