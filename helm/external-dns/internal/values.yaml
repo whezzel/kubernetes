@@ -2,22 +2,22 @@ env:
   - name: RFC2136_HOST
     valueFrom:
       secretKeyRef:
-        name: external-dns-secrets
+        name: external-dns-internal-secrets
         key: RFC2136_HOST
   - name: RFC2136_ZONE
     valueFrom:
       secretKeyRef:
-        name: external-dns-secrets
+        name: external-dns-internal-secrets
         key: RFC2136_ZONE
   - name: DOMAIN_FILTER
     valueFrom:
       secretKeyRef:
-        name: external-dns-secrets
+        name: external-dns-internal-secrets
         key: DOMAIN_FILTER
   - name: RFC2136_TSIG_SECRET
     valueFrom:
       secretKeyRef:
-        name: external-dns-secrets
+        name: external-dns-internal-secrets
         key: RFC2136_TSIG_SECRET
 interval: 15s
 sources:
@@ -25,8 +25,8 @@ sources:
   - ingress
 policy: sync
 registry: txt
-txtOwnerId: talos
-txtPrefix: external-dns-
+txtOwnerId: external-dns-internal
+txtPrefix: external-dns-internal-
 txtSuffix:
 domainFilters:
   - $(DOMAIN_FILTER)
@@ -39,5 +39,5 @@ extraArgs:
   - --rfc2136-zone=$(RFC2136_ZONE)
   - --rfc2136-tsig-secret=$(RFC2136_TSIG_SECRET)
   - --rfc2136-tsig-secret-alg=hmac-sha512
-  - --rfc2136-tsig-keyname=talos-external-dns
+  - --rfc2136-tsig-keyname=external-dns-internal
   - --rfc2136-tsig-axfr

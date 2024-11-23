@@ -7,14 +7,14 @@ External-DNS tracks svc/ing and creates dns records
 
 **Apply supporting manifests:**
 ```bash
-kubectl apply -f ~/repos/k3s/helm/external-dns
+kubectl apply -f ~/repos/k3s/helm/external-dns/3amigos
 ```
 
 **Deploy External-DNS using helm:**
 ```bash
-helm upgrade --install external-dns external-dns \
+helm upgrade --install external-dns-3amigos external-dns \
     --repo https://kubernetes-sigs.github.io/external-dns \
     --namespace dns \
     --create-namespace \
-    --values ~/repos/k3s/helm/external-dns/values.yaml
+    --values ~/repos/k3s/helm/external-dns/3amigos/values.yaml
 ```
