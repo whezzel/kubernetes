@@ -36,11 +36,11 @@ data:
     statistics-channels { inet 0.0.0.0 port 8053; };
 
     view "internal" {
-        match-clients { !external-keys; !opnsense-keys; !3amigos-keys; internal-keys; };
+        match-clients { !external-keys; !3amigos-keys; opnsense-keys; internal-keys; internal; };
         allow-recursion { internal; internal-keys; };
-        allow-transfer { !external-keys; !opnsense-keys; !3amigos-keys; internal-keys; };
-        allow-query { internal; internal-keys; };
-        allow-update { !external-keys; !opnsense-keys; !3amigos-keys; internal-keys; };
+        allow-transfer { !external-keys; !3amigos-keys; opnsense-keys; internal-keys; };
+        allow-query { internal-keys; internal; };
+        allow-update { !external-keys; !3amigos-keys; opnsense-keys; internal-keys; };
         recursion yes;
         notify explicit;
         zone "localhost" { type primary; file "/var/lib/bind/localhost.db"; };
@@ -63,7 +63,7 @@ data:
         match-clients { !external-keys; !opnsense-keys; !internal-keys; 3amigos-keys; };
         allow-recursion { none; };
         allow-transfer { !external-keys; !opnsense-keys; !internal-keys; 3amigos-keys; };
-        allow-query { 3amigos; 3amigos-keys; };
+        allow-query { 3amigos-keys; 3amigos; };
         allow-update { !external-keys; !opnsense-keys; !internal-keys; 3amigos-keys; };
         recursion no;
         notify explicit;
