@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actual
+  namespace: finance
+  labels:
+    app: actual
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actual
+  template:
+    metadata:
+      labels:
+        app: actual
+      name: actual
+    spec:
+      containers:
+        - name: actual
+          image: ghcr.io/actualbudget/actual-server:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 5006
+              protocol: TCP
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: actual
+              mountPath: /data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+      volumes:
+        - name: actual
+          persistentVolumeClaim:
+            claimName: actual
