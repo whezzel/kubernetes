@@ -3,7 +3,8 @@ container_runtime: containerd
 image:
   repository: crowdsecurity/crowdsec
   pullPolicy: Always
-  tag: "latest"
+  tag: "dev"
+  #tag: "latest"
 config:
   parsers:
     s00-raw: {}
@@ -45,49 +46,33 @@ config:
             expression: evt.Parsed.source_ip
           - meta: http_status
             expression: evt.Parsed.http_status
-        ...
-    s02-enrich:
-      geoip-enrich.yaml: |
-        filter: |
-          let ipv6Check = IsIPV6(evt.Meta.source_ip);
-          "source_ip" in evt.Meta &&
-          (
-            not ipv6Check &&
-            not (IpInRange(evt.Meta.source_ip, "127.0.0.0/8") || IpInRange(evt.Meta.source_ip, "192.168.0.0/16") || IpInRange(evt.Meta.source_ip, "172.16.0.0/12") || IpInRange(evt.Meta.source_ip, "10.0.0.0/8"))
-          ) ||
-          (
-            ipv6Check &&
-            not (IpInRange(evt.Meta.source_ip, "::1/128") || IpInRange(evt.Meta.source_ip, "fd00::/8") || IpInRange(evt.Meta.source_ip, "fc00::/7"))
-          )
-
-        name: crowdsecurity/geoip-enrich
-        description: "Populate event with geoloc info : as, country, coords, source range."
-        data:
-          - source_url: https://hub-data.crowdsec.net/mmdb/GeoLite2-City.mmdb
-            dest_file: GeoLite2-City.mmdb
-          - source_url: https://hub-data.crowdsec.net/mmdb/GeoLite2-ASN.mmdb
-            dest_file: GeoLite2-ASN.mmdb
+      dovecot-logs.yaml: |
+        ---
+        onsuccess: next_stage
+        debug: false
+        filter: "evt.Parsed.program == 'dovecot'"
+        name: whezzel/dovecot-logs
+        description: "Parse dovecot logs"
+        pattern_syntax:
+          AUTH_FUNC: '[A-Za-z0-9_]+(\(\))?'
+        nodes:
+          - grok:
+              pattern: "auth: %{DATA:auth_type}\\(%{DATA:dovecot_user},%{IP:dovecot_remote_ip},<%{DATA:auth_func}>\\):%{DATA:dovecot_login_message}$"
+              apply_on: message
+          - grok:
+              pattern: "auth: %{DATA:auth_type}\\(%{DATA:dovecot_user},%{IP:dovecot_remote_ip}\\): (%{AUTH_FUNC:auth_func} failed: )?%{DATA:dovecot_login_message}$"
+              apply_on: message
         statics:
-          - method: GeoIpCity
-            expression: evt.Meta.source_ip
-          - meta: IsoCode
-            expression: evt.Enriched.IsoCode
-          - meta: IsInEU
-            expression: evt.Enriched.IsInEU
-          - meta: GeoCoords
-            expression: evt.Enriched.GeoCoords
-          - method: GeoIpASN
-            expression: evt.Meta.source_ip
-          - meta: ASNNumber
-            expression: evt.Enriched.ASNNumber
-          - meta: ASNOrg
-            expression: evt.Enriched.ASNOrg
-          - method: IpToRange
-            expression: evt.Meta.source_ip
-          - meta: SourceRange
-            expression: evt.Enriched.SourceRange
+            - meta: log_type
+              value: dovecot_logs
+            - meta: source_ip
+              expression: "evt.Parsed.dovecot_remote_ip"
+            - meta: dovecot_login_result
+              expression: "any(['Authentication failure', 'Password mismatch', 'password mismatch', 'auth failed', 'unknown user'], {evt.Parsed.dovecot_login_message contains #}) ? 'auth_failed' : ''"
+    s02-enrich: {}
   scenarios:
     gotify-bf.yaml: |
+      ---
       type: leaky
       name: whezzel/gotify-bf
       description: "Detect bruteforce"
@@ -105,11 +90,14 @@ config:
         confidence: 3
         label: "Gotify Bruteforce"
         remediation: true
-  postoverflows: {}
-  simmulation: {}
-  console: {}
+  postoverflows:
+    s00-enrich: {}
+    s01-whitelist: {}
+  simulation.yaml: ""
+  console.yaml: ""
   capi_whitelists.yaml: ""
   profiles.yaml: |
+    ---
     name: default_ip_remediation
     filters:
      - Alert.Remediation == true && Alert.GetScope() == "Ip"
@@ -120,9 +108,40 @@ config:
     notifications:
      - http_gotify   # Set the required http parameters in /etc/crowdsec/notifications/http.yaml before enabling this.
     on_success: break
-#  notifications: {}
+  config.yaml.local: |
+    api:
+      server:
+        auto_registration:
+          enabled: true
+          token: "${REGISTRATION_TOKEN}"
+          allowed_ranges:
+            - "127.0.0.1/32"
+            - "10.244.0.0/16"
+            - "10.69.20.2/32"
+            - "10.69.20.3/32"
+        use_forwarded_for_headers: true
+        online_client:
+          credentials_path: "/etc/crowdsec/online_api_credentials.yaml"
+        trusted_ips:
+          - 127.0.0.1
+          - ::1
+          - 10.69.20.2
+          - 10.69.20.3
+    db_config:
+      type:     postgresql
+      user:     crowdsec
+      password: "${DB_PASSWORD}"
+      db_name:  crowdsec
+      host:     crowdsec-postgres-rw.database
+      port:     5432
+      sslmode:  require
+      flush:
+        agents_autodelete:
+          cert: 60m
+          login_password: 60m
   notifications:
     http-gotify.yaml: |
+      ---
       type: http          # Don't change
       name: http_gotify # Must match the registered plugin in the profile
       log_level: info
@@ -145,60 +164,96 @@ config:
       url: http://gotify.email.svc.cluster.local/message
       method: POST
       headers:
-        X-Gotify-Key: AhvQ2l4Bwle8t99
+        X-Gotify-Key: <PLACEHOLDER>
         Content-Type: application/json
 lapi:
+  enabled: true
+  replicas: 1
   env:
-    - name: DISABLE_ONLINE_API
-      value: "true"
-#    - name: HOSTNAME
-#      value: "crowdsec-lapi"
+    - name: TZ
+      value: "America/Chicago"
     - name: CUSTOM_HOSTNAME
       value: "crowdsec-lapi"
-    - name: AGENT_USERNAME
+    - name: DISABLE_ONLINE_API
+      value: "true"
+    - name: BOUNCER_KEY_opnsense01
       valueFrom:
         secretKeyRef:
-          name: cs-agent-credentials
-          key: username
-    - name: AGENT_PASSWORD
+          name: crowdsec-secrets
+          key: BOUNCER_KEY_opnsense01
+    - name: BOUNCER_KEY_opnsense02
       valueFrom:
         secretKeyRef:
-          name: cs-agent-credentials
-          key: password
+          name: crowdsec-secrets
+          key: BOUNCER_KEY_opnsense02
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: DB_PASSWORD
+    #- name: ENROLL_KEY
+    #  valueFrom:
+    #    secretKeyRef:
+    #      name: crowdsec-secrets
+    #      key: ENROLL_KEY
+    #- name: ENROLL_INSTANCE_NAME
+    #  valueFrom:
+    #    secretKeyRef:
+    #      name: crowdsec-secrets
+    #      key: ENROLL_INSTANCE_NAME
+    #- name: ENROLL_TAGS
+    #  valueFrom:
+    #    secretKeyRef:
+    #      name: crowdsec-secrets
+    #      key: ENROLL_TAGS
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    ingressClassName: "nginx"
+    host: "crowdsec-api.whezzel.com"
+    tls:
+      - secretName: ""
+  extraVolumes:
+    - name: crowdsec-capi-credentials
+      secret:
+        secretName: crowdsec-capi-credentials
+  extraVolumeMounts:
+    - name: crowdsec-capi-credentials
+      mountPath: "/etc/crowdsec/online_api_credentials.yaml"
+      readOnly: true
+      subPath: online_api_credentials.yaml
   dashboard:
     enabled: false
     ingress:
       enabled: false
       ingressClassName: "nginx"
       host: "crowdsec.whezzel.com"
+      tls:
+        - secretName: ""
   persistentVolume:
     data:
-      enabled: true
-      accessModes:
-        - ReadWriteOnce
-      existingClaim: "crowdsec-data"
-      size: 1Gi
+      enabled: false
     config:
       enabled: false
-  resources:
-    limits:
-      memory: 1G
-    requests:
-      cpu: 150m
-      memory: 100Mi
-  service:
-    type: LoadBalancer
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: crowdsec-api.whezzel.com
-    externalTrafficPolicy: Local
+      existingClaim: "crowdsec-config"
+      size: 100Mi
+  # -- Enable service monitoring (exposes "metrics" port "6060" for Prometheus)
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  #service:
+  #  type: LoadBalancer
+  #  annotations:
+  #    external-dns.alpha.kubernetes.io/hostname: crowdsec-api.whezzel.com
+  #  externalTrafficPolicy: Local
+  storeCAPICredentialsInSecret: false
 agent:
   acquisition:
     - namespace: "auth"
       podName: "authelia-*"
       program: "authelia"
-    - namespace: "auth"
-      podName: "authentik-*"
-      program: "authentik"
     - namespace: "dns"
       podName: "bind-*"
       program: "bind"
@@ -223,28 +278,26 @@ agent:
     - namespace: "homeassistant"
       podName: "homeassistant-*"
       program: "home-assistant"
-    - namespace: "email"
-      podName: "mailu-*"
-      program: "mailu-admin"
     - namespace: "cloud"
       podName: "baikal-*"
       program: "baikal"
+    - namespace: "email"
+      podName: "docker-mailserver-*"
+      program: "dovecot"
+    - namespace: "email"
+      podName: "docker-mailserver-*"
+      program: "postfix/smtpd"
+    - namespace: "email"
+      podName: "docker-mailserver-*"
+      program: "postfix/postscreen"
   env:
+    - name: TZ
+      value: "America/Chicago"
     - name: COLLECTIONS
-      value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant mwinters-stuff/mailu-admin andreasbrett/baikal firix/authentik"
-    - name: DISABLE_ONLINE_API
-      value: "true"
+      value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant andreasbrett/baikal crowdsecurity/postfix crowdsecurity/dovecot"
+    #- name: SCENARIOS
+    #  value: "crowdsecurity/dovecot-spam" # crowdsecurity/postfix-spam crowdsecurity/postfix-relay-denied crowdsecurity/postfix-helo-rejected crowdsecurity/postfix-non-smtp-command"
     - name: LEVEL_DEBUG
       value: "false"
     - name: LEVEL_TRACE
       value: "false"
-    - name: AGENT_USERNAME
-      valueFrom:
-        secretKeyRef:
-          name: cs-agent-credentials
-          key: username
-    - name: AGENT_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: cs-agent-credentials
-          key: password
