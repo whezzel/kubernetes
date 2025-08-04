@@ -1,0 +1,810 @@
+ingress:
+  enabled: true
+  rulesOverride:
+    - host: authelia.whezzel.com
+      path: /
+  className: 'nginx'
+  tls:
+    enabled: true
+    secret: ''
+pod:
+  kind: 'Deployment'
+  replicas: 3
+  selectors:
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - authelia
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+              - authelia
+          topologyKey: "kubernetes.io/hostname"
+  env:
+    - name: 'TZ'
+      value: 'America/Chicago'
+configMap:
+  disabled: false
+  filters:
+    disabled: false
+  server:
+    headers:
+      csp_template: default-src 'self'; frame-src 'none'; object-src 'none'; style-src 'self' 'nonce-${NONCE}'; frame-ancestors 'self' homeassistant.whezzel.com; base-uri 'self'
+    endpoints:
+      authz:
+        auth-request:
+          implementation: 'AuthRequest'
+          authn_strategies:
+          - name: 'HeaderAuthRequestProxyAuthorization'
+            schemes:
+            - 'Basic'
+          - name: 'CookieSession'
+        ext-authz:
+          implementation: 'ExtAuthz'
+          authn_strategies:
+          - name: 'HeaderProxyAuthorization'
+            schemes:
+            - 'Basic'
+          - name: 'CookieSession'
+        forward-auth:
+          implementation: 'ForwardAuth'
+          authn_strategies:
+          - name: 'HeaderProxyAuthorization'
+            schemes:
+            - 'Basic'
+          - name: 'CookieSession'
+  log:
+    level: 'debug' # info, debug, trace
+  telemetry:
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: false
+  default_2fa_method: 'webauthn'
+  theme: 'dark'
+  definitions:
+    network:
+      k8s:
+        - '10.244.0.0/16'
+      LAN:
+        - '10.69.0.0/16'
+  identity_validation:
+    reset_password:
+      jwt_lifespan: '5 minutes'
+      jwt_algorithm: 'HS256'
+      secret:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'identity_validation.reset_password.jwt.hmac.key'
+    elevated_session:
+      code_lifespan: '5 minutes'
+      elevation_lifespan: '10 minutes'
+      characters: 10
+      require_second_factor: true
+      skip_second_factor: false
+  totp:
+    disable: false
+    issuer: 'Authelia'
+    skew: 1
+    secret_size: 32
+    algorithm: 'SHA1'
+    digits: 6
+    period: 30
+    allowed_algorithms:
+      - 'SHA1'
+    allowed_digits:
+      - 6
+    allowed_periods:
+      - 30
+  webauthn:
+    disable: false
+    timeout: '60 seconds'
+    display_name: 'Authelia'
+    attestation_conveyance_preference: 'indirect'
+    filtering:
+      permitted_aaguids: []
+      prohibited_aaguids: []
+      prohibit_backup_eligibility: false
+    selection_criteria:
+      attachment: ''
+      discoverability: 'preferred'
+      user_verification: 'preferred'
+    metadata:
+      enabled: false
+      validate_trust_anchor: true
+      validate_entry: true
+      validate_entry_permit_zero_aaguid: false
+      validate_status: true
+      validate_status_permitted: []
+      validate_status_prohibited: []
+  ntp:
+    address: 'udp://10.69.20.1:123'
+    version: 3
+    max_desync: '3 seconds'
+    disable_startup_check: false
+    disable_failure: false
+  authentication_backend:
+    password_reset:
+      disable: false
+      custom_url: ''
+    password_change:
+      disable: false
+    refresh_interval: '5 minutes'
+    ldap:
+      enabled: true
+      implementation: 'custom'
+      address: 'ldap://openldap.auth:389'
+      timeout: '5 seconds'
+      start_tls: false
+      tls:
+        server_name: ''
+        skip_verify: false
+        minimum_version: 'TLS1.2'
+        maximum_version: 'TLS1.3'
+      pooling:
+        enable: false
+        count: 5
+        retries: 2
+        timeout: '10 seconds'
+      base_dn: 'dc=whezzel,dc=com'
+      additional_users_dn: 'ou=users'
+      users_filter: '(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))'
+      additional_groups_dn: 'ou=groups'
+      groups_filter: '(&(member={dn})(objectclass=groupOfNames))'
+      permit_referrals: true
+      permit_unauthenticated_bind: false
+      permit_feature_detection_failure: false
+      user: 'cn=bind_authelia,ou=services,dc=whezzel,dc=com'
+      password:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'authentication.ldap.password.txt'
+      attributes:
+        distinguished_name: 'distinguishedName'
+        username: 'uid'
+        display_name: 'displayName'
+        family_name: ''
+        given_name: ''
+        middle_name: ''
+        nickname: ''
+        gender: ''
+        birthdate: ''
+        website: ''
+        profile: ''
+        picture: ''
+        zoneinfo: ''
+        locale: ''
+        phone_number: ''
+        phone_extension: ''
+        street_address: ''
+        locality: ''
+        region: ''
+        postal_code: ''
+        country: ''
+        mail: 'mail'
+        member_of: 'memberOf'
+        group_name: 'cn'
+        extra: {}
+  password_policy:
+    standard:
+      enabled: false
+      min_length: 8
+      max_length: 0
+      require_uppercase: false
+      require_lowercase: false
+      require_number: false
+      require_special: false
+    zxcvbn:
+      enabled: false
+      min_score: 0
+  access_control:
+    secret:
+      enabled: false
+      key: 'configuration.acl.yaml'
+      existingSecret: ''
+    default_policy: 'deny'
+    rules:
+      - domain:
+          - "actual.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:actual"
+        policy: two_factor
+      - domain:
+          - "authelia.whezzel.com"
+        policy: bypass
+      - domain:
+          - "baikal.whezzel.com"
+        resources:
+          - "^/dav.php.*$"
+        policy: bypass
+      - domain:
+          - "baikal.whezzel.com"
+        resources:
+          - "^*/admin.*$"
+        subject:
+          - "group:admins"
+          - "group:baikal_admin"
+        policy: two_factor
+      - domain:
+          - "bluemap.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:bluemap"
+        policy: two_factor
+      - domain:
+          - "changedetection.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:changedetection"
+        policy: two_factor
+      - domain:
+          - "dufs.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:dufs"
+        policy: two_factor
+      - domain:
+          - "esphome.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:esphome"
+        policy: two_factor
+      - domain:
+          - "fluidd.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:fluidd"
+        policy: two_factor
+      - domain:
+          - "frigate.whezzel.com"
+        resources:
+          - "^/api([/?].*)?$"
+        policy: bypass
+      - domain:
+          - "frigate.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:frigate"
+        policy: two_factor
+      - domain:
+          - "gotify.whezzel.com"
+        policy: bypass
+      - domain:
+          - "grafana.whezzel.com"
+        policy: bypass
+      - domain:
+          - "headscale.whezzel.com"
+        policy: bypass
+      - domain:
+          - "homeassistant.whezzel.com"
+        policy: bypass
+      - domain:
+          - "immich.whezzel.com"
+        policy: bypass
+      - domain:
+          - "influxdb.whezzel.com"
+        policy: bypass
+      - domain:
+          - "jellyfin.whezzel.com"
+        policy: bypass
+      - domain:
+          - "jellystat.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:jellystat"
+        policy: two_factor
+      - domain:
+          - "lidarr.whezzel.com"
+        resources:
+          - "^/api([/?].*)?$"
+        policy: bypass
+      - domain:
+          - "lidarr.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:lidarr"
+        policy: two_factor
+      - domain:
+          - "mainsail.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:mainsail"
+        policy: two_factor
+      - domain:
+          - "minio.whezzel.com"
+        policy: bypass
+      - domain:
+          - "nodered.whezzel.com"
+        resources:
+          - "^/hooks.*$"
+        policy: bypass
+      - domain:
+          - "nodered.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:nodered"
+        policy: two_factor
+      - domain:
+          - "notes.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:notemark"
+        policy: two_factor
+      - domain:
+          - "ntfy.whezzel.com"
+        policy: bypass
+      - domain:
+          - "ollama.whezzel.com"
+        policy: bypass
+      - domain:
+          - "pihole01.whezzel.com"
+          - "pihole02.whezzel.com"
+        policy: bypass
+      - domain:
+          - "prowlarr.whezzel.com"
+        resources:
+          - "^/api([/?].*)?$"
+        policy: bypass
+      - domain:
+          - "prowlarr.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:prowlarr"
+        policy: two_factor
+      - domain:
+          - "radarr.whezzel.com"
+        resources:
+          - "^/api([/?].*)?$"
+        policy: bypass
+      - domain:
+          - "radarr.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:radarr"
+        policy: two_factor
+      - domain:
+          - "scrutiny.whezzel.com"
+        resources:
+          - "^/api([/?].*)?$"
+        networks:
+          - 'LAN'
+        policy: bypass
+      - domain:
+          - "scrutiny.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:scrutiny"
+        policy: two_factor
+      - domain:
+          - "skooner.whezzel.com"
+        policy: bypass
+      #- domain:
+      #    - "skooner.whezzel.com"
+      #  subject:
+      #    - "group:admins"
+      #    - "group:skooner"
+      #  policy: two_factor
+      - domain:
+          - "sonarr.whezzel.com"
+        resources:
+          - "^/api([/?].*)?$"
+        policy: bypass
+      - domain:
+          - "sonarr.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:sonarr"
+        policy: two_factor
+      - domain:
+          - "spoolman.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:spoolman"
+        policy: two_factor
+      - domain:
+          - "syncthing.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:syncthing_user"
+        policy: two_factor
+      - domain:
+          - "transmission.whezzel.com"
+        policy: bypass
+      - domain:
+          - "vaultwarden.whezzel.com"
+        resources:
+          - "^*/admin.*$"
+        policy: two_factor
+      - domain:
+          - "vaultwarden.whezzel.com"
+        policy: bypass
+      - domain:
+          - "vscode.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:vscode"
+        policy: two_factor
+      - domain:
+          - "whoami.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:whoami"
+        policy: two_factor
+      - domain:
+          - "wiki.whezzel.com"
+        policy: bypass
+      - domain:
+          - "zigbee.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:zigbee"
+        policy: two_factor
+      - domain:
+          - "zwave.whezzel.com"
+        subject:
+          - "group:admins"
+          - "group:zwave"
+        policy: two_factor
+      #- domain:
+      #    - "*.whezzel.com"
+      #  resources:
+      #    - "^/api([/?].*)?$"
+      #    - "^/hooks.*$"
+      #    - "^/rest.*$"
+      #    - "^/dav.php.*$"
+      #  policy: bypass
+      #- domain:
+      #    - "vaultwarden.whezzel.com"
+      #    - "baikal.whezzel.com"
+      #  resources:
+      #    - "^*/admin.*$"
+      #  policy: two_factor
+      - domain: "*.whezzel.com"
+        subject:
+          - "group:admins"
+        policy: two_factor
+  session:
+    name: 'authelia_session'
+    same_site: 'lax'
+    expiration: '1 hour'
+    inactivity: '5 minutes'
+    remember_me: '1 month'
+    encryption_key:
+      disabled: false
+      secret_name: ~
+      value: ''
+      path: 'session.encryption.key'
+    cookies:
+      - name: 'authelia_session'
+        domain: 'whezzel.com'
+        authelia_url: 'https://authelia.whezzel.com'
+        inactivity: '5 minutes'
+        expiration: '1 hour'
+        remember_me: '2 month'
+    redis:
+      enabled: true
+      deploy: false
+      host: 'authelia-redis.auth'
+      #host: 'authelia.valkey'
+      port: 6379
+      username: 'default'
+      password:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'session.redis.password.txt'
+      database_index: 0
+      maximum_active_connections: 8
+      minimum_idle_connections: 0
+      tls:
+        enabled: false
+        server_name: ''
+        skip_verify: false
+        minimum_version: 'TLS1.2'
+        maximum_version: 'TLS1.3'
+      high_availability:
+        enabled: false
+        sentinel_name: 'mysentinel'
+        username: ''
+        password:
+          disabled: false
+          secret_name: ~
+          value: ''
+          path: 'session.redis.sentinel.password.txt'
+        nodes: []
+        route_by_latency: false
+        route_randomly: false
+  regulation:
+    modes:
+      - 'user'
+    max_retries: 3
+    find_time: '2 minutes'
+    ban_time: '5 minutes'
+  storage:
+    encryption_key:
+      disabled: false
+      secret_name: ~
+      value: ''
+      path: 'storage.encryption.key'
+    postgres:
+      enabled: true
+      deploy: false
+      address: 'tcp://authelia-postgres-rw.database:5432'
+      timeout: '5 seconds'
+      database: 'authelia'
+      schema: 'public'
+      username: 'authelia'
+      password:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'storage.postgres.password.txt'
+      tls:
+        enabled: false
+        server_name: ''
+        skip_verify: false
+        minimum_version: 'TLS1.2'
+        maximum_version: 'TLS1.3'
+  notifier:
+    disable_startup_check: false
+    smtp:
+      enabled: true
+      address: 'submissions://docker-mailserver.email:465'
+      timeout: '5 seconds'
+      sender: 'Authelia <hello@whezzel.com>'
+      identifier: 'whezzel.com'
+      subject: '[Authelia] {title}'
+      startup_check_address: 'test@authelia.com'
+      disable_html_emails: false
+      disable_require_tls: false
+      disable_starttls: false
+      username: 'hello@whezzel.com'
+      password:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'notifier.smtp.password.txt'
+      tls:
+        server_name: 'authelia.whezzel.com'
+        skip_verify: false
+        minimum_version: 'TLS1.2'
+        maximum_version: 'TLS1.3'
+  identity_providers:
+    oidc:
+      enabled: true
+      hmac_secret:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'identity_providers.oidc.hmac.key'
+      lifespans:
+        access_token: '1 hour'
+        authorize_code: '1 minute'
+        id_token: '1 hour'
+        refresh_token: '1 hour and 30 minutes'
+      claims_policies: {}
+      scopes: {}
+      enforce_pkce: 'public_clients_only'
+      enable_pkce_plain_challenge: false
+      minimum_parameter_entropy: 8
+      enable_client_debug_messages: false
+      pushed_authorizations:
+        enforce: false
+        context_lifespan: '5 minutes'
+      authorization_policies: {}
+      jwks:
+        - key_id: 'default'
+          algorithm: 'RS256'
+          use: sig
+          key:
+            path: /secrets/authelia-oidc/oidc.jwks.default.RS256.pem
+      cors:
+        endpoints: []
+        allowed_origins: []
+        allowed_origins_from_client_redirect_uris: false
+      clients:
+        # k run --image authelia/authelia:latest authelia -it --rm --command -- authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
+        - client_id: 'dms'
+          client_name: 'dms'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.dms.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          require_pkce: true
+          pkce_challenge_method: 'S256'
+          redirect_uris:
+            - 'https://mail.whezzel.com/oauth2/callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'groups'
+            - 'email'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_basic'
+        - client_id: 'grafana'
+          client_name: 'grafana'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.grafana.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          require_pkce: true
+          pkce_challenge_method: 'S256'
+          redirect_uris:
+            - 'https://grafana.whezzel.com/login/generic_oauth'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'groups'
+            - 'email'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_basic'
+        - client_id: 'headscale'
+          client_name: 'Headscale'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.headscale.value
+          public: false
+          authorization_policy: "two_factor"
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://headscale.whezzel.com/oidc/callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'email'
+            - 'groups'
+          userinfo_signed_response_alg: 'none'
+        - client_id: 'headplane'
+          client_name: 'Headplane'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.headplane.value
+          public: false
+          authorization_policy: "two_factor"
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://headscale.whezzel.com/admin/oidc/callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'email'
+            - 'groups'
+          userinfo_signed_response_alg: 'none'
+        - client_id: 'immich'
+          client_name: 'immich'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.immich.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://immich.whezzel.com/auth/login'
+            - 'https://immich.whezzel.com/user-settings'
+            - 'app.immich:///oauth-callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'email'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_post'
+        - client_id: 'jellyfin'
+          client_name: 'Jellyfin'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.jellyfin.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          require_pkce: true
+          pkce_challenge_method: 'S256'
+          redirect_uris:
+            - 'https://jellyfin.whezzel.com/sso/OID/redirect/authelia'
+            - 'app.jellyfin:///oauth-callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'groups'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_post'
+        - client_id: 'lubelogger'
+          client_name: 'Lubelogger'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.lubelogger.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          require_pkce: true
+          pkce_challenge_method: 'S256'
+          redirect_uris:
+            - https://lubelogger.whezzel.com/Login/RemoteAuth
+            - https://lubelogger.whezzel.com/Login/RemoteAuthDebug
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'groups'
+            - 'email'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_post'
+        - client_id: 'minio'
+          client_name: 'MinIO'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.minio.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://minio.whezzel.com/oauth_callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'email'
+          userinfo_signed_response_alg: 'none'
+        - client_id: 'ollama'
+          client_name: 'Ollama'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.ollama.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://ollama.whezzel.com/oauth/oidc/callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'groups'
+            - 'email'
+          userinfo_signed_response_alg: 'RS256'
+        - client_id: 'skooner'
+          client_name: 'Skooner'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.skooner.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://skooner.whezzel.com/'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'groups'
+            - 'email'
+          userinfo_signed_response_alg: 'RS256'
+        - client_id: 'wikijs'
+          client_name: 'Wiki'
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.wikijs.value
+          public: false
+          authorization_policy: 'two_factor'
+          consent_mode: 'implicit'
+          redirect_uris:
+            - 'https://wiki.whezzel.com/login/4099e4c6-812a-44a1-9a07-20f3a55e96ea/callback'
+          scopes:
+            - 'openid'
+            - 'profile'
+            - 'email'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_post'
+secret:
+  disabled: false
+  existingSecret: 'authelia'
+  mountPath: '/secrets'
+  additionalSecrets:
+    authelia-oidc: {}
