@@ -18,6 +18,8 @@ kind: Service
 metadata:
   name: minecraft-lb
   namespace: games
+  labels:
+    3amigos_tunnel: "false"
   annotations:
     external-dns.alpha.kubernetes.io/hostname: minecraft.whezzel.com
 spec:

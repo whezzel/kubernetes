@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -25,7 +25,7 @@ spec:
       containers:
         - name: orbital-sync
           image: mattwebbio/orbital-sync:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: orbital-sync-secrets
@@ -42,3 +42,5 @@ spec:
               value: "/admin"
             - name: "UPDATE_GRAVITY"
               value: "false"
+            - name: INTERVAL_MINUTES
+              value: "10"

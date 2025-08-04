@@ -20,7 +20,7 @@ spec:
       containers:
         - name: whoami
           image: traefik/whoami
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http

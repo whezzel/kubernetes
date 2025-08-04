@@ -1,0 +1,26 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  finalizers:
+  - longhorn.io
+  name: talos07
+  namespace: longhorn
+spec:
+  allowScheduling: true
+  disks:
+    longhorn00:
+      allowScheduling: true
+      diskDriver: ""
+      diskType: filesystem
+      evictionRequested: false
+      path: /var/mnt/longhorn
+      storageReserved: 0
+#    longhorn01:
+#      allowScheduling: true
+#      diskDriver: ""
+#      diskType: filesystem
+#      evictionRequested: false
+#      path: /var/mnt/longhorn01
+#      storageReserved: 0
+  name: talos07

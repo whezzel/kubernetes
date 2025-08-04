@@ -6,11 +6,11 @@ metadata:
   namespace: games
   labels:
     app: factorio
-  #annotations:
-  #  keel.sh/policy: force
-  #  keel.sh/match-tag: "true"
-  #  keel.sh/trigger: poll
-  #  keel.sh/pollSchedule: "@every 12h"
+#  annotations:
+#    keel.sh/policy: force
+#    keel.sh/match-tag: "true"
+#    keel.sh/trigger: poll
+#    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -54,6 +54,25 @@ spec:
               protocol: UDP
             - containerPort: 27015
               name: rcon
+#          livenessProbe:
+#            tcpSocket:
+#              port: factorio-tcp
+#            initialDelaySeconds: 180
+#            periodSeconds: 10
+#            timeoutSeconds: 10
+#            failureThreshold: 10
+#          readinessProbe:
+#            tcpSocket:
+#              port: factorio-tcp
+#            initialDelaySeconds: 60
+#            periodSeconds: 10
+#            timeoutSeconds: 5
+#            failureThreshold: 3
+#          startupProbe:
+#            tcpSocket:
+#              port: factorio-tcp
+#            failureThreshold: 60
+#            periodSeconds: 10
           env:
             - name: GENERATE_NEW_SAVE
               value: "false"

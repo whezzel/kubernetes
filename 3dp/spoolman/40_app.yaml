@@ -10,11 +10,9 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
-  strategy:
-    type: Recreate
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: spoolman
@@ -27,7 +25,7 @@ spec:
       containers:
         - name: spoolman
           image: ghcr.io/donkie/spoolman:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
               name: http
@@ -40,14 +38,32 @@ spec:
               value: "1000"
             - name: SPOOLMAN_PORT
               value: "8000"
-          volumeMounts:
-            - name: spoolman
-              mountPath: /home/app/.local/share/spoolman
+            - name: SPOOLMAN_DB_TYPE
+              value: postgres
+            - name: SPOOLMAN_DB_HOST
+              value: spoolman-postgres-rw.database
+            - name: SPOOLMAN_DB_PORT
+              value: "5432"
+            - name: SPOOLMAN_DB_NAME
+              value: spoolman
+            - name: SPOOLMAN_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: spoolman-secrets
+                  key: username
+            - name: SPOOLMAN_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spoolman-secrets
+                  key: password
+          #volumeMounts:
+          #  - name: spoolman
+          #    mountPath: /home/app/.local/share/spoolman
           resources:
             requests:
               memory: "256Mi"
               cpu: "100m"
-      volumes:
-        - name: spoolman
-          persistentVolumeClaim:
-            claimName: spoolman
+      #volumes:
+      #  - name: spoolman
+      #    persistentVolumeClaim:
+      #      claimName: spoolman

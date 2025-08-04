@@ -8,10 +8,14 @@ spec:
   selector:
     app: frigate
   ports:
-    - name: http
+    - name: http-auth
       protocol: TCP
       port: 80
-      targetPort: http
+      targetPort: http-auth
+    - name: http
+      protocol: TCP
+      port: 81
+      targetPort: http-unauth
     - name: rtsp
       protocol: TCP
       port: 8554

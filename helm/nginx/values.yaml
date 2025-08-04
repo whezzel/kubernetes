@@ -28,8 +28,13 @@ controller:
   extraArgs:
     default-ssl-certificate: "cert-manager/whezzel-com-tls"
   config:
-    compute-full-forwarded-for: "false"
+    compute-full-forwarded-for: "true"
     use-forwarded-headers: "true"
+    #annotations-risk-level: Critical
+    proxy-real-ip-cidr: "10.69.0.0/16,10.244.0.0/16"
+    enable-real-ip: "true"
+    real-ip-header: "X-Forwarded-For"
+    set-real-ip-from: "10.69.0.0/16,10.244.0.0/16"
   ingressClassResource:
     default: true
   allowSnippetAnnotations: true

@@ -6,11 +6,11 @@ metadata:
   namespace: games
   labels:
     app: minecraft
-  #annotations:
-  #  keel.sh/policy: force
-  #  keel.sh/match-tag: "true"
-  #  keel.sh/trigger: poll
-  #  keel.sh/pollSchedule: "@every 12h"
+#  annotations:
+#    keel.sh/policy: force
+#    keel.sh/match-tag: "true"
+#    keel.sh/trigger: poll
+#    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -42,7 +42,7 @@ spec:
         - name: minecraft
           image: itzg/minecraft-server:latest
           #imagePullPolicy: IfNotPresent
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           stdin: true
           tty: true
           ports:
@@ -52,6 +52,25 @@ spec:
               name: minecraft
 #            - containerPort: 25575
 #              name: rcon
+          livenessProbe:
+            tcpSocket:
+              port: minecraft
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            tcpSocket:
+              port: minecraft
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            tcpSocket:
+              port: minecraft
+            failureThreshold: 60
+            periodSeconds: 10
           env:
             - name: TZ
               value: "America/Chicago"
@@ -83,6 +102,8 @@ spec:
               value: "Whezzel's World"
             - name: WHITELIST
               value: "true"
+            - name: ONLINE_MODE
+              value: 'true'
 
           volumeMounts:
             - name: minecraft

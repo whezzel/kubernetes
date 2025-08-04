@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "0 9 * * *"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -26,23 +26,41 @@ spec:
       labels:
         app: homeassistant
     spec:
-      affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - esphome
-            topologyKey: "kubernetes.io/hostname"
+#      affinity:
+#        podAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                - esphome
+#            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: homeassistant
           image: homeassistant/home-assistant:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8123
               name: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -50,6 +68,8 @@ spec:
               value: "1000"
             - name: "PGID"
               value: "1000"
+            - name: "PYTHONPATH"
+              value: "/config/deps"
           volumeMounts:
             - name: homeassistant
               mountPath: /config
@@ -63,7 +83,7 @@ spec:
         - name: homeassistant
           persistentVolumeClaim:
             claimName: homeassistant
-        #- name: nas-media
-        #  nfs:
-        #    server: nas.whezzel.com
-        #    path: /mnt/netstorage/media
+      #  - name: nas-media
+      #    nfs:
+      #      server: nas.whezzel.com
+      #      path: /mnt/netstorage/media

@@ -34,7 +34,7 @@ provider:
   name: rfc2136
 extraArgs:
   - --rfc2136-host=$(RFC2136_HOST)
-  - --rfc2136-min-ttl=60s
+  #- --rfc2136-min-ttl=60s
   - --rfc2136-port=53
   - --rfc2136-zone=$(RFC2136_ZONE)
   - --rfc2136-tsig-secret=$(RFC2136_TSIG_SECRET)

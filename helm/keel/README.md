@@ -1,21 +1,31 @@
-## **Deploy keel.sh**
+# Deploy keel.sh
+
 Manually updating workloads is annoying, but keel.sh allows us to automate that.
 
-- https://keel.sh/docs/#deploying-with-helm
+- <https://keel.sh/docs/#deploying-with-helm>
 
 **Example values.yaml:**
-```bash
-cat > ~/repos/k3s/helm/keel/values.yaml <<'EOF'
+
+```yaml
+cat > ./helm/keel/values.yaml <<'EOF'
 webhook:
   enabled: true
   endpoint: "http://nodered.homeassistant/hooks/ndN656rVjA6E5V26nxXgGmRHo99Cm7wg"
 EOF
 ```
-**Deploy keel.sh using helm:**
+
+## Deploy keel.sh using helm
+
 ```bash
 helm upgrade --install keel keel \
     --repo https://charts.keel.sh \
     --namespace=keel \
     --create-namespace \
-    --values ~/repos/k3s/helm/keel/values.yaml
+    --values ./helm/keel/values.yaml
+```
+
+## Dump chart values
+
+```bash
+helm show values keel --repo https://charts.keel.sh > ./helm/keel/temp-values.yaml
 ```

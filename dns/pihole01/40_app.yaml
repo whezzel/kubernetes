@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -34,26 +34,17 @@ spec:
                 values:
                 - pihole02
             topologyKey: "kubernetes.io/hostname"
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - bind
-            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: pihole01
           image: pihole/pihole:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http
             - containerPort: 53
-            #  hostPort: 53
               protocol: TCP
               name: dns-tcp
             - containerPort: 53
-            #  hostPort: 53
               protocol: UDP
               name: dns-udp
           env:
@@ -63,17 +54,15 @@ spec:
               value: "1000"
             - name: "PGID"
               value: "1000"
-            - name: "PIHOLE_DNS_"
+            - name: "FTLCONF_DNS_UPSTREAMS"
               value: "10.69.20.2;10.69.20.3"
-            - name: "DNS_FQDN_REQUIRED"
+            - name: "FTLCONF_DNS_DOMAINNEEDED"
               value: "false"
-            - name: "DNSSEC"
+            - name: "FTLCONF_DNS_DNSSEC"
               value: "false"
-            - name: "CUSTOM_CACHE_SIZE"
+            - name: "FTLCONF_DNS_CACHE_SIZE"
               value: "0"
-            - name: "DNS_BOGUS_PRIV"
-              value: "false"
-            - name: "IPv6"
+            - name: "FTLCONF_DNS_BOGUSPRIV"
               value: "false"
           volumeMounts:
             - name: pihole01

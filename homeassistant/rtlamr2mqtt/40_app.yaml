@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -31,7 +31,27 @@ spec:
           securityContext:
             privileged: true
           image: allangood/rtlamr2mqtt:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          #livenessProbe:
+          #  exec:
+          #    command:
+          #      - sh
+          #      - -c
+          #      - 'pgrep rtl_433 || exit 1'
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 5
+          #readinessProbe:
+          #  exec:
+          #    command:
+          #      - sh
+          #      - -c
+          #      - 'pgrep rtl_433 || exit 1'
+          #  initialDelaySeconds: 15
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
           env:
             - name: "TZ"
               value: "America/Chicago"

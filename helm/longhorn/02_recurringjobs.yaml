@@ -8,24 +8,10 @@ spec:
   concurrency: 1
   cron: 0 0 * * *
   groups:
-  - default
+  - backups
   name: daily
   retain: 7
   task: backup
----
-apiVersion: longhorn.io/v1beta2
-kind: RecurringJob
-metadata:
-  name: hourly
-  namespace: longhorn
-spec:
-  concurrency: 1
-  cron: 0 * * * *
-  groups:
-  - default
-  name: hourly
-  retain: 1
-  task: snapshot
 ---
 apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
@@ -36,7 +22,7 @@ spec:
   concurrency: 1
   cron: 0 0 1 * ?
   groups:
-  - default
+  - backups
   name: monthly
   retain: 6
   task: backup
@@ -50,7 +36,7 @@ spec:
   concurrency: 1
   cron: 0 0 ? * SUN
   groups:
-  - default
+  - backups
   name: weekly
   retain: 4
   task: backup
@@ -64,7 +50,7 @@ spec:
   concurrency: 1
   cron: 0 0 1 1 ?
   groups:
-  - default
+  - backups
   name: yearly
   retain: 1
   task: backup

@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -27,7 +27,7 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
               name: http
@@ -50,20 +50,10 @@ spec:
               port: 3000
             timeoutSeconds: 1
           env:
-            - name: GF_AUTH_ANONYMOUS_ENABLED
-              value: 'true'
-            - name: GF_AUTH_ANONYMOUS_ORG_NAME
-              value: 'whezzel.com'
-            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
-              value: 'Viewer'
             - name: GF_AUTH_LDAP_ENABLED
-              value: 'false'
-            - name: GF_AUTH_PROXY_ENABLED
               value: 'false'
             - name: GF_SECURITY_ALLOW_EMBEDDING
               value: 'true'
-            - name: GF_INSTALL_PLUGINS
-              value: ""
           envFrom:
             - secretRef:
                 name: grafana-secrets

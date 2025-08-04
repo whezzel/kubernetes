@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -29,7 +29,7 @@ spec:
       containers:
         - name: syncthing
           image: lscr.io/linuxserver/syncthing:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           #command: ["syncthing"]
           #args: ["--reset-deltas"]
           env:
@@ -73,6 +73,10 @@ spec:
               subPath: config
             - name: nas-syncthing
               mountPath: /backups
+              subPath: backups
+            - name: nas-syncthing
+              mountPath: /3amigos
+              subPath: 3amigos
           resources:
             requests:
               memory: "512Mi"
@@ -84,4 +88,4 @@ spec:
         - name: nas-syncthing
           nfs:
             server: nas.whezzel.com
-            path: /mnt/netstorage/backups
+            path: /mnt/netstorage

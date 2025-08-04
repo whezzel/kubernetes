@@ -10,11 +10,9 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
-  strategy:
-    type: Recreate
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mainsail
@@ -27,7 +25,7 @@ spec:
       containers:
         - name: mainsail
           image: ghcr.io/mainsail-crew/mainsail:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http

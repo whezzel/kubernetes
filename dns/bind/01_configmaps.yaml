@@ -13,7 +13,7 @@ data:
     acl "internal-keys" { key internal; key arch01-internal; key external-dns-internal; };
     acl "external-keys" { key external; };
     acl "opnsense-keys" { key opnsense; };
-    acl "3amigos-keys"  { key 3amigos; key arch01-3amigos; key external-dns-3amigos; };
+    acl "3amigos-keys"  { key 3amigos; key arch01-3amigos; key external-dns-3amigos; key opnsense-3amigos; };
 
     options {
         directory "/var/lib/bind/working";
@@ -37,7 +37,7 @@ data:
 
     view "internal" {
         match-clients { !external-keys; !3amigos-keys; opnsense-keys; internal-keys; internal; };
-        allow-recursion { internal; internal-keys; };
+        allow-recursion { internal-keys; internal; };
         allow-transfer { !external-keys; !3amigos-keys; opnsense-keys; internal-keys; };
         allow-query { internal-keys; internal; };
         allow-update { !external-keys; !3amigos-keys; opnsense-keys; internal-keys; };

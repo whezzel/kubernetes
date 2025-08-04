@@ -1,11 +1,13 @@
-## **Deploy ingress-nginx**
+# Deploy ingress-nginx
+
 We disabled the traefik ingress controller when deploying k3s, so we will need to deploy a different ingress controller. I chose ingress-inginx.
 
- - https://kubernetes.github.io/ingress-nginx/deploy/
+- <https://kubernetes.github.io/ingress-nginx/deploy>
 
 **Example values.yaml:**
-```bash
-cat > ~/repos/k3s/helm/nginx/values.yaml <<'EOF'
+
+```yaml
+cat > ./helm/nginx/values.yaml <<'EOF'
 ---
 controller:
   replicaCount: 5
@@ -18,19 +20,27 @@ controller:
   extraArgs:
     default-ssl-certificate: "cert-manager/whezzel-com-tls"
   config:
-    compute-full-forwarded-for: "false"
-    use-forwarded-headers: "true"
+    compute-full-forwarded-for: "true"
+    use-forwarded-headers: "false"
+    annotations-risk-level: "Critical"
   ingressClassResource:
     default: true
   allowSnippetAnnotations: true
 EOF
 ```
 
-**Deploy ingress-nginx using helm:**
+## Deploy ingress-nginx using helm
+
 ```bash
 helm upgrade --install nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace nginx \
     --create-namespace \
-    --values ~/repos/k3s/helm/nginx/values.yaml
+    --values ./helm/nginx/values.yaml
+```
+
+## Dump chart values
+
+```bash
+helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx > ./helm/nginx/temp-values.yaml
 ```

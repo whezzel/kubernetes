@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -32,17 +32,35 @@ spec:
               - key: app
                 operator: In
                 values:
-                - esphome
+                - homeassistant
             topologyKey: "kubernetes.io/hostname"
       containers:
         - name: vscode
           image: lscr.io/linuxserver/code-server:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8443
               name: http
             - containerPort: 22
               name: ssh
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -55,41 +73,25 @@ spec:
             - name: "DEFAULT_WORKSPACE"
               value: "/mnt"
           volumeMounts:
-            - name: vscode
-              mountPath: /config
-              subPath: config
-            - name: vscode
-              mountPath: /var/cache/apt
-              subPath: cache
-            - name: esphome
-              mountPath: /mnt/esphome
             - name: homeassistant
               mountPath: /mnt/homeassistant
-            #- name: nodered
-            #  mountPath: /mnt/nodered
-            #- name: vscode
-            #  mountPath: /mnt/vscode
-            #  subPath: config
             - name: ssh-config
               mountPath: "/etc/ssh/ssh_config"
               subPath: ssh_config
+            - name: nas-esphome
+              mountPath: /mnt/esphome
           resources:
             requests:
               memory: "400Mi"
               cpu: "250m"
       volumes:
-        - name: esphome
-          persistentVolumeClaim:
-            claimName: esphome
         - name: homeassistant
           persistentVolumeClaim:
             claimName: homeassistant
-        #- name: nodered
-        #  persistentVolumeClaim:
-        #    claimName: nodered
-        - name: vscode
-          persistentVolumeClaim:
-            claimName: vscode
         - name: ssh-config
           configMap:
             name: ssh-config
+        - name: nas-esphome
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/backups/esphome

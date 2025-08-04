@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -27,7 +27,7 @@ spec:
       containers:
         - name: scrutiny-master-web
           image: ghcr.io/analogj/scrutiny:master-web
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: http
@@ -68,7 +68,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -80,12 +80,17 @@ spec:
       labels:
         app: scrutiny-collector-talos01
     spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
       nodeSelector:
         kubernetes.io/hostname: talos01
       containers:
         - name: scrutiny-collector-talos01
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             privileged: true
           volumeMounts:
@@ -119,7 +124,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -131,12 +136,17 @@ spec:
       labels:
         app: scrutiny-collector-talos02
     spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
       nodeSelector:
         kubernetes.io/hostname: talos02
       containers:
         - name: scrutiny-collector-talos02
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             privileged: true
           volumeMounts:
@@ -170,7 +180,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -182,12 +192,17 @@ spec:
       labels:
         app: scrutiny-collector-talos03
     spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
       nodeSelector:
         kubernetes.io/hostname: talos03
       containers:
         - name: scrutiny-collector-talos03
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             privileged: true
           volumeMounts:
@@ -221,7 +236,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -238,7 +253,7 @@ spec:
       containers:
         - name: scrutiny-collector-talos04
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             privileged: true
           volumeMounts:
@@ -272,7 +287,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -289,7 +304,7 @@ spec:
       containers:
         - name: scrutiny-collector-talos05
           image: ghcr.io/analogj/scrutiny:master-collector
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             privileged: true
           volumeMounts:
@@ -311,3 +326,156 @@ spec:
         - name: scrutiny-collector
           configMap:
             name: scrutiny-collector-talos05
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-talos06
+  namespace: logging
+  labels:
+    app: scrutiny-collector-talos06
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-talos06
+  template:
+    metadata:
+      name: scrutiny-collector-talos06
+      labels:
+        app: scrutiny-collector-talos06
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: talos06
+      containers:
+        - name: scrutiny-collector-talos06
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-talos06
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-talos07
+  namespace: logging
+  labels:
+    app: scrutiny-collector-talos07
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-talos07
+  template:
+    metadata:
+      name: scrutiny-collector-talos07
+      labels:
+        app: scrutiny-collector-talos07
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: talos07
+      containers:
+        - name: scrutiny-collector-talos07
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-talos07
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-collector-talos08
+  namespace: logging
+  labels:
+    app: scrutiny-collector-talos08
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector-talos08
+  template:
+    metadata:
+      name: scrutiny-collector-talos08
+      labels:
+        app: scrutiny-collector-talos08
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: talos08
+      containers:
+        - name: scrutiny-collector-talos08
+          image: ghcr.io/analogj/scrutiny:master-collector
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+            - name: scrutiny-collector
+              mountPath: "/opt/scrutiny/config/collector.yaml"
+              readOnly: true
+              subPath: collector.yaml
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: scrutiny-collector
+          configMap:
+            name: scrutiny-collector-talos08

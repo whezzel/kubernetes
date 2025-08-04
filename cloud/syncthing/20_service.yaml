@@ -18,8 +18,10 @@ kind: Service
 metadata:
   name: syncthing-lb
   namespace: cloud
+  labels:
+    3amigos_tunnel: "true"
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: syncthing.whezzel.com
+    external-dns.alpha.kubernetes.io/hostname: sync.whezzel.com
 spec:
   selector:
     app: syncthing

@@ -12,3 +12,22 @@ spec:
       protocol: TCP
       port: 80
       targetPort: http
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: whoami
+#  namespace: kube-system
+#  annotations:
+#    external-dns.alpha.kubernetes.io/hostname: whoami-lb.whezzel.com
+#spec:
+#  selector:
+#    app: whoami
+#  ports:
+#    - name: http
+#      protocol: TCP
+#      port: 80
+#      targetPort: http
+#  type: LoadBalancer
+#  externalTrafficPolicy: Local
+#  loadBalancerIP: 10.69.21.169

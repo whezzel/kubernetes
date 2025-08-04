@@ -24,6 +24,7 @@ spec:
         app: actual
       name: actual
     spec:
+      enableServiceLinks: false
       containers:
         - name: actual
           image: ghcr.io/actualbudget/actual-server:latest
@@ -32,6 +33,24 @@ spec:
             - name: http
               containerPort: 5006
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           env:
             - name: TZ
               value: America/Chicago

@@ -19,29 +19,12 @@ spec:
       labels:
         app: bind
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - pihole01
-            topologyKey: "kubernetes.io/hostname"
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - pihole02
-            topologyKey: "kubernetes.io/hostname"
       securityContext:
-        fsGroup: 101
+        fsGroup: 53
       containers:
         - name: bind
           image: internetsystemsconsortium/bind9:9.20
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command: ["named"]
           args:
 #            - "-f"
@@ -50,7 +33,7 @@ spec:
             - "/etc/bind/named.conf"
             - "-4"
             - "-u"
-            - "bind"
+            - "53"
           ports:
             - containerPort: 53
               protocol: UDP

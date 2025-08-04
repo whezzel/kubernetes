@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -27,37 +27,37 @@ spec:
       containers:
         - name: vaultwarden
           image: vaultwarden/server:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http
             - containerPort: 3012
               name: websocket
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#              scheme: HTTP
-#            initialDelaySeconds: 5
-#            periodSeconds: 3
-#            failureThreshold: 5
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#              scheme: HTTP
-#            initialDelaySeconds: 5
-#            periodSeconds: 3
-#            failureThreshold: 5
-#          startupProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#              scheme: HTTP
-#            initialDelaySeconds: 30
-#            periodSeconds: 3
-#            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /alive
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /alive
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           env:
+            - name: DOMAIN
+              value: "https://vaultwarden.whezzel.com"
+            - name: SENDS_ALLOWED
+              value: "true"
             - name: WEBSOCKET_ENABLED
               value: "true"
             - name: WEB_VAULT_ENABLED
@@ -66,6 +66,8 @@ spec:
               value: "false"
             - name: SIGNUPS_VERIFY
               value: "true"
+            - name: LOG_LEVEL
+              value: "info"
           envFrom:
             - secretRef:
                 name: vaultwarden

@@ -15,12 +15,12 @@ spec:
       labels:
         app.kubernetes.io/name: generic-device-plugin
     spec:
-      priorityClassName: system-node-critical
-      tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      #priorityClassName: system-node-critical
+      #tolerations:
+      #- operator: "Exists"
+      #  effect: "NoExecute"
+      #- operator: "Exists"
+      #  effect: "NoSchedule"
       containers:
       - image: squat/generic-device-plugin
         args:

@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -27,10 +27,40 @@ spec:
       containers:
         - name: transmission
           image: haugene/transmission-openvpn:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 9091
               name: http
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -s
+                - http://localhost:9091/rpc
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
+          readinessProbe:
+            exec:
+              command:
+                - curl
+                - -s
+                - http://localhost:9091/rpc
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          startupProbe:
+            exec:
+              command:
+                - curl
+                - -s
+                - http://localhost:9091/rpc
+            failureThreshold: 30
+            periodSeconds: 10
           env:
 ### Container Variables ###
             - name: CREATE_TUN_DEVICE
@@ -189,7 +219,7 @@ spec:
 #              value: "true"
 ### Queuing ###
             - name: TRANSMISSION_DOWNLOAD_QUEUE_ENABLED
-              value: "true"
+              value: "false"
             - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
               value: "5"
             - name: TRANSMISSION_QUEUE_STALLED_ENABLED
@@ -197,7 +227,7 @@ spec:
             - name: TRANSMISSION_QUEUE_STALLED_MINUTES
               value: "10"
             - name: TRANSMISSION_SEED_QUEUE_ENABLED
-              value: "true"
+              value: "talse"
             - name: TRANSMISSION_SEED_QUEUE_SIZE
               value: "5"
 ### RPC ###
@@ -255,27 +285,30 @@ spec:
           volumeMounts:
             - name: nas-media
               mountPath: /media/downloads
-            - name: transmission
-              mountPath: /config
-              subPath: config
-            - name: transmission
-              mountPath: /data
-              subPath: data
+            - name: nas-isos
+              mountPath: /isos
+            - name: nas-config
+              mountPath: /data/transmission-home
           resources:
             requests:
               memory: "128Mi"
               cpu: "100m"
+            limits:
+              squat.ai/tun: "1"
           securityContext:
             capabilities:
               add:
                 - NET_ADMIN
-            limits:
-              squat.ai/tun: "1"
       volumes:
         - name: nas-media
           nfs:
             server: nas.whezzel.com
             path: /mnt/netstorage/media/downloads
-        - name: transmission
-          persistentVolumeClaim:
-            claimName: transmission
+        - name: nas-isos
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/isos
+        - name: nas-config
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/media/transmission

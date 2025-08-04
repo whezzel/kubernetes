@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -22,18 +22,22 @@ spec:
       labels:
         app: telegraf-talos01
     spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos01
       securityContext:
         runAsUser: 999
-        runAsGroup: 969
+        runAsGroup: 973
         fsGroup: 999
       containers:
         - name: telegraf-talos01
           image: library/telegraf:latest
-          imagePullPolicy: IfNotPresent
-#          securityContext:
-#            privileged: true
+          imagePullPolicy: Always
           env:
             - name: TALOS01_INFLUXDB_TOKEN
               valueFrom:
@@ -53,9 +57,6 @@ spec:
             - name: HOST_MOUNT_PREFIX
               value: "/host"
           volumeMounts:
-#            - name: udev
-#              mountPath: /run/udev
-#              readOnly: true
             - name: telegraf
               mountPath: "/etc/telegraf/telegraf.conf"
               readOnly: true
@@ -68,9 +69,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-#        - name: udev
-#          hostPath:
-#            path: /run/udev
         - name: host
           hostPath:
             path: /
@@ -89,7 +87,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -101,18 +99,22 @@ spec:
       labels:
         app: telegraf-talos02
     spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos02
       securityContext:
         runAsUser: 999
-        runAsGroup: 964
+        runAsGroup: 973
         fsGroup: 999
       containers:
         - name: telegraf-talos02
           image: library/telegraf:latest
-          imagePullPolicy: IfNotPresent
-#          securityContext:
-#            privileged: true
+          imagePullPolicy: Always
           env:
             - name: TALOS02_INFLUXDB_TOKEN
               valueFrom:
@@ -132,9 +134,6 @@ spec:
             - name: HOST_MOUNT_PREFIX
               value: "/host"
           volumeMounts:
-#            - name: udev
-#              mountPath: /run/udev
-#              readOnly: true
             - name: telegraf
               mountPath: "/etc/telegraf/telegraf.conf"
               readOnly: true
@@ -147,9 +146,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-#        - name: udev
-#          hostPath:
-#            path: /run/udev
         - name: host
           hostPath:
             path: /
@@ -168,7 +164,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -180,6 +176,12 @@ spec:
       labels:
         app: telegraf-talos03
     spec:
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos03
       securityContext:
@@ -189,9 +191,7 @@ spec:
       containers:
         - name: telegraf-talos03
           image: library/telegraf:latest
-          imagePullPolicy: IfNotPresent
-#          securityContext:
-#            privileged: true
+          imagePullPolicy: Always
           env:
             - name: TALOS03_INFLUXDB_TOKEN
               valueFrom:
@@ -211,9 +211,6 @@ spec:
             - name: HOST_MOUNT_PREFIX
               value: "/host"
           volumeMounts:
-#            - name: udev
-#              mountPath: /run/udev
-#              readOnly: true
             - name: telegraf
               mountPath: "/etc/telegraf/telegraf.conf"
               readOnly: true
@@ -226,9 +223,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-#        - name: udev
-#          hostPath:
-#            path: /run/udev
         - name: host
           hostPath:
             path: /
@@ -247,7 +241,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -259,6 +253,7 @@ spec:
       labels:
         app: telegraf-talos04
     spec:
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos04
       securityContext:
@@ -268,9 +263,7 @@ spec:
       containers:
         - name: telegraf-talos04
           image: library/telegraf:latest
-          imagePullPolicy: IfNotPresent
-#          securityContext:
-#            privileged: true
+          imagePullPolicy: Always
           env:
             - name: TALOS04_INFLUXDB_TOKEN
               valueFrom:
@@ -290,9 +283,6 @@ spec:
             - name: HOST_MOUNT_PREFIX
               value: "/host"
           volumeMounts:
-#            - name: udev
-#              mountPath: /run/udev
-#              readOnly: true
             - name: telegraf
               mountPath: "/etc/telegraf/telegraf.conf"
               readOnly: true
@@ -305,9 +295,6 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-#        - name: udev
-#          hostPath:
-#            path: /run/udev
         - name: host
           hostPath:
             path: /
@@ -326,7 +313,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   replicas: 1
   selector:
@@ -338,6 +325,7 @@ spec:
       labels:
         app: telegraf-talos05
     spec:
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos05
       securityContext:
@@ -347,9 +335,7 @@ spec:
       containers:
         - name: telegraf-talos05
           image: library/telegraf:latest
-          imagePullPolicy: IfNotPresent
-#          securityContext:
-#            privileged: true
+          imagePullPolicy: Always
           env:
             - name: TALOS05_INFLUXDB_TOKEN
               valueFrom:
@@ -369,9 +355,6 @@ spec:
             - name: HOST_MOUNT_PREFIX
               value: "/host"
           volumeMounts:
-#            - name: udev
-#              mountPath: /run/udev
-#              readOnly: true
             - name: telegraf
               mountPath: "/etc/telegraf/telegraf.conf"
               readOnly: true
@@ -384,12 +367,225 @@ spec:
               memory: "128Mi"
               cpu: "100m"
       volumes:
-#        - name: udev
-#          hostPath:
-#            path: /run/udev
         - name: host
           hostPath:
             path: /
         - name: telegraf
           configMap:
             name: telegraf-talos05
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-talos06
+  namespace: logging
+  labels:
+    app: telegraf-talos06
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-talos06
+  template:
+    metadata:
+      name: telegraf-talos06
+      labels:
+        app: telegraf-talos06
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/hostname: talos06
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 973
+        fsGroup: 999
+      containers:
+        - name: telegraf-talos06
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: TALOS06_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegraf-secrets
+                  key: TALOS06_INFLUXDB_TOKEN
+            - name: HOST_ETC
+              value: "/host/etc"
+            - name: HOST_PROC
+              value: "/host/proc"
+            - name: HOST_SYS
+              value: "/host/sys"
+            - name: HOST_VAR
+              value: "/host/var"
+            - name: HOST_RUN
+              value: "/host/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/host"
+          volumeMounts:
+            - name: telegraf
+              mountPath: "/etc/telegraf/telegraf.conf"
+              readOnly: true
+              subPath: telegraf.conf
+            - name: host
+              mountPath: /host
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+        - name: telegraf
+          configMap:
+            name: telegraf-talos06
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-talos07
+  namespace: logging
+  labels:
+    app: telegraf-talos07
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-talos07
+  template:
+    metadata:
+      name: telegraf-talos07
+      labels:
+        app: telegraf-talos07
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/hostname: talos07
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 969
+        fsGroup: 999
+      containers:
+        - name: telegraf-talos07
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: TALOS07_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegraf-secrets
+                  key: TALOS07_INFLUXDB_TOKEN
+            - name: HOST_ETC
+              value: "/host/etc"
+            - name: HOST_PROC
+              value: "/host/proc"
+            - name: HOST_SYS
+              value: "/host/sys"
+            - name: HOST_VAR
+              value: "/host/var"
+            - name: HOST_RUN
+              value: "/host/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/host"
+          volumeMounts:
+            - name: telegraf
+              mountPath: "/etc/telegraf/telegraf.conf"
+              readOnly: true
+              subPath: telegraf.conf
+            - name: host
+              mountPath: /host
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+        - name: telegraf
+          configMap:
+            name: telegraf-talos07
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-talos08
+  namespace: logging
+  labels:
+    app: telegraf-talos08
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-talos08
+  template:
+    metadata:
+      name: telegraf-talos08
+      labels:
+        app: telegraf-talos08
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/hostname: talos08
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 964
+        fsGroup: 999
+      containers:
+        - name: telegraf-talos08
+          image: library/telegraf:latest
+          imagePullPolicy: Always
+          env:
+            - name: TALOS08_INFLUXDB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegraf-secrets
+                  key: TALOS08_INFLUXDB_TOKEN
+            - name: HOST_ETC
+              value: "/host/etc"
+            - name: HOST_PROC
+              value: "/host/proc"
+            - name: HOST_SYS
+              value: "/host/sys"
+            - name: HOST_VAR
+              value: "/host/var"
+            - name: HOST_RUN
+              value: "/host/run"
+            - name: HOST_MOUNT_PREFIX
+              value: "/host"
+          volumeMounts:
+            - name: telegraf
+              mountPath: "/etc/telegraf/telegraf.conf"
+              readOnly: true
+              subPath: telegraf.conf
+            - name: host
+              mountPath: /host
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+        - name: telegraf
+          configMap:
+            name: telegraf-talos08

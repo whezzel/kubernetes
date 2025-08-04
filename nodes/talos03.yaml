@@ -5,6 +5,6 @@ metadata:
   labels:
     nvidia-present: "false"
     coral-present: "false"
-    zigbee-present: "true"
-    zwave-present: "true"
-    rtlsdr-present: "true"
+    zigbee-present: "false"
+    zwave-present: "false"
+    rtlsdr-present: "false"

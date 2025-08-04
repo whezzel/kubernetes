@@ -10,11 +10,9 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
-  strategy:
-    type: Recreate
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: prowlarr
@@ -26,11 +24,29 @@ spec:
     spec:
       containers:
         - name: prowlarr
-          image: lscr.io/linuxserver/prowlarr:develop
-          imagePullPolicy: IfNotPresent
+          image: lscr.io/linuxserver/prowlarr:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 9696
               name: http
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           env:
             - name: TZ
               value: "America/Chicago"
@@ -55,6 +71,8 @@ spec:
               value: "DisabledForLocalAddresses"
             - name: PROWLARR__LOG__ANALYTICSENABLED
               value: "False"
+            - name: PROWLARR__LOG__DBENABLED
+              value: "False"
             - name: PROWLARR__LOG__LEVEL
               value: "info"
             - name: PROWLARR__UPDATE__AUTOMATICALLY
@@ -78,13 +96,26 @@ spec:
               value: "/"
             - name: PROWLARR__SERVER__SSLPORT
               value: "6969"
+            - name: PROWLARR__POSTGRES__HOST
+              value: "prowlarr-postgres-rw.database"
+            - name: PROWLARR__POSTGRES__PORT
+              value: "5432"
+            - name: PROWLARR__POSTGRES__USER
+              value: "prowlarr"
+            - name: PROWLARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prowlarr-secrets
+                  key: PROWLARR__POSTGRES__PASSWORD
+            - name: PROWLARR__POSTGRES__MAINDB
+              value: "prowlarr"
+            - name: PROWLARR__POSTGRES__LOGDB
+              value: "logs"
           volumeMounts:
             - name: nas-media
               mountPath: /media
             - name: nas-mediacover
               mountPath: /config/MediaCover
-            - name: prowlarr
-              mountPath: /config
           resources:
             requests:
               memory: "256Mi"
@@ -98,6 +129,3 @@ spec:
           nfs:
             server: nas.whezzel.com
             path: /mnt/netstorage/media/movies/MediaCover
-        - name: prowlarr
-          persistentVolumeClaim:
-            claimName: prowlarr

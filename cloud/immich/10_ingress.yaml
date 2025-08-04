@@ -5,6 +5,10 @@ metadata:
   name: immich
   namespace: cloud
   annotations:
+    nginx.ingress.kubernetes.io/auth-method: GET
+    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
+    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
+    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "96384m"
 spec:
@@ -19,6 +23,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: immich
+                name: immich-svc
                 port:
                   name: http

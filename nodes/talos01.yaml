@@ -3,8 +3,8 @@ kind: Node
 metadata:
   name: talos01
   labels:
-    nvidia-present: "true"
-    coral-present: "true"
+    nvidia-present: "false"
+    coral-present: "false"
     zigbee-present: "false"
     zwave-present: "false"
     rtlsdr-present: "false"

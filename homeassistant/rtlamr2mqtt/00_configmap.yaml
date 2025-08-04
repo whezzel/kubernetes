@@ -12,7 +12,7 @@ data:
     #  verbosity: debug
       verbosity: info
       tickle_rtl_tcp: true
-      device_id: '0bda:2838'
+    #  device_id: '0bda:2838'
 
     mqtt:
       ha_autodiscovery: true

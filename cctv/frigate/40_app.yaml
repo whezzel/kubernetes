@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -33,7 +33,7 @@ spec:
           securityContext:
             privileged: true
           image: ghcr.io/blakeblackshear/frigate:stable
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: all
@@ -45,8 +45,11 @@ spec:
             - secretRef:
                 name: frigate
           ports:
-            - name: http
+            - name: http-unauth
               containerPort: 5000
+              protocol: TCP
+            - name: http-auth
+              containerPort: 8971
               protocol: TCP
             - name: rtsp
               containerPort: 8554
@@ -65,6 +68,8 @@ spec:
               subPath: db
             - name: cache
               mountPath: /dev/shm
+            - name: tmp
+              mountPath: /tmp
           resources:
             requests:
               memory: "1Gi"
@@ -79,8 +84,12 @@ spec:
         - name: nas-frigate
           nfs:
             server: nas.whezzel.com
-            path: /mnt/netstorage/frigate
+            path: /mnt/frigate
         - name: cache
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+        - name: tmp
           emptyDir:
             medium: Memory
             sizeLimit: 1Gi

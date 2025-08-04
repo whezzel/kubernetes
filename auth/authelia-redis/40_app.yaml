@@ -22,7 +22,7 @@ spec:
       containers:
         - name: authelia-redis
           image: redis:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command: ["redis-server"]
           args: ["/usr/local/etc/redis/redis.conf"]
           ports:

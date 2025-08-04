@@ -7,7 +7,7 @@ Crowdsec is a modern fail2ban
 ## Apply supporting manifests
 
 ```bash
-kubectl apply -f ~/repos/k8s/helm/crowdsec
+kubectl apply -f ./helm/crowdsec
 ```
 
 ## Deploy Crowdsec using helm
@@ -17,19 +17,19 @@ helm upgrade --install crowdsec crowdsec \
     --repo https://crowdsecurity.github.io/helm-charts \
     --namespace crowdsec \
     --create-namespace \
-    --values ~/repos/k8s/helm/crowdsec/values.yaml
+    --values ./helm/crowdsec/values.yaml
 ```
 
 ## Dump chart values
 
 ```bash
-helm show values crowdsec --repo https://crowdsecurity.github.io/helm-charts > ~/repos/k8s/helm/crowdsec/temp-values.yaml
+helm show values crowdsec --repo https://crowdsecurity.github.io/helm-charts > ./helm/crowdsec/temp-values.yaml
 ```
 
 ## Remove extra machines from lapi
 
 ```bash
-for i in $(cscli machines list|grep "crowdsec-agent-"|cut -d" " -f2); do cscli machines delete $i; done
+for i in `cscli machines list|grep "crowdsec-agent-"|cut -d" " -f2`; do cscli machines delete $i; done
 ```
 
 ## Register new machine with lapi
@@ -37,5 +37,11 @@ for i in $(cscli machines list|grep "crowdsec-agent-"|cut -d" " -f2); do cscli m
 On the machine you want to register with the lapi, run the following command:
 
 ```bash
-cscli lapi register --machine $(hostname | cut -d. -f1) --url https://crowdsec-api.whezzel.com/
+cscli lapi register --machine `hostname | cut -d. -f1` --url https://crowdsec-api.whezzel.com/
+```
+
+## Verify new machine on lapi
+
+```bash
+cscli machines validate <machine-name>
 ```

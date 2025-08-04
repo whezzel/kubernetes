@@ -10,7 +10,7 @@ metadata:
     keel.sh/policy: force
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 12h"
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
@@ -33,6 +33,22 @@ spec:
           ports:
             - containerPort: 6052
               name: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
             - name: "TZ"
               value: "America/Chicago"
@@ -42,9 +58,13 @@ spec:
               value: "1000"
             - name: "ESPHOME_DASHBOARD_USE_PING"
               value: "true"
+            - name: "ESPHOME_BUILD_PATH"
+              value: "/cache"
           volumeMounts:
-            - name: esphome
+            - name: nas-esphome
               mountPath: /config
+            - name: esphome-cache
+              mountPath: /cache
           resources:
             requests:
               memory: "400Mi"
@@ -53,6 +73,28 @@ spec:
               memory: "4Gi"
               cpu: "4"
       volumes:
-        - name: esphome
+        - name: nas-esphome
+          nfs:
+            server: nas.whezzel.com
+            path: /mnt/netstorage/backups/esphome
+        - name: tmp-cache
+          emptyDir:
+            medium: Memory
+            sizeLimit: 4Gi
+        - name: esphome-cache
           persistentVolumeClaim:
-            claimName: esphome
+            claimName: esphome-cache
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: esphome-cache
+  namespace: homeassistant
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-db
+  resources:
+    requests:
+      storage: 12Gi

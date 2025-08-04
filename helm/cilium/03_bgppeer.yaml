@@ -3,7 +3,7 @@ apiVersion: "cilium.io/v2alpha1"
 kind: CiliumBGPPeeringPolicy
 metadata:
   name: opnsense
-  namespace: kube-system
+  namespace: cilium
 spec:
   virtualRouters:
   - localASN: 64513

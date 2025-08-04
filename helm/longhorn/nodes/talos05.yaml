@@ -11,11 +11,16 @@ spec:
   disks:
     longhorn00:
       allowScheduling: true
+      diskDriver: ""
       diskType: filesystem
       evictionRequested: false
-      path: /var/mnt/longhorn00
-    longhorn01:
-      allowScheduling: true
-      diskType: filesystem
-      evictionRequested: false
-      path: /var/mnt/longhorn01
+      path: /var/mnt/longhorn
+      storageReserved: 0
+#    longhorn01:
+#      allowScheduling: true
+#      diskDriver: ""
+#      diskType: filesystem
+#      evictionRequested: false
+#      path: /var/mnt/longhorn01
+#      storageReserved: 0
+  name: talos05

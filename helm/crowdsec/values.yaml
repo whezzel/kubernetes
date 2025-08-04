@@ -3,8 +3,8 @@ container_runtime: containerd
 image:
   repository: crowdsecurity/crowdsec
   pullPolicy: Always
-  tag: "dev"
-  #tag: "latest"
+  #tag: "dev"
+  tag: "latest"
 config:
   parsers:
     s00-raw: {}
@@ -164,11 +164,11 @@ config:
       url: http://gotify.email.svc.cluster.local/message
       method: POST
       headers:
-        X-Gotify-Key: <PLACEHOLDER>
+        X-Gotify-Key: AhvQ2l4Bwle8t99
         Content-Type: application/json
 lapi:
   enabled: true
-  replicas: 1
+  replicas: 2
   env:
     - name: TZ
       value: "America/Chicago"
@@ -191,21 +191,6 @@ lapi:
         secretKeyRef:
           name: crowdsec-secrets
           key: DB_PASSWORD
-    #- name: ENROLL_KEY
-    #  valueFrom:
-    #    secretKeyRef:
-    #      name: crowdsec-secrets
-    #      key: ENROLL_KEY
-    #- name: ENROLL_INSTANCE_NAME
-    #  valueFrom:
-    #    secretKeyRef:
-    #      name: crowdsec-secrets
-    #      key: ENROLL_INSTANCE_NAME
-    #- name: ENROLL_TAGS
-    #  valueFrom:
-    #    secretKeyRef:
-    #      name: crowdsec-secrets
-    #      key: ENROLL_TAGS
   ingress:
     enabled: true
     annotations:
@@ -238,16 +223,10 @@ lapi:
       enabled: false
       existingClaim: "crowdsec-config"
       size: 100Mi
-  # -- Enable service monitoring (exposes "metrics" port "6060" for Prometheus)
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-  #service:
-  #  type: LoadBalancer
-  #  annotations:
-  #    external-dns.alpha.kubernetes.io/hostname: crowdsec-api.whezzel.com
-  #  externalTrafficPolicy: Local
+#  metrics:
+#    enabled: true
+#    serviceMonitor:
+#      enabled: true
   storeCAPICredentialsInSecret: false
 agent:
   acquisition:
@@ -295,8 +274,6 @@ agent:
       value: "America/Chicago"
     - name: COLLECTIONS
       value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant andreasbrett/baikal crowdsecurity/postfix crowdsecurity/dovecot"
-    #- name: SCENARIOS
-    #  value: "crowdsecurity/dovecot-spam" # crowdsecurity/postfix-spam crowdsecurity/postfix-relay-denied crowdsecurity/postfix-helo-rejected crowdsecurity/postfix-non-smtp-command"
     - name: LEVEL_DEBUG
       value: "false"
     - name: LEVEL_TRACE
