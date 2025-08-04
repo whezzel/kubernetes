@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joplin
+  namespace: cloud
+  labels:
+    app: joplin
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 12h"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: joplin
+  template:
+    metadata:
+      name: joplin
+      labels:
+        app: joplin
+    spec:
+      containers:
+        - name: joplin
+          image: joplin/server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 22300
+              hostPort: 22300
+              name: http
+          env:
+            - name: TZ
+              value: "America/Chicago"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: DB_CLIENT
+              value: pg
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: joplin-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DATABASE
+              value: joplin
+            - name: POSTGRES_USER
+              value: joplin
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_HOST
+              value: joplin-postgres-rw.database
+            - name: APP_BASE_URL
+              value: https://joplin.whezzel.com
+            - name: MAILER_ENABLED
+              value: "1"
+            - name: MAILER_HOST
+              value: smtp.whezzel.com
+            - name: MAILER_PORT
+              value: "465"
+            - name: MAILER_SECURE
+              value: "true"
+            - name: MAILER_AUTH_USER
+              value: hello@whezzel.com
+            - name: MAILER_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: joplin-secrets
+                  key: MAILER_AUTH_PASSWORD
+            - name: MAILER_NOREPLY_NAME
+              value: Joplin
+            - name: MAILER_NOREPLY_EMAIL
+              value: hello@whezzel.com
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
