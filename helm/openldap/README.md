@@ -1,0 +1,30 @@
+# Deploy openldap
+
+OpenLDAP Software is an open source implementation of the Lightweight Directory Access Protocol.
+
+- <https://github.com/jp-gouin/helm-openldap>
+
+**Example values.yaml:**
+
+```yaml
+cat > ./helm/openldap/values.yaml <<'EOF'
+---
+EOF
+```
+
+## Deploy openldap using helm
+
+```bash
+helm upgrade --install openldap openldap-stack-ha \
+    --repo https://jp-gouin.github.io/helm-openldap \
+    --namespace auth \
+    --create-namespace \
+    --values ./helm/openldap/values.yaml \
+    --values ./helm/openldap/secret-values.yaml
+```
+
+## Dump chart values
+
+```bash
+helm show values openldap-stack-ha --repo https://jp-gouin.github.io/helm-openldap > ./helm/openldap/temp-values.yaml
+```

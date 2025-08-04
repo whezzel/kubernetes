@@ -1,0 +1,59 @@
+global:
+  imageRegistry: ""
+  ldapDomain: "whezzel.com"
+  ldapPort: 389
+  sslLdapPort: 636
+nameOverride: "openldap"
+fullnameOverride: "openldap"
+replicaCount: 3
+#logLevel: info
+service:
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: openldap.whezzel.com
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
+env:
+ BITNAMI_DEBUG: "true"
+ LDAP_LOGLEVEL: "256"
+ LDAP_REQUIRE_TLS: "false"
+ LDAPTLS_REQCERT: "never"
+ LDAP_ENABLE_TLS: "yes"
+ LDAP_SKIP_DEFAULT_TREE: "yes"
+ LDAP_ALLOW_ANON_BINDING: 'no'
+persistence:
+  enabled: true
+  size: 2Gi
+serviceAccount:
+  create: true
+  name: "openldap"
+initTLSSecret:
+  tls_enabled: true
+  secret: "openldap-tls"
+replication:
+  tls_cacert: "/etc/ssl/certs/ca.crt"
+  tls_reqcert: demand
+extraVolumes:
+  - name: selfsigned-ca
+    secret:
+      secretName: selfsigned-ca
+extraVolumeMounts:
+  - name: selfsigned-ca
+    mountPath: /etc/ssl/certs/
+    readOnly: true
+ltb-passwd:
+  enabled : true
+  ingress:
+    enabled: true
+    hosts:
+    - "ssl-ldap2.whezzel.com"
+    tls:
+      - secretName: ""
+phpldapadmin:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+    - phpldapadmin.whezzel.com
+    tls:
+      - secretName: ""
