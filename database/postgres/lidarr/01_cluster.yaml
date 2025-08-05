@@ -1,0 +1,68 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: lidarr-postgres
+  namespace: database
+spec:
+  description: "Lidarr Database"
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+  instances: 3
+  startDelay: 300
+  stopDelay: 300
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    parameters:
+      shared_buffers: 256MB
+      pg_stat_statements.max: '10000'
+      pg_stat_statements.track: all
+      auto_explain.log_min_duration: '10s'
+    pg_hba:
+      - host all all 10.244.0.0/16 md5
+  managed:
+    roles:
+      - name: lidarr
+        superuser: false
+        login: true
+        passwordSecret:
+          name: lidarr-postgres-app-user
+  bootstrap:
+    recovery:
+      database: lidarr
+      owner: lidarr
+      source: lidarr-postgres
+      secret:
+        name: lidarr-postgres-app-user
+      #backup:
+      #  name: manual-lidarr-postgres
+      #recoveryTarget:
+      #  targetTime: 2025-05-04 23:00:00+00:00 # Time in UTC
+    #initdb:
+    #  database: lidarr
+    #  owner: lidarr
+    #  secret:
+    #    name: lidarr-postgres-app-user
+    #  #backup:
+    #  #  name: manual-lidarr-postgres
+  externalClusters:
+    - name: lidarr-postgres
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        isWALArchiver: true
+        parameters:
+          barmanObjectName: backblaze-b2
+          serverName: lidarr-postgres-0
+  enableSuperuserAccess: true
+  storage:
+    storageClass: longhorn-db
+    size: 3Gi
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: backblaze-b2
+        serverName: lidarr-postgres-1
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: failure-domain.beta.kubernetes.io/zone
+  enablePDB: true
