@@ -43,6 +43,7 @@ extraVolumeMounts:
     readOnly: true
 ltb-passwd:
   enabled : true
+  replicaCount: 2
   ingress:
     enabled: true
     hosts:
@@ -51,6 +52,7 @@ ltb-passwd:
       - secretName: ""
 phpldapadmin:
   enabled: true
+  replicaCount: 2
   ingress:
     enabled: true
     hosts:
