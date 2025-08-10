@@ -11,7 +11,7 @@ Please carefully read the release notes before performing an upgrade as some ver
 ```bash
 helm upgrade --install cloudnative-pg cloudnative-pg \
     --repo https://cloudnative-pg.github.io/charts \
-    --namespace database \
+    --namespace cnpg \
     --create-namespace \
     --values ./helm/cloudnative-pg/values.yaml
 ```
@@ -19,7 +19,7 @@ helm upgrade --install cloudnative-pg cloudnative-pg \
 ## Deploy Barman Cloud Plugin
 
 ```bash
-wget -q -O - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/latest/download/manifest.yaml | sed -E 's/namespace:[[:space:]]*[^[:space:]]+/namespace: database/g' | ka -f -
+wget -q -O - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/latest/download/manifest.yaml | sed -E 's/namespace:[[:space:]]*[^[:space:]]+/namespace: cnpg/g' | ka -f -
 ```
 
 ## Dump chart values
