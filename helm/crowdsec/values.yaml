@@ -132,7 +132,7 @@ config:
       user:     crowdsec
       password: "${DB_PASSWORD}"
       db_name:  crowdsec
-      host:     crowdsec-postgres-rw.database
+      host:     crowdsec-postgres-rw.postgres
       port:     5432
       sslmode:  require
       flush:

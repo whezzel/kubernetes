@@ -535,7 +535,7 @@ configMap:
     postgres:
       enabled: true
       deploy: false
-      address: 'tcp://authelia-postgres-rw.database:5432'
+      address: 'tcp://authelia-postgres-rw.postgres:5432'
       timeout: '5 seconds'
       database: 'authelia'
       schema: 'public'

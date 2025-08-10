@@ -97,7 +97,7 @@ spec:
             - name: RADARR__SERVER__SSLPORT
               value: "8787"
             - name: RADARR__POSTGRES__HOST
-              value: "radarr-postgres-rw.database"
+              value: "radarr-postgres-rw.postgres"
             - name: RADARR__POSTGRES__PORT
               value: "5432"
             - name: RADARR__POSTGRES__USER

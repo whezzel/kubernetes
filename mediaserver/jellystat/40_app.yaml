@@ -69,7 +69,7 @@ spec:
                   name: jellystat-secrets
                   key: password
             - name: POSTGRES_IP
-              value: jellystat-postgres-rw.database
+              value: jellystat-postgres-rw.postgres
             - name: POSTGRES_PORT
               value: "5432"
             - name: JWT_SECRET

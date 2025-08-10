@@ -51,7 +51,7 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_HOST
-              value: joplin-postgres-rw.database
+              value: joplin-postgres-rw.postgres
             - name: APP_BASE_URL
               value: https://joplin.whezzel.com
             - name: MAILER_ENABLED

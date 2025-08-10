@@ -97,7 +97,7 @@ spec:
             - name: LIDARR__SERVER__SSLPORT
               value: "6868"
             - name: LIDARR__POSTGRES__HOST
-              value: "lidarr-postgres-rw.database"
+              value: "lidarr-postgres-rw.postgres"
             - name: LIDARR__POSTGRES__PORT
               value: "5432"
             - name: LIDARR__POSTGRES__USER

@@ -97,7 +97,7 @@ spec:
             - name: PROWLARR__SERVER__SSLPORT
               value: "6969"
             - name: PROWLARR__POSTGRES__HOST
-              value: "prowlarr-postgres-rw.database"
+              value: "prowlarr-postgres-rw.postgres"
             - name: PROWLARR__POSTGRES__PORT
               value: "5432"
             - name: PROWLARR__POSTGRES__USER

@@ -48,7 +48,7 @@ spec:
             - name: DB_DATABASE_NAME
               value: immich
             - name: DB_HOSTNAME
-              value: immich-postgres-rw.database
+              value: immich-postgres-rw.postgres
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:

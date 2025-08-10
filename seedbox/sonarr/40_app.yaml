@@ -97,7 +97,7 @@ spec:
             - name: SONARR__SERVER__SSLPORT
               value: "9898"
             - name: SONARR__POSTGRES__HOST
-              value: "sonarr-postgres-rw.database"
+              value: "sonarr-postgres-rw.postgres"
             - name: SONARR__POSTGRES__PORT
               value: "5432"
             - name: SONARR__POSTGRES__USER
