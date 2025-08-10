@@ -1,0 +1,66 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authelia-postgres
+  namespace: postgres
+spec:
+  description: "Authelia Database"
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+  instances: 3
+  startDelay: 300
+  stopDelay: 300
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    parameters:
+      shared_buffers: 256MB
+      pg_stat_statements.max: '10000'
+      pg_stat_statements.track: all
+      auto_explain.log_min_duration: '10s'
+    pg_hba:
+      - host all all 10.244.0.0/16 md5
+  managed:
+    roles:
+      - name: authelia
+        superuser: false
+        login: true
+        passwordSecret:
+          name: authelia-postgres-app-user
+  bootstrap:
+    recovery:
+      database: authelia
+      owner: authelia
+      source: authelia-postgres
+      secret:
+        name: authelia-postgres-app-user
+      #backup:
+      #  name: manual-authelia-postgres
+      #recoveryTarget:
+      #  targetTime: 2025-05-04 23:00:00+00:00 # Time in UTC
+    #initdb:
+    #  database: authelia
+    #  owner: authelia
+    #  secret:
+    #    name: authelia-postgres-app-user
+  externalClusters:
+    - name: authelia-postgres
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        isWALArchiver: true
+        parameters:
+          barmanObjectName: backblaze-b2
+          serverName: authelia-postgres-0
+  enableSuperuserAccess: true
+  storage:
+    storageClass: longhorn-db
+    size: 3Gi
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: backblaze-b2
+        serverName: authelia-postgres-1
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: failure-domain.beta.kubernetes.io/zone
+  enablePDB: true
