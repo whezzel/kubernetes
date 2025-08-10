@@ -4,14 +4,6 @@ OpenLDAP Software is an open source implementation of the Lightweight Directory 
 
 - <https://github.com/jp-gouin/helm-openldap>
 
-**Example values.yaml:**
-
-```yaml
-cat > ./helm/openldap/values.yaml <<'EOF'
----
-EOF
-```
-
 ## Deploy openldap using helm
 
 ```bash

@@ -4,10 +4,10 @@ External-DNS tracks svc/ing and creates dns records
 
 - <https://github.com/kubernetes-sigs/external-dns/blob/master/charts/external-dns/README.md>
 
-## Apply supporting manifests
+## Apply secrets
 
 ```bash
-kubectl apply -f ./helm/external-dns/internal
+kubectl apply -f ./helm/external-dns/internal/00_secrets.yaml
 ```
 
 ## Deploy External-DNS using helm

@@ -7,7 +7,7 @@ External-DNS tracks svc/ing and creates dns records
 ## Apply supporting manifests
 
 ```bash
-kubectl apply -f ./helm/external-dns/3amigos
+kubectl apply -f ./helm/external-dns/3amigos/00_secrets.yaml
 ```
 
 ## Deploy External-DNS using helm

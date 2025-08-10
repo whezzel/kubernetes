@@ -17,7 +17,7 @@ helm upgrade --install longhorn longhorn \
 ## Deploy supporting manifests
 
 ```bash
-k apply -Rf ./longhorn/
+k apply -Rf ./helm/longhorn/
 ```
 
 ## Dump chart values

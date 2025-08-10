@@ -4,11 +4,10 @@ This chart deploys [docker-mailserver](https://github.com/docker-mailserver/dock
 
 - <https://github.com/docker-mailserver/docker-mailserver-helm/tree/master/charts/docker-mailserver>
 
-**Example values.yaml:**
+## Apply secrets
 
-```yaml
-cat > ./helm/docker-mailserver/values.yaml <<'EOF'
-EOF
+```bash
+kubectl apply -f ./helm/docker-mailserver/00_secrets.yaml
 ```
 
 ## Deploy docker-mailserver using helm

@@ -4,10 +4,10 @@ Crowdsec is a modern fail2ban
 
 - <https://github.com/crowdsecurity/helm-charts/blob/main/charts/crowdsec/README.md>
 
-## Apply supporting manifests
+## Apply secrets
 
 ```bash
-kubectl apply -f ./helm/crowdsec
+kubectl apply -f ./helm/crowdsec/00_secrets.yaml
 ```
 
 ## Deploy Crowdsec using helm

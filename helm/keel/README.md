@@ -4,16 +4,6 @@ Manually updating workloads is annoying, but keel.sh allows us to automate that.
 
 - <https://keel.sh/docs/#deploying-with-helm>
 
-**Example values.yaml:**
-
-```yaml
-cat > ./helm/keel/values.yaml <<'EOF'
-webhook:
-  enabled: true
-  endpoint: "http://nodered.homeassistant/hooks/ndN656rVjA6E5V26nxXgGmRHo99Cm7wg"
-EOF
-```
-
 ## Deploy keel.sh using helm
 
 ```bash

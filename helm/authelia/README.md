@@ -6,6 +6,12 @@ Authelia is an open-source authentication and authorization server providing two
 - <https://github.com/authelia/authelia>
 - <https://charts.authelia.com/>
 
+## Apply secrets
+
+```bash
+kubectl apply -f ./helm/authelia/00_secrets.yaml
+```
+
 ## Deploy authelia using helm
 
 ```bash
