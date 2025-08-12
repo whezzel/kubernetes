@@ -434,10 +434,10 @@ configMap:
         policy: two_factor
       - domain:
           - "whoami.whezzel.com"
-        subject:
-          - "group:admins"
-          - "group:whoami"
-        policy: two_factor
+        #subject:
+        #  - "group:admins"
+        #  - "group:whoami"
+        #policy: two_factor
         policy: bypass
       - domain:
           - "zigbee.whezzel.com"
