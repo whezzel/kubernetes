@@ -5,10 +5,19 @@ metadata:
   name: selfsigned-ca
   namespace: cert-manager
 spec:
+  isCA: true
   commonName: Self-Signed CA
   secretName: selfsigned-ca
-  isCA: true
+  privateKey:
+    algorithm: ECDSA
+    size: 256
   issuerRef:
     name: selfsigned
     kind: ClusterIssuer
     group: cert-manager.io
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "auth,email,mediaserver,seedbox"  # Control destination namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" # Auto create reflection for matching namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "auth,email,mediaserver,seedbox" # Control auto-reflection namespaces

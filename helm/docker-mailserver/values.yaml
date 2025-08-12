@@ -154,8 +154,8 @@ deployment:
     # -----------------------------------------------
     # --- LDAP Section ------------------------------
     # -----------------------------------------------
-    LDAP_START_TLS: "no"
-    LDAP_SERVER_HOST: ldap://openldap.auth:389
+    LDAP_START_TLS:
+    LDAP_SERVER_HOST: ldaps://openldap.auth.svc.cluster.local:636
     LDAP_SEARCH_BASE: dc=whezzel,dc=com
     # set those unless you're using a secret
     #LDAP_BIND_DN:
@@ -280,15 +280,17 @@ deployment:
   #        subPath: another-folder
 
   ## Optionally specify a list of extra mounts to add (normally used with extraVolumes)
-  extraVolumeMounts: []
-  #  - name: extra-storage
-  #    mountPath: /mnt/extra-storage
-  #    subPath: another-folder
+  extraVolumeMounts:
+    - name: selfsigned-ca
+      mountPath: "/usr/local/share/ca-certificates/selfsigned-ca.crt"
+      readOnly: true
+      subPath: tls.crt
 
   ## Optionally specify a list of extra volumes to add
-  extraVolumes: []
-  #  - name: extra-storage
-  #    emptyDir: {}
+  extraVolumes:
+    - name: selfsigned-ca
+      secret:
+        secretName: selfsigned-ca
 
 service:
   ## What scope the service should be exposed in. One of:
@@ -580,7 +582,13 @@ configMaps:
     data: |
       #!/bin/bash
 
+      # Update CA certificates
+      update-ca-certificates
+
       sed -i 's/message_size_limit = 10240000/message_size_limit = 0/' /etc/postfix/main.cf
+
+      # Valid values: never, hard, demand, allow, try
+      echo "tls_require_cert = demand" >> /etc/dovecot/dovecot-ldap.conf.ext
 
       {{- if .Values.proxyProtocol.enabled }}
       # Make sure to keep this file in sync with https://github.com/docker-mailserver/docker-mailserver/blob/master/target/postfix/master.cf!

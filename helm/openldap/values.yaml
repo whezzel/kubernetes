@@ -13,16 +13,18 @@ service:
   type: LoadBalancer
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
+  enableLdapPort: true
+  enableSslLdapPort: true
 env:
  BITNAMI_DEBUG: "true"
  LDAP_LOGLEVEL: "256"
  LDAP_REQUIRE_TLS: "false"
- LDAPTLS_REQCERT: "never"
+ LDAPTLS_REQCERT: "allow"
  LDAP_ENABLE_TLS: "yes"
  LDAP_SKIP_DEFAULT_TREE: "yes"
  LDAP_ALLOW_ANON_BINDING: 'no'
 persistence:
-  enabled: true
+  enabled: enable
   size: 2Gi
 serviceAccount:
   create: true
@@ -30,20 +32,9 @@ serviceAccount:
 initTLSSecret:
   tls_enabled: true
   secret: "openldap-tls"
-replication:
-  tls_cacert: "/etc/ssl/certs/ca.crt"
-  tls_reqcert: demand
-extraVolumes:
-  - name: selfsigned-ca
-    secret:
-      secretName: selfsigned-ca
-extraVolumeMounts:
-  - name: selfsigned-ca
-    mountPath: /etc/ssl/certs/
-    readOnly: true
 ltb-passwd:
   enabled : true
-  replicaCount: 2
+  replicaCount: 1
   ingress:
     enabled: true
     hosts:
@@ -52,7 +43,7 @@ ltb-passwd:
       - secretName: ""
 phpldapadmin:
   enabled: true
-  replicaCount: 2
+  replicaCount: 1
   ingress:
     enabled: true
     hosts:

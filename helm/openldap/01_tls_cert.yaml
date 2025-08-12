@@ -5,12 +5,14 @@ metadata:
   name: openldap-tls
   namespace: auth
 spec:
-  commonName: openldap.auth.svc
+  commonName: openldap.auth.svc.cluster.local
   dnsNames:
-    - "openldap.auth.svc"
+    # Update for the number of replicas running
     - "openldap.auth.svc.cluster.local"
     - "openldap-headless.auth.svc.cluster.local"
-    - "*.openldap-headless.auth.svc.cluster.local"
+    - "openldap-0.openldap-headless.auth.svc.cluster.local"
+    - "openldap-1.openldap-headless.auth.svc.cluster.local"
+    - "openldap-2.openldap-headless.auth.svc.cluster.local"
   secretName: openldap-tls
   issuerRef:
     name: selfsigned-ca

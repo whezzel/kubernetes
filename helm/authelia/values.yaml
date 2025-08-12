@@ -139,7 +139,7 @@ configMap:
     ldap:
       enabled: true
       implementation: 'custom'
-      address: 'ldap://openldap.auth:389'
+      address: 'ldaps://openldap.auth.svc.cluster.local:636'
       timeout: '5 seconds'
       start_tls: false
       tls:
@@ -790,3 +790,5 @@ secret:
   mountPath: '/secrets'
   additionalSecrets:
     authelia-oidc: {}
+certificates:
+  existingSecret: 'selfsigned-ca'
