@@ -384,13 +384,13 @@ configMap:
           - "group:scrutiny"
         policy: two_factor
       - domain:
-          - "skooner.whezzel.com"
+          - "headlamp.whezzel.com"
         policy: bypass
       #- domain:
-      #    - "skooner.whezzel.com"
+      #    - "headlamp.whezzel.com"
       #  subject:
       #    - "group:admins"
-      #    - "group:skooner"
+      #    - "group:headlamp"
       #  policy: two_factor
       - domain:
           - "sonarr.whezzel.com"
@@ -767,24 +767,23 @@ configMap:
             - 'profile'
             - 'groups'
             - 'email'
-          userinfo_signed_response_alg: 'RS256'
-        - client_id: 'skooner'
-          client_name: 'Skooner'
+          userinfo_signed_response_alg: 'none'
+        - client_id: 'headlamp'
+          client_name: 'Headlamp'
           client_secret:
             value: ''
-            path: /secrets/authelia-oidc/oidc.client.skooner.value
+            path: /secrets/authelia-oidc/oidc.client.headlamp.value
           public: false
           authorization_policy: 'two_factor'
           consent_mode: 'implicit'
           redirect_uris:
-            - 'https://skooner.whezzel.com/'
+            - 'https://headlamp.whezzel.com/oidc-callback'
           scopes:
             - 'openid'
             - 'profile'
             - 'groups'
             - 'email'
           userinfo_signed_response_alg: 'none'
-          token_endpoint_auth_method: 'client_secret_post'
 secret:
   disabled: false
   existingSecret: 'authelia'
