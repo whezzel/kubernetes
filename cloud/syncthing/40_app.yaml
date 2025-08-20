@@ -56,17 +56,21 @@ spec:
               path: /rest/noauth/health
               port: http
               scheme: HTTP
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 5
-            timeoutSeconds: 10
-          #readinessProbe:
-          #  httpGet:
-          #    path: /rest/noauth/health
-          #    port: http
-          #    scheme: HTTP
-          #  initialDelaySeconds: 10
-          #  failureThreshold: 5
-          #  timeoutSeconds: 10
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /rest/noauth/health
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           volumeMounts:
             - name: syncthing
               mountPath: /config
