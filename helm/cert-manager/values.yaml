@@ -6,3 +6,19 @@ dns01RecursiveNameserversOnly: true
 #  enabled: true
 #  servicemonitor:
 #    enabled: true
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 50m
+webhook:
+  replicaCount: 2
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 50m
+cainjector:
+  replicaCount: 2
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m

@@ -72,8 +72,8 @@ spec:
               mountPath: /tmp
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "4"
+              memory: 3Gi
+              cpu: 4000m
       volumes:
         - name: dev-usb
           hostPath:

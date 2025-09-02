@@ -26,6 +26,10 @@ env:
 persistence:
   enabled: enable
   size: 2Gi
+resources:
+  requests:
+    memory: 32Mi
+    cpu: 50m
 serviceAccount:
   create: true
   name: "openldap"
@@ -41,6 +45,10 @@ ltb-passwd:
     - "ssl-ldap2.whezzel.com"
     tls:
       - secretName: ""
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 150m
 phpldapadmin:
   enabled: true
   replicaCount: 1
@@ -50,3 +58,7 @@ phpldapadmin:
     - phpldapadmin.whezzel.com
     tls:
       - secretName: ""
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m

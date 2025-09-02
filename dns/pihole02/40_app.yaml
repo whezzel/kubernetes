@@ -73,8 +73,8 @@ spec:
               subPath: dnsmasq
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "100m"
+              memory: 256Mi
+              cpu: 50m
       volumes:
         - name: pihole02
           persistentVolumeClaim:

@@ -43,8 +43,8 @@ spec:
               subPath: config.json
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "100m"
+              memory: 16Mi
+              cpu: 50m
       volumes:
         - name: mainsail-config
           configMap:

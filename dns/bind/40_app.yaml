@@ -68,8 +68,8 @@ spec:
               subPath: log
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "100m"
+              memory: 64Mi
+              cpu: 50m
       volumes:
         - name: bind
           persistentVolumeClaim:

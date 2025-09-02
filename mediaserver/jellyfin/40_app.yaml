@@ -78,6 +78,10 @@ spec:
               mountPath: /media
             - name: jellyfin-config
               mountPath: /config
+          resources:
+            requests:
+              memory: 1800Mi
+              cpu: 500m
       volumes:
         - name: nas-media
           nfs:

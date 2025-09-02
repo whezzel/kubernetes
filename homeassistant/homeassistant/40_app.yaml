@@ -77,8 +77,8 @@ spec:
           #    mountPath: /media
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "250m"
+              memory: 700Mi
+              cpu: 500m
       volumes:
         - name: homeassistant
           persistentVolumeClaim:

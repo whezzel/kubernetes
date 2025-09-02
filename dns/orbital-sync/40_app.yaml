@@ -44,3 +44,7 @@ spec:
               value: "false"
             - name: INTERVAL_MINUTES
               value: "10"
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m

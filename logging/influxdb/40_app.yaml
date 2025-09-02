@@ -48,8 +48,8 @@ spec:
               subPath: config
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: 1800Mi
+              cpu: 500m
       volumes:
         - name: influxdb
           persistentVolumeClaim:

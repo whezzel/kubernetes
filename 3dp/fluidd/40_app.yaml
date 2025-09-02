@@ -38,5 +38,5 @@ spec:
               value: "1000"
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "100m"
+              memory: 16Mi
+              cpu: 10m

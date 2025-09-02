@@ -61,8 +61,8 @@ spec:
               mountPath: /data
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "100m"
+              memory: 256Mi
+              cpu: 350m
       volumes:
         - name: nodered
           persistentVolumeClaim:

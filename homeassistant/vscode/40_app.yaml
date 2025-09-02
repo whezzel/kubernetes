@@ -82,8 +82,8 @@ spec:
               mountPath: /mnt/esphome
           resources:
             requests:
-              memory: "400Mi"
-              cpu: "250m"
+              memory: 300Mi
+              cpu: 100m
       volumes:
         - name: homeassistant
           persistentVolumeClaim:

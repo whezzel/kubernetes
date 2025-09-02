@@ -41,8 +41,8 @@ spec:
               mountPath: /app/data
           resources:
             requests:
-              memory: "50Mi"
-              cpu: "50m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: gotify
           persistentVolumeClaim:

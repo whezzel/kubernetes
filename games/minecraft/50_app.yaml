@@ -81,7 +81,7 @@ spec:
             - name: EULA
               value: "TRUE"
             - name: INIT_MEMORY
-              value: "4G"
+              value: "1G"
             - name: MAX_MEMORY
               value: "8G"
             - name: MEMORY
@@ -114,11 +114,8 @@ spec:
               mountPath: /netstorage
           resources:
             requests:
-              memory: "4Gi"
-              cpu: "250m"
-          #  limits:
-          #    memory: "8Gi"
-          #    cpu: "8"
+              memory: 4Gi
+              cpu: 2000m
       volumes:
         - name: minecraft
           persistentVolumeClaim:

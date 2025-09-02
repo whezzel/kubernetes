@@ -18,3 +18,17 @@ securityContext:
     cleanCiliumState: ["NET_ADMIN","SYS_ADMIN","SYS_RESOURCE"]
 image:
   pullPolicy: "IfNotPresent"
+resources:
+   requests:
+     cpu: 800m
+     memory: 512Mi
+envoy:
+  resources:
+     requests:
+       cpu: 100m
+       memory: 64Mi
+operator:
+  resources:
+     requests:
+       cpu: 100m
+       memory: 200Mi

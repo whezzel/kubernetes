@@ -118,8 +118,8 @@ spec:
               mountPath: /config/MediaCover
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "100m"
+              memory: 256Mi
+              cpu: 250m
       volumes:
         - name: nas-media
           nfs:

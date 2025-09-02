@@ -77,8 +77,8 @@ spec:
               subPath: data
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 128Mi
+              cpu: 50m
       volumes:
         - name: vaultwarden
           persistentVolumeClaim:

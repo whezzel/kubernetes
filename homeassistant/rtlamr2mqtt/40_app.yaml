@@ -73,8 +73,8 @@ spec:
               subPath: rtlamr2mqtt.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "800m"
+              memory: 256Mi
+              cpu: 300m
       volumes:
         - name: usb
           hostPath:

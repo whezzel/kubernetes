@@ -50,8 +50,8 @@ spec:
               mountPath: /opt/scrutiny/config
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: scrutiny
           persistentVolumeClaim:
@@ -103,8 +103,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -159,8 +159,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -215,8 +215,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -266,8 +266,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -317,8 +317,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -368,8 +368,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -419,8 +419,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -470,8 +470,8 @@ spec:
               subPath: collector.yaml
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: 32Mi
+              cpu: 50m
       volumes:
         - name: udev
           hostPath:

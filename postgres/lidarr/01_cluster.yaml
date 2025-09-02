@@ -66,3 +66,7 @@ spec:
     enablePodAntiAffinity: true
     topologyKey: failure-domain.beta.kubernetes.io/zone
   enablePDB: true
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
