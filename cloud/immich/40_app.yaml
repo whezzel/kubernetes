@@ -84,5 +84,5 @@ spec:
             claimName: immich
         - name: photos
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/photos
+            server: nas01.whezzel.com
+            path: /photos

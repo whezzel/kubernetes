@@ -111,7 +111,7 @@ spec:
             - name: minecraft-bluemap
               mountPath: /data/bluemap
             - name: nas
-              mountPath: /netstorage
+              mountPath: /mnt/temp
           resources:
             requests:
               memory: 4Gi
@@ -125,5 +125,5 @@ spec:
             claimName: minecraft-bluemap
         - name: nas
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/
+            server: nas01.whezzel.com
+            path: /temp

@@ -87,8 +87,6 @@ spec:
           volumeMounts:
             - name: factorio
               mountPath: /factorio
-            - name: nas
-              mountPath: /netstorage
           resources:
             requests:
               memory: 2Gi
@@ -97,7 +95,3 @@ spec:
         - name: factorio
           persistentVolumeClaim:
             claimName: factorio
-        - name: nas
-          nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/

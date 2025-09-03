@@ -85,8 +85,8 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/media
+            server: nas01.whezzel.com
+            path: /media
         - name: jellyfin-config
           persistentVolumeClaim:
             claimName: jellyfin

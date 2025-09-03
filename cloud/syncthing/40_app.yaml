@@ -76,11 +76,9 @@ spec:
               mountPath: /config
               subPath: config
             - name: nas-syncthing
-              mountPath: /backups
-              subPath: backups
-            - name: nas-syncthing
+              mountPath: /syncthing
+            - name: nas-3amigos
               mountPath: /3amigos
-              subPath: 3amigos
           resources:
             requests:
               memory: 1Gi
@@ -89,7 +87,11 @@ spec:
         - name: syncthing
           persistentVolumeClaim:
             claimName: syncthing
+        - name: nas-3amigos
+          nfs:
+            server: nas01.whezzel.com
+            path: /3amigos
         - name: nas-syncthing
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage
+            server: nas01.whezzel.com
+            path: /syncthing

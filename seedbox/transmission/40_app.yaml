@@ -302,13 +302,13 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/media/downloads
+            server: nas01.whezzel.com
+            path: /media/downloads
         - name: nas-isos
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/isos
+            server: nas01.whezzel.com
+            path: /isos
         - name: nas-config
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/media/transmission
+            server: nas01.whezzel.com
+            path: /media/transmission

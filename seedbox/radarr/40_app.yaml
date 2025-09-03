@@ -123,9 +123,9 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/media
+            server: nas01.whezzel.com
+            path: /media
         - name: nas-mediacover
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/media/movies/MediaCover
+            server: nas01.whezzel.com
+            path: /media/movies/MediaCover

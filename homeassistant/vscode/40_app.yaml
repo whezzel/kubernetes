@@ -93,5 +93,5 @@ spec:
             name: ssh-config
         - name: nas-esphome
           nfs:
-            server: nas.whezzel.com
-            path: /mnt/netstorage/backups/esphome
+            server: nas01.whezzel.com
+            path: /esphome

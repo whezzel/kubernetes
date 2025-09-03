@@ -85,5 +85,5 @@ spec:
             claimName: homeassistant
       #  - name: nas-media
       #    nfs:
-      #      server: nas.whezzel.com
-      #      path: /mnt/netstorage/media
+      #      server: nas01.whezzel.com
+      #      path: /media
