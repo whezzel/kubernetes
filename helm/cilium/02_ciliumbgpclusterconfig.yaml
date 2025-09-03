@@ -1,0 +1,24 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: opnsense
+  namespace: cilium
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+  bgpInstances:
+    - name: opnsense
+      localASN: 64513
+      peers:
+        - name: opnsense01
+          peerASN: 64512
+          peerAddress: 10.69.20.2
+          peerConfigRef:
+            name: "bgp-peer"
+        - name: opnsense02
+          peerASN: 64512
+          peerAddress: 10.69.20.3
+          peerConfigRef:
+            name: "bgp-peer"
