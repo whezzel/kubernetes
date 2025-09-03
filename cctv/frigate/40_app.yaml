@@ -55,9 +55,6 @@ spec:
               containerPort: 8554
               protocol: TCP
           volumeMounts:
-            - name: dev-usb
-              mountPath: /dev/usb
-              readOnly: true
             - name: frigate
               mountPath: /config
               subPath: config
@@ -75,9 +72,6 @@ spec:
               memory: 3Gi
               cpu: 4000m
       volumes:
-        - name: dev-usb
-          hostPath:
-            path: /dev/usb
         - name: frigate
           persistentVolumeClaim:
             claimName: frigate
