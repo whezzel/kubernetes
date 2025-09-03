@@ -5,8 +5,8 @@ metadata:
   namespace: postgres
 spec:
   configuration:
-    destinationPath: "s3://postgres-77uIu5/"
-    endpointURL:  "https://s3.us-east-005.backblazeb2.com"
+    destinationPath: s3://postgres-77uIu5/
+    endpointURL:  https://s3.us-east-005.backblazeb2.com
     s3Credentials:
       accessKeyId:
         name: backup-creds
@@ -22,4 +22,4 @@ spec:
       encryption: AES256
       immediateCheckpoint: false
       jobs: 2
-  retentionPolicy: "7d"
+  retentionPolicy: 7d

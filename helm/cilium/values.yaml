@@ -5,19 +5,21 @@ bgpControlPlane:
 cgroup:
   autoMount:
     enabled: false
-  hostRoot: "/sys/fs/cgroup"
+  hostRoot: /sys/fs/cgroup
+l2announcements:
+  enabled: true
 ipam:
-  mode: "kubernetes"
-k8sServiceHost: "localhost"
-k8sServicePort: "7445"
+  mode: kubernetes
+k8sServiceHost: localhost
+k8sServicePort: 7445
 kubeProxyReplacement: true
-kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
+kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 securityContext:
   capabilities:
     ciliumAgent: ["CHOWN","KILL","NET_ADMIN","NET_RAW","IPC_LOCK","SYS_ADMIN","SYS_RESOURCE","DAC_OVERRIDE","FOWNER","SETGID","SETUID"]
     cleanCiliumState: ["NET_ADMIN","SYS_ADMIN","SYS_RESOURCE"]
 image:
-  pullPolicy: "IfNotPresent"
+  pullPolicy: IfNotPresent
 resources:
    requests:
      cpu: 800m

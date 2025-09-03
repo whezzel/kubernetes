@@ -72,16 +72,16 @@ spec:
             - name: GLOBAL_APPLY_PERMISSIONS
               value: "false"
             - name: HEALTH_CHECK_HOST
-              value: "cloudflare.com"
+              value: cloudflare.com
             - name: LOCAL_NETWORK
               valueFrom:
                 secretKeyRef:
                   name: transmission-secrets
                   key: LOCAL_NETWORK
             - name: OPENVPN_CONFIG
-              value: "us_east,us_houston,us_texas"
+              value: us_east,us_houston,us_texas
             - name: OPENVPN_OPTS
-              value: "--inactive 3600 --ping 10 --ping-exit 60"
+              value: --inactive 3600 --ping 10 --ping-exit 60
             - name: OPENVPN_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -99,15 +99,15 @@ spec:
             - name: PGID
               value: "1000"
             - name: TRANSMISSION_HOME
-              value: "/data/transmission-home"
+              value: /data/transmission-home
 #            - name: TRANSMISSION_WATCH_DIR_FORCE_GENERIC
 #              value: "false"
 #            - name: TRANSMISSION_WEB_HOME
-#              value: ""
+#              value:
             - name: TRANSMISSION_WEB_UI
-              value: "transmission-web-control"
+              value: transmission-web-control
 #            - name: TZ
-#              value: "America/Chicago"
+#              value: America/Chicago
             - name: UFW_ALLOW_GW_NET
               value: "true"
 #            - name: UFW_DISABLE_IPTABLES_REJECT
@@ -117,11 +117,11 @@ spec:
 #            - name: WEBPROXY_ENABLED
 #              value: "false"
 #            - name: WEBPROXY_PASSWORD
-#              value: "passw"
+#              value: passw
 #            - name: WEBPROXY_PORT
 #              value: "8888"
 #            - name: WEBPROXY_USERNAME
-#              value: "username"
+#              value: username
 ### Transmission Variables ###
 ## Bandwidth ##
             - name: TRANSMISSION_ALT_SPEED_ENABLED
@@ -142,14 +142,14 @@ spec:
               value: "10"
 ## Blocklists ##
 #            - name: TRANSMISSION_BLOCKLIST_URL
-#              value: "http://www.example.com/blocklist"
+#              value: http://www.example.com/blocklist
 #           - name: TRANSMISSION_BLOCKLIST_ENABLED
 #              value: "false"
 ## Files and Locations
             - name: TRANSMISSION_DOWNLOAD_DIR
-              value: "/media/downloads/complete"
+              value: /media/downloads/complete
             - name: TRANSMISSION_INCOMPLETE_DIR
-              value: "/media/downloads/incomplete"
+              value: /media/downloads/incomplete
             - name: TRANSMISSION_INCOMPLETE_DIR_ENABLED
               value: "true"
 #            - name: TRANSMISSION_PREALLOCATION
@@ -163,7 +163,7 @@ spec:
 #            - name: TRANSMISSION_UMASK
 #              value: "2"
             - name: TRANSMISSION_WATCH_DIR
-              value: "/media/downloads/.torrents"
+              value: /media/downloads/.torrents
             - name: TRANSMISSION_WATCH_DIR_ENABLED
               value: "true"
 ### Misc ###
@@ -188,14 +188,14 @@ spec:
 #            - name: TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED
 #              value: "false"
 #            - name: TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME
-#              value: ""
+#              value:
 #            - name: TRANSMISSION_UTP_ENABLED
 #              value: "true"
 ### Peers ###
 #            - name: TRANSMISSION_BIND_ADDRESS_IPV4
-#              value: "0.0.0.0"
+#              value: 0.0.0.0
 #            - name: TRANSMISSION_BIND_ADDRESS_IPV6
-#              value: "::"
+#              value: ::
 #            - name: TRANSMISSION_PEER_CONGESTION_ALGORITHM
 #              value: ""
 #            - name: TRANSMISSION_PEER_ID_TTL_HOURS
@@ -205,7 +205,7 @@ spec:
 #            - name: TRANSMISSION_PEER_LIMIT_PER_TORRENT
 #              value: "60"
 #            - name: TRANSMISSION_PEER_SOCKET_TOS
-#              value: "default"
+#              value: default
 ### Peer Port ###
 #            - name: TRANSMISSION_PEER_PORT
 #              value: "51413"
@@ -234,7 +234,7 @@ spec:
             - name: TRANSMISSION_RPC_AUTHENTICATION_REQUIRED
               value: "false"
 #            - name: TRANSMISSION_RPC_BIND_ADDRESS
-#              value: "0.0.0.0"
+#              value: 0.0.0.0
             - name: TRANSMISSION_RPC_ENABLED
               value: "true"
             - name: TRANSMISSION_RPC_HOST_WHITELIST
@@ -252,7 +252,7 @@ spec:
 #            - name: TRANSMISSION_RPC_PORT
 #              value: "9091"
             - name: TRANSMISSION_RPC_URL
-              value: "/"
+              value: /
 #            - name: TRANSMISSION_RPC_USERNAME
 #              valueFrom:
 #                secretKeyRef:

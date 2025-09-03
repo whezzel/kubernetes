@@ -33,7 +33,7 @@ spec:
               name: http
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: GOTIFY_EXTENDEDLOGFORMAT
               value: "true"
           volumeMounts:

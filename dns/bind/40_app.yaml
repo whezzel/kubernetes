@@ -25,14 +25,14 @@ spec:
         - name: bind
           image: internetsystemsconsortium/bind9:9.20
           imagePullPolicy: Always
-          command: ["named"]
+          command: [named]
           args:
-#            - "-f"
-            - "-g"
-            - "-c"
-            - "/etc/bind/named.conf"
+#            - -f
+            - -g
+            - -c
+            - /etc/bind/named.conf
             - "-4"
-            - "-u"
+            - -u
             - "53"
           ports:
             - containerPort: 53
@@ -49,15 +49,15 @@ spec:
               name: dns-stats
           volumeMounts:
             - name: bind-dns-config
-              mountPath: "/etc/bind/named.conf"
+              mountPath: /etc/bind/named.conf
               readOnly: false
               subPath: named.conf
             - name: bind-rndc-key
-              mountPath: "/etc/bind/rndc.key"
+              mountPath: /etc/bind/rndc.key
               readOnly: true
               subPath: rndc.key
             - name: bind-rndc-keys
-              mountPath: "/etc/bind/rndc-keys.conf"
+              mountPath: /etc/bind/rndc-keys.conf
               readOnly: true
               subPath: rndc-keys.conf
             - name: bind

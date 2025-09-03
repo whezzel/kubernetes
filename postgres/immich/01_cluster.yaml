@@ -5,10 +5,7 @@ metadata:
   name: immich-postgres
   namespace: postgres
 spec:
-  description: "Immich Database"
-  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.5-v0.3.0
-  instances: 1
-  #instances: 3
+  description: Immich Database
   startDelay: 300
   stopDelay: 300
   primaryUpdateStrategy: unsupervised
@@ -17,11 +14,11 @@ spec:
       shared_buffers: 256MB
       pg_stat_statements.max: '10000'
       pg_stat_statements.track: all
-      auto_explain.log_min_duration: '10s'
+      auto_explain.log_min_duration: 10s
     pg_hba:
       - host all all 10.244.0.0/16 md5
     shared_preload_libraries:
-      - "vectors.so"
+      - vchord.so
   managed:
     roles:
       - name: immich

@@ -55,8 +55,8 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           env:
-            - name: "TZ"
-              value: "America/Chicago"
+            - name: TZ
+              value: America/Chicago
           envFrom:
             - secretRef:
                 name: zigbee2mqtt-secrets

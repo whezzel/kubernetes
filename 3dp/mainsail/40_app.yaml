@@ -31,14 +31,14 @@ spec:
               name: http
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
           volumeMounts:
             - name: mainsail-config
-              mountPath: "/usr/share/nginx/html/config.json"
+              mountPath: /usr/share/nginx/html/config.json
               readOnly: false
               subPath: config.json
           resources:

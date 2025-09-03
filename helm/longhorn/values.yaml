@@ -1,57 +1,30 @@
 persistence:
-  # -- Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort")
   defaultDataLocality: best-effort
-  # -- Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete")
   reclaimPolicy: Retain
-  # -- Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the volume-head-xxx.img file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery.
   disableRevisionCounter: "false"
   recurringJobSelector:
-    # -- Setting that allows you to enable the recurring job selector for a Longhorn StorageClass.
     enable: true
-    # -- Recurring job selector for a Longhorn StorageClass. Ensure that quotes are used correctly when specifying job parameters. (Example: `[{"name":"backup", "isGroup":true}]`)
     jobList: '[{"name":"hourly","isGroup":false},{"name":"daily","isGroup":false},{"name":"weekly","isGroup":false},{"name":"monthly","isGroup":false},{"name":"yearly","isGroup":false}]'
-  # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
   removeSnapshotsDuringFilesystemTrim: ignored
 csi:
-  # -- kubelet root directory. When unspecified, Longhorn uses the default value.
   kubeletRootDir: /var/lib/kubelet
 defaultSettings:
-  # -- Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.
   createDefaultDiskLabeledNodes: true
-  # -- Default path for storing data on a host. The default value is "/var/lib/longhorn/".
-  # -- Default data locality. A Longhorn volume has data locality if a local replica of the volume exists on the same node as the pod that is using the volume.
   defaultDataLocality: best-effort
-  # -- Setting that allows scheduling on nodes with healthy replicas of the same volume. This setting is disabled by default.
   replicaSoftAntiAffinity: false
-  # -- Setting that automatically rebalances replicas when an available node is discovered.
   replicaAutoBalance: best-effort
-  # -- Default name of Longhorn static StorageClass. "storageClassName" is assigned to PVs and PVCs that are created for an existing Longhorn volume. "storageClassName" can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. "storageClassName" needs to be an existing StorageClass. The default value is "longhorn-static".
   defaultLonghornStaticStorageClass: longhorn
-  # -- Setting that allows Longhorn to schedule new replicas of a volume to nodes in the same zone as existing healthy replicas. Nodes that do not belong to any zone are treated as existing in the zone that contains healthy replicas. When identifying zones, Longhorn relies on the label "topology.kubernetes.io/zone=<Zone name of the node>" in the Kubernetes node object.
   replicaZoneSoftAntiAffinity: true
-  # -- Maximum number of replicas that can be concurrently rebuilt on each node.
   concurrentReplicaRebuildPerNodeLimit: 10
-  # -- Maximum number of engines that are allowed to concurrently upgrade on each node after Longhorn Manager is upgraded. When the value is "0", Longhorn does not automatically upgrade volume engines to the new default engine image version.
   concurrentAutomaticEngineUpgradePerNodeLimit: 5
-  # -- Flag that prevents accidental uninstallation of Longhorn.
   deletingConfirmationFlag: true
-  # -- Setting that allows you to enable and disable snapshot hashing and data integrity checks.
   snapshotDataIntegrity: fast-check
-  # -- Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check".
   fastReplicaRebuildEnabled: true
-# -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
-  # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
-  backupTarget: nfs://nas.whezzel.com:/mnt/netstorage/backups/longhorn
+  backupTarget: nfs://nas01.whezzel.com:/longhorn
 ingress:
-  # -- Setting that allows Longhorn to generate ingress records for the Longhorn UI service.
   enabled: true
-  # -- IngressClass resource that contains ingress configuration, including the name of the Ingress controller.
-  # ingressClassName can replace the kubernetes.io/ingress.class annotation used in earlier Kubernetes releases.
   ingressClassName: nginx
-  # -- Hostname of the Layer 7 load balancer.
   host: longhorn.whezzel.com
-  # -- Setting that allows you to enable TLS on ingress records.
   tls: true
-  # -- TLS secret that contains the private key and certificate to be used for TLS. This setting applies only when TLS is enabled on ingress records.
   tleSecret: ""

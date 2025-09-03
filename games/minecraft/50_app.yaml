@@ -35,7 +35,7 @@ spec:
 #                  operator: In
 #                  values:
 #                  - arch-01
-#              topologyKey: "kubernetes.io/hostname"
+#              topologyKey: kubernetes.io/hostname
 #      nodeSelector:
 #        kubernetes.io/hostname: archserv01
       containers:
@@ -73,23 +73,23 @@ spec:
             periodSeconds: 10
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: TYPE
-              value: "fabric"
+              value: fabric
             - name: VERSION
-              value: "1.21.1"
+              value: 1.21.8
             - name: EULA
               value: "TRUE"
             - name: INIT_MEMORY
-              value: "1G"
+              value: 1G
             - name: MAX_MEMORY
-              value: "8G"
+              value: 8G
             - name: MEMORY
-              value: "8G"
+              value: 8G
             - name: SET_CONTAINER
               value: "true"
             - name: CONTAINER_TIMEZONE
-              value: "America/Chicago"
+              value: America/Chicago
             - name: ENABLE_ROLLING_LOGS
               value: "true"
             #- name: DIFFICULTY
@@ -99,7 +99,7 @@ spec:
             #- name: ALLOW_FLIGHT
             #  value: "true"
             - name: SERVER_NAME
-              value: "Whezzel's World"
+              value: Whezzel's World
             - name: WHITELIST
               value: "true"
             - name: ONLINE_MODE

@@ -35,7 +35,7 @@ spec:
 #                  operator: In
 #                  values:
 #                  - arch-01
-#              topologyKey: "kubernetes.io/hostname"
+#              topologyKey: kubernetes.io/hostname
 #      nodeSelector:
 #        kubernetes.io/hostname: archserv01
       containers:
@@ -79,11 +79,11 @@ spec:
             - name: LOAD_LATEST_SAVE
               value: "true"
             - name: SAVE_NAME
-              value: "Whezzel's World"
+              value: Whezzel's World
             - name: TOKEN
-              value: "10cceb374a29.04561fdcbab607265b22b94f83848003"
+              value: 10cceb374a29.04561fdcbab607265b22b94f83848003
             - name: USERNAME
-              value: "Whezzel"
+              value: Whezzel
           volumeMounts:
             - name: factorio
               mountPath: /factorio

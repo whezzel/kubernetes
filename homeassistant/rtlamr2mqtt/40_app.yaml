@@ -53,22 +53,22 @@ spec:
           #  timeoutSeconds: 5
           #  failureThreshold: 3
           env:
-            - name: "TZ"
-              value: "America/Chicago"
-            - name: "PUID"
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
               value: "1000"
-            - name: "PGID"
+            - name: PGID
               value: "1000"
-          #  - name: "LISTEN_ONLY"
-          #    value: "yes"
-          #  - name: "RTL_MSGTYPE"
-          #    value: "all"
+#            - name: LISTEN_ONLY
+#              value: "yes"
+#            - name: RTL_MSGTYPE
+#              value: all
           volumeMounts:
             - name: usb
               mountPath: /dev/bus/usb
               readOnly: true
             - name: rtlamr2mqtt-yaml
-              mountPath: "/etc/rtlamr2mqtt.yaml"
+              mountPath: /etc/rtlamr2mqtt.yaml
               readOnly: true
               subPath: rtlamr2mqtt.yaml
           resources:

@@ -49,13 +49,13 @@ spec:
             successThreshold: 1
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
             - name: RADARR__APP__INSTANCENAME
-              value: "Radarr"
+              value: Radarr
             - name: RADARR__APP__LAUNCHBROWSER
               value: "False"
             - name: RADARR__AUTH__APIKEY
@@ -66,19 +66,19 @@ spec:
             - name: RADARR_AUTH_ENABLED
               value: "True"
             - name: RADARR__AUTH__METHOD
-              value: "External"
+              value: External
             - name: RADARR__AUTH__REQUIRED
-              value: "DisabledForLocalAddresses"
+              value: DisabledForLocalAddresses
             - name: RADARR__LOG__ANALYTICSENABLED
               value: "False"
             - name: RADARR__LOG__DBENABLED
               value: "False"
             - name: RADARR__LOG__LEVEL
-              value: "info"
+              value: info
             - name: RADARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: RADARR__UPDATE__MECHANISM
-              value: "Docker"
+              value: Docker
             - name: RADARR__SERVER__BINDADDRESS
               value: "*"
             - name: RADARR__SERVER__ENABLESSL
@@ -93,24 +93,24 @@ spec:
 #                  name: pkcs12-pass-secrets
 #                  key: pkcs12-pass
             - name: RADARR__SERVER__URLBASE
-              value: "/"
+              value: /
             - name: RADARR__SERVER__SSLPORT
               value: "8787"
             - name: RADARR__POSTGRES__HOST
-              value: "radarr-postgres-rw.postgres"
+              value: radarr-postgres-rw.postgres
             - name: RADARR__POSTGRES__PORT
               value: "5432"
             - name: RADARR__POSTGRES__USER
-              value: "radarr"
+              value: radarr
             - name: RADARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: radarr-secrets
                   key: RADARR__POSTGRES__PASSWORD
             - name: RADARR__POSTGRES__MAINDB
-              value: "radarr"
+              value: radarr
             - name: RADARR__POSTGRES__LOGDB
-              value: "logs"
+              value: logs
           volumeMounts:
             - name: nas-media
               mountPath: /media

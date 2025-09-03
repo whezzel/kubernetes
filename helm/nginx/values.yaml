@@ -17,24 +17,24 @@ controller:
             operator: In
             values:
             - controller
-        topologyKey: "kubernetes.io/hostname"
+        topologyKey: kubernetes.io/hostname
   replicaCount: 5
   service:
-    externalTrafficPolicy: "Local"
-    loadBalancerIP: 10.69.21.20
+    externalTrafficPolicy: Local
+    loadBalancerIP: 10.69.20.197
     ports:
       http: 80
       https: 443
   extraArgs:
-    default-ssl-certificate: "cert-manager/whezzel-com-tls"
+    default-ssl-certificate: cert-manager/whezzel-com-tls
   config:
-    compute-full-forwarded-for: "true"
-    use-forwarded-headers: "true"
+    compute-full-forwarded-for: true
+    use-forwarded-headers: true
     #annotations-risk-level: Critical
-    proxy-real-ip-cidr: "10.69.0.0/16,10.244.0.0/16"
+    proxy-real-ip-cidr: 10.69.0.0/16,10.244.0.0/16
     enable-real-ip: "true"
-    real-ip-header: "X-Forwarded-For"
-    set-real-ip-from: "10.69.0.0/16,10.244.0.0/16"
+    real-ip-header: X-Forwarded-For
+    set-real-ip-from: 10.69.0.0/16,10.244.0.0/16
   ingressClassResource:
     default: true
   allowSnippetAnnotations: true

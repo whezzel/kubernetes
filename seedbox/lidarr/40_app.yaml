@@ -49,13 +49,13 @@ spec:
             successThreshold: 1
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
             - name: LIDARR__APP__INSTANCENAME
-              value: "Lidarr"
+              value: Lidarr
             - name: LIDARR__APP__LAUNCHBROWSER
               value: "False"
             - name: LIDARR__AUTH__APIKEY
@@ -66,23 +66,23 @@ spec:
             - name: LIDARR_AUTH_ENABLED
               value: "True"
             - name: LIDARR__AUTH__METHOD
-              value: "External"
+              value: External
             - name: LIDARR__AUTH__REQUIRED
-              value: "DisabledForLocalAddresses"
+              value: DisabledForLocalAddresses
             - name: LIDARR__LOG__ANALYTICSENABLED
               value: "False"
             - name: LIDARR__LOG__DBENABLED
               value: "False"
             - name: LIDARR__LOG__LEVEL
-              value: "info"
+              value: info
             - name: LIDARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: LIDARR__UPDATE__MECHANISM
-              value: "Docker"
+              value: Docker
             - name: LIDARR__SERVER__BINDADDRESS
               value: "*"
             - name: LIDARR__SERVER__ENABLESSL
-              value: "false"
+              value: "true"
             - name: LIDARR__SERVER__PORT
               value: "8686"
 #            - name: LIDARR__SERVER__SSLCERTPATH
@@ -93,24 +93,24 @@ spec:
 #                  name: pkcs12-pass-secrets
 #                  key: pkcs12-pass
             - name: LIDARR__SERVER__URLBASE
-              value: "/"
+              value: /
             - name: LIDARR__SERVER__SSLPORT
               value: "6868"
             - name: LIDARR__POSTGRES__HOST
-              value: "lidarr-postgres-rw.postgres"
+              value: lidarr-postgres-rw.postgres
             - name: LIDARR__POSTGRES__PORT
               value: "5432"
             - name: LIDARR__POSTGRES__USER
-              value: "lidarr"
+              value: lidarr
             - name: LIDARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: lidarr-secrets
                   key: LIDARR__POSTGRES__PASSWORD
             - name: LIDARR__POSTGRES__MAINDB
-              value: "lidarr"
+              value: lidarr
             - name: LIDARR__POSTGRES__LOGDB
-              value: "logs"
+              value: logs
           volumeMounts:
             - name: nas-media
               mountPath: /media

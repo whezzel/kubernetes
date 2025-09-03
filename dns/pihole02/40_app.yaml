@@ -33,7 +33,7 @@ spec:
                 operator: In
                 values:
                 - pihole01
-            topologyKey: "kubernetes.io/hostname"
+            topologyKey: kubernetes.io/hostname
       containers:
         - name: pihole02
           image: pihole/pihole:latest
@@ -48,21 +48,21 @@ spec:
               protocol: UDP
               name: dns-udp
           env:
-            - name: "TZ"
-              value: "America/Chicago"
+            - name: TZ
+              value: America/Chicago
             - name: "PUID"
               value: "1000"
-            - name: "PGID"
+            - name: PGID
               value: "1000"
-            - name: "FTLCONF_DNS_UPSTREAMS"
-              value: "10.69.20.2;10.69.20.3"
-            - name: "FTLCONF_DNS_DOMAINNEEDED"
+            - name: FTLCONF_DNS_UPSTREAMS
+              value: 10.69.20.2;10.69.20.3
+            - name: FTLCONF_DNS_DOMAINNEEDED
               value: "false"
-            - name: "FTLCONF_DNS_DNSSEC"
+            - name: FTLCONF_DNS_DNSSEC
               value: "false"
-            - name: "FTLCONF_DNS_CACHE_SIZE"
+            - name: FTLCONF_DNS_CACHE_SIZE
               value: "0"
-            - name: "FTLCONF_DNS_BOGUSPRIV"
+            - name: FTLCONF_DNS_BOGUSPRIV
               value: "false"
           volumeMounts:
             - name: pihole02

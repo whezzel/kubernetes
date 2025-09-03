@@ -33,11 +33,11 @@ spec:
             - containerPort: 8080
               name: http
           env:
-            - name: "TZ"
-              value: "America/Chicago"
-            - name: "PUID"
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
               value: "1000"
-            - name: "PGID"
+            - name: PGID
               value: "1000"
 #            - name: IMMICH_PORT
 #              value: "8080"

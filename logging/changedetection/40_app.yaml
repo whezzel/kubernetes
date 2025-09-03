@@ -57,7 +57,7 @@ spec:
 #            failureThreshold: 5
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID

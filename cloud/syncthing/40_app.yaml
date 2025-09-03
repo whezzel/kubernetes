@@ -30,8 +30,8 @@ spec:
         - name: syncthing
           image: lscr.io/linuxserver/syncthing:latest
           imagePullPolicy: Always
-          #command: ["syncthing"]
-          #args: ["--reset-deltas"]
+          #command: [syncthing]
+          #args: [--reset-deltas]
           env:
             - name: TZ
               value: America/Chicago

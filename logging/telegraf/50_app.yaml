@@ -23,10 +23,10 @@ spec:
         app: telegraf-talos01
     spec:
       tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
       hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos01
@@ -45,20 +45,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS01_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -100,10 +100,10 @@ spec:
         app: telegraf-talos02
     spec:
       tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
       hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos02
@@ -122,20 +122,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS02_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -177,10 +177,10 @@ spec:
         app: telegraf-talos03
     spec:
       tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
       hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: talos03
@@ -199,20 +199,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS03_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -271,20 +271,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS04_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -343,20 +343,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS05_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -415,20 +415,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS06_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -487,20 +487,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS07_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host
@@ -559,20 +559,20 @@ spec:
                   name: telegraf-secrets
                   key: TALOS08_INFLUXDB_TOKEN
             - name: HOST_ETC
-              value: "/host/etc"
+              value: /host/etc
             - name: HOST_PROC
-              value: "/host/proc"
+              value: /host/proc
             - name: HOST_SYS
-              value: "/host/sys"
+              value: /host/sys
             - name: HOST_VAR
-              value: "/host/var"
+              value: /host/var
             - name: HOST_RUN
-              value: "/host/run"
+              value: /host/run
             - name: HOST_MOUNT_PREFIX
-              value: "/host"
+              value: /host
           volumeMounts:
             - name: telegraf
-              mountPath: "/etc/telegraf/telegraf.conf"
+              mountPath: /etc/telegraf/telegraf.conf
               readOnly: true
               subPath: telegraf.conf
             - name: host

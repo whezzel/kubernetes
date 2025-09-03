@@ -49,13 +49,13 @@ spec:
             successThreshold: 1
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
             - name: SONARR__APP__INSTANCENAME
-              value: "Sonarr"
+              value: Sonarr
             - name: SONARR__APP__LAUNCHBROWSER
               value: "False"
             - name: SONARR__AUTH__APIKEY
@@ -66,19 +66,19 @@ spec:
             - name: SONARR_AUTH_ENABLED
               value: "True"
             - name: SONARR__AUTH__METHOD
-              value: "External"
+              value: External
             - name: SONARR__AUTH__REQUIRED
-              value: "DisabledForLocalAddresses"
+              value: DisabledForLocalAddresses
             - name: SONARR__LOG__ANALYTICSENABLED
               value: "False"
             - name: SONARR__LOG__DBENABLED
               value: "False"
             - name: SONARR__LOG__LEVEL
-              value: "info"
+              value: info
             - name: SONARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: SONARR__UPDATE__MECHANISM
-              value: "Docker"
+              value: Docker
             - name: SONARR__SERVER__BINDADDRESS
               value: "*"
             - name: SONARR__SERVER__ENABLESSL
@@ -93,24 +93,24 @@ spec:
 #                  name: pkcs12-pass-secrets
 #                  key: pkcs12-pass
             - name: SONARR__SERVER__URLBASE
-              value: "/"
+              value: /
             - name: SONARR__SERVER__SSLPORT
               value: "9898"
             - name: SONARR__POSTGRES__HOST
-              value: "sonarr-postgres-rw.postgres"
+              value: sonarr-postgres-rw.postgres
             - name: SONARR__POSTGRES__PORT
               value: "5432"
             - name: SONARR__POSTGRES__USER
-              value: "sonarr"
+              value: sonarr
             - name: SONARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: sonarr-secrets
                   key: SONARR__POSTGRES__PASSWORD
             - name: SONARR__POSTGRES__MAINDB
-              value: "sonarr"
+              value: sonarr
             - name: SONARR__POSTGRES__LOGDB
-              value: "logs"
+              value: logs
           volumeMounts:
             - name: nas-media
               mountPath: /media

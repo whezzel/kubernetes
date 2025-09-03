@@ -33,7 +33,7 @@ spec:
                 operator: In
                 values:
                 - homeassistant
-            topologyKey: "kubernetes.io/hostname"
+            topologyKey: kubernetes.io/hostname
       containers:
         - name: vscode
           image: lscr.io/linuxserver/code-server:latest
@@ -62,21 +62,21 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           env:
-            - name: "TZ"
-              value: "America/Chicago"
-            - name: "PUID"
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
               value: "0"
-            - name: "PGID"
+            - name: PGID
               value: "0"
-            - name: "GIT_SSH_COMMAND"
-              value: "ssh -4"
-            - name: "DEFAULT_WORKSPACE"
-              value: "/mnt"
+            - name: GIT_SSH_COMMAND
+              value: ssh -4
+            - name: DEFAULT_WORKSPACE
+              value: /mnt
           volumeMounts:
             - name: homeassistant
               mountPath: /mnt/homeassistant
             - name: ssh-config
-              mountPath: "/etc/ssh/ssh_config"
+              mountPath: /etc/ssh/ssh_config
               subPath: ssh_config
             - name: nas-esphome
               mountPath: /mnt/esphome

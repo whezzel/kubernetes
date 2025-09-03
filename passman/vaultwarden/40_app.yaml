@@ -55,7 +55,7 @@ spec:
             successThreshold: 1
           env:
             - name: DOMAIN
-              value: "https://vaultwarden.whezzel.com"
+              value: https://vaultwarden.whezzel.com
             - name: SENDS_ALLOWED
               value: "true"
             - name: WEBSOCKET_ENABLED
@@ -67,7 +67,7 @@ spec:
             - name: SIGNUPS_VERIFY
               value: "true"
             - name: LOG_LEVEL
-              value: "info"
+              value: info
           envFrom:
             - secretRef:
                 name: vaultwarden

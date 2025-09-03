@@ -6,8 +6,8 @@ metadata:
   namespace: dns
 spec:
   tls:
-    - secretName: ""
-  ingressClassName: "nginx"
+    - {}
+  ingressClassName: nginx
   rules:
     - host: pihole01.whezzel.com
       http:

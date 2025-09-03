@@ -1,10 +1,9 @@
 global:
-  imageRegistry: ""
-  ldapDomain: "whezzel.com"
+  ldapDomain: whezzel.com
   ldapPort: 389
   sslLdapPort: 636
-nameOverride: "openldap"
-fullnameOverride: "openldap"
+nameOverride: openldap
+fullnameOverride: openldap
 replicaCount: 3
 #logLevel: info
 service:
@@ -19,12 +18,12 @@ env:
  BITNAMI_DEBUG: "true"
  LDAP_LOGLEVEL: "256"
  LDAP_REQUIRE_TLS: "false"
- LDAPTLS_REQCERT: "allow"
+ LDAPTLS_REQCERT: allow
  LDAP_ENABLE_TLS: "yes"
  LDAP_SKIP_DEFAULT_TREE: "yes"
- LDAP_ALLOW_ANON_BINDING: 'no'
+ LDAP_ALLOW_ANON_BINDING: "no"
 persistence:
-  enabled: enable
+  enabled: true
   size: 2Gi
 resources:
   requests:
@@ -32,19 +31,19 @@ resources:
     cpu: 50m
 serviceAccount:
   create: true
-  name: "openldap"
+  name: openldap
 initTLSSecret:
   tls_enabled: true
-  secret: "openldap-tls"
+  secret: openldap-tls
 ltb-passwd:
   enabled : true
   replicaCount: 1
   ingress:
     enabled: true
     hosts:
-    - "ssl-ldap2.whezzel.com"
+    - ssl-ldap2.whezzel.com
     tls:
-      - secretName: ""
+      - {}
   resources:
     requests:
       memory: 64Mi
@@ -57,7 +56,7 @@ phpldapadmin:
     hosts:
     - phpldapadmin.whezzel.com
     tls:
-      - secretName: ""
+      - {}
   resources:
     requests:
       memory: 128Mi

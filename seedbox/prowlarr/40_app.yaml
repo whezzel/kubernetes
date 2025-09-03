@@ -49,13 +49,13 @@ spec:
             successThreshold: 1
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
             - name: PROWLARR__APP__INSTANCENAME
-              value: "Prowlarr"
+              value: Prowlarr
             - name: PROWLARR__APP__LAUNCHBROWSER
               value: "False"
             - name: PROWLARR__AUTH__APIKEY
@@ -66,19 +66,19 @@ spec:
             - name: PROWLARR_AUTH_ENABLED
               value: "True"
             - name: PROWLARR__AUTH__METHOD
-              value: "External"
+              value: External
             - name: PROWLARR__AUTH__REQUIRED
-              value: "DisabledForLocalAddresses"
+              value: DisabledForLocalAddresses
             - name: PROWLARR__LOG__ANALYTICSENABLED
               value: "False"
             - name: PROWLARR__LOG__DBENABLED
               value: "False"
             - name: PROWLARR__LOG__LEVEL
-              value: "info"
+              value: info
             - name: PROWLARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: PROWLARR__UPDATE__MECHANISM
-              value: "Docker"
+              value: Docker
             - name: PROWLARR__SERVER__BINDADDRESS
               value: "*"
             - name: PROWLARR__SERVER__ENABLESSL
@@ -93,24 +93,24 @@ spec:
 #                  name: pkcs12-pass-secrets
 #                  key: pkcs12-pass
             - name: PROWLARR__SERVER__URLBASE
-              value: "/"
+              value: /
             - name: PROWLARR__SERVER__SSLPORT
               value: "6969"
             - name: PROWLARR__POSTGRES__HOST
-              value: "prowlarr-postgres-rw.postgres"
+              value: prowlarr-postgres-rw.postgres
             - name: PROWLARR__POSTGRES__PORT
               value: "5432"
             - name: PROWLARR__POSTGRES__USER
-              value: "prowlarr"
+              value: prowlarr
             - name: PROWLARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: prowlarr-secrets
                   key: PROWLARR__POSTGRES__PASSWORD
             - name: PROWLARR__POSTGRES__MAINDB
-              value: "prowlarr"
+              value: prowlarr
             - name: PROWLARR__POSTGRES__LOGDB
-              value: "logs"
+              value: logs
           volumeMounts:
             - name: nas-media
               mountPath: /media

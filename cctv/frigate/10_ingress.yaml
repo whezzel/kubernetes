@@ -9,11 +9,11 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
     nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
     nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
 spec:
   tls:
-    - secretName: ""
-  ingressClassName: "nginx"
+    - {}
+  ingressClassName: nginx
   rules:
     - host: frigate.whezzel.com
       http:

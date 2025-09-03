@@ -33,13 +33,13 @@ spec:
               name: http
           env:
             - name: SCRUTINY_WEB_INFLUXDB_HOST
-              value: "influxdb.logging"
+              value: influxdb.logging
             - name: SCRUTINY_WEB_INFLUXDB_PORT
               value: "80"
             - name: SCRUTINY_WEB_INFLUXDB_ORG
-              value: "whezzel.com"
+              value: whezzel.com
             - name: SCRUTINY_WEB_INFLUXDB_BUCKET
-              value: "scrutiny"
+              value: scrutiny
 #            - name: SCRUTINY_WEB_INFLUXDB_TLS_INSECURE_SKIP_VERIFY
 #              value: "true"
           envFrom:
@@ -81,10 +81,10 @@ spec:
         app: scrutiny-collector-talos01
     spec:
       tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
       nodeSelector:
         kubernetes.io/hostname: talos01
       containers:
@@ -98,7 +98,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -137,10 +137,10 @@ spec:
         app: scrutiny-collector-talos02
     spec:
       tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
       nodeSelector:
         kubernetes.io/hostname: talos02
       containers:
@@ -154,7 +154,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -193,10 +193,10 @@ spec:
         app: scrutiny-collector-talos03
     spec:
       tolerations:
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
+      - operator: Exists
+        effect: NoExecute
+      - operator: Exists
+        effect: NoSchedule
       nodeSelector:
         kubernetes.io/hostname: talos03
       containers:
@@ -210,7 +210,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -261,7 +261,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -312,7 +312,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -363,7 +363,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -414,7 +414,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:
@@ -465,7 +465,7 @@ spec:
               mountPath: /run/udev
               readOnly: true
             - name: scrutiny-collector
-              mountPath: "/opt/scrutiny/config/collector.yaml"
+              mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
           resources:

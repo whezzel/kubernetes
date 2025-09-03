@@ -18,6 +18,6 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "3dp,auth,cctv,cert-manager,chat,cilium,cloud,cnpg,crowdsec,default,dns,email,external-services,finance,games,gitea,harbor,homeassistant,keel,kube-system,logging,longhorn,mediaserver,nginx,openbao,passman,postgres,prometheus,reflector,seedbox,valkey"  # Control destination namespaces
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: 3dp,auth,cctv,cert-manager,chat,cilium,cloud,cnpg,crowdsec,default,dns,email,external-services,finance,games,gitea,harbor,homeassistant,keel,kube-system,logging,longhorn,mediaserver,nginx,openbao,passman,postgres,prometheus,reflector,seedbox,valkey # Control destination namespaces
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" # Auto create reflection for matching namespaces
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "3dp,auth,cctv,cert-manager,chat,cilium,cloud,cnpg,crowdsec,default,dns,email,external-services,finance,games,gitea,harbor,homeassistant,keel,kube-system,logging,longhorn,mediaserver,nginx,openbao,passman,postgres,prometheus,reflector,seedbox,valkey" # Control auto-reflection namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: 3dp,auth,cctv,cert-manager,chat,cilium,cloud,cnpg,crowdsec,default,dns,email,external-services,finance,games,gitea,harbor,homeassistant,keel,kube-system,logging,longhorn,mediaserver,nginx,openbao,passman,postgres,prometheus,reflector,seedbox,valkey # Control auto-reflection namespaces

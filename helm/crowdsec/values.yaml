@@ -3,8 +3,8 @@ container_runtime: containerd
 image:
   repository: crowdsecurity/crowdsec
   pullPolicy: Always
-  #tag: "dev"
-  tag: "latest"
+  #tag: dev
+  tag: latest
 config:
   parsers:
     s00-raw: {}
@@ -93,9 +93,9 @@ config:
   postoverflows:
     s00-enrich: {}
     s01-whitelist: {}
-  simulation.yaml: ""
-  console.yaml: ""
-  capi_whitelists.yaml: ""
+  simulation.yaml: 
+  console.yaml: 
+  capi_whitelists.yaml: 
   profiles.yaml: |
     ---
     name: default_ip_remediation
@@ -171,9 +171,9 @@ lapi:
   replicas: 2
   env:
     - name: TZ
-      value: "America/Chicago"
+      value: America/Chicago
     - name: CUSTOM_HOSTNAME
-      value: "crowdsec-lapi"
+      value: crowdsec-lapi
     - name: DISABLE_ONLINE_API
       value: "true"
     - name: BOUNCER_KEY_opnsense01
@@ -194,34 +194,34 @@ lapi:
   ingress:
     enabled: true
     annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    ingressClassName: "nginx"
-    host: "crowdsec-api.whezzel.com"
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    ingressClassName: nginx
+    host: crowdsec-api.whezzel.com
     tls:
-      - secretName: ""
+      - {}
   extraVolumes:
     - name: crowdsec-capi-credentials
       secret:
         secretName: crowdsec-capi-credentials
   extraVolumeMounts:
     - name: crowdsec-capi-credentials
-      mountPath: "/etc/crowdsec/online_api_credentials.yaml"
+      mountPath: /etc/crowdsec/online_api_credentials.yaml
       readOnly: true
       subPath: online_api_credentials.yaml
   dashboard:
     enabled: false
     ingress:
       enabled: false
-      ingressClassName: "nginx"
-      host: "crowdsec.whezzel.com"
+      ingressClassName: nginx
+      host: crowdsec.whezzel.com
       tls:
-        - secretName: ""
+        - {}
   persistentVolume:
     data:
       enabled: false
     config:
       enabled: false
-      existingClaim: "crowdsec-config"
+      existingClaim: crowdsec-config
       size: 100Mi
 #  metrics:
 #    enabled: true
@@ -230,50 +230,50 @@ lapi:
   storeCAPICredentialsInSecret: false
 agent:
   acquisition:
-    - namespace: "auth"
-      podName: "authelia-*"
-      program: "authelia"
-    - namespace: "dns"
-      podName: "bind-*"
-      program: "bind"
-    - namespace: "cloud"
-      podName: "immich-*"
-      program: "immich"
-    - namespace: "email"
-      podName: "gotify-*"
-      program: "gotify"
-    - namespace: "mediaserver"
-      podName: "jellyfin-*"
-      program: "jellyfin"
-    - namespace: "nginx"
-      podName: "nginx-ingress-nginx-controller-*"
-      program: "nginx"
-    - namespace: "passman"
-      podName: "vaultwarden-*"
-      program: "vaultwarden"
-    - namespace: "logging"
-      podName: "grafana-*"
-      program: "grafana"
-    - namespace: "homeassistant"
-      podName: "homeassistant-*"
-      program: "home-assistant"
-    - namespace: "cloud"
-      podName: "baikal-*"
-      program: "baikal"
-    - namespace: "email"
-      podName: "docker-mailserver-*"
-      program: "dovecot"
-    - namespace: "email"
-      podName: "docker-mailserver-*"
-      program: "postfix/smtpd"
-    - namespace: "email"
-      podName: "docker-mailserver-*"
-      program: "postfix/postscreen"
+    - namespace: auth
+      podName: authelia-*
+      program: authelia
+    - namespace: dns
+      podName: bind-*
+      program: bind
+    - namespace: cloud
+      podName: immich-*
+      program: immich
+    - namespace: email
+      podName: gotify-*
+      program: gotify
+    - namespace: mediaserver
+      podName: jellyfin-*
+      program: jellyfin
+    - namespace: nginx
+      podName: nginx-ingress-nginx-controller-*
+      program: nginx
+    - namespace: passman
+      podName: vaultwarden-*
+      program: vaultwarden
+    - namespace: logging
+      podName: grafana-*
+      program: grafana
+    - namespace: homeassistant
+      podName: homeassistant-*
+      program: home-assistant
+    - namespace: cloud
+      podName: baikal-*
+      program: baikal
+    - namespace: email
+      podName: docker-mailserver-*
+      program: dovecot
+    - namespace: email
+      podName: docker-mailserver-*
+      program: postfix/smtpd
+    - namespace: email
+      podName: docker-mailserver-*
+      program: postfix/postscreen
   env:
     - name: TZ
-      value: "America/Chicago"
+      value: America/Chicago
     - name: COLLECTIONS
-      value: "LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant andreasbrett/baikal crowdsecurity/postfix crowdsecurity/dovecot"
+      value: LePresidente/authelia mstilkerich/bind9 crowdsecurity/nginx gauth-fr/immich LePresidente/jellyfin Dominic-Wagner/vaultwarden LePresidente/grafana crowdsecurity/home-assistant andreasbrett/baikal crowdsecurity/postfix crowdsecurity/dovecot
     - name: LEVEL_DEBUG
       value: "false"
     - name: LEVEL_TRACE

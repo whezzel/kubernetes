@@ -11,7 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
 spec:
   tls:
-    - secretName: ""
+    - {}
   ingressClassName: nginx
   rules:
     - host: actual.whezzel.com

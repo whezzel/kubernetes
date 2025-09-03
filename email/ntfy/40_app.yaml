@@ -28,32 +28,32 @@ spec:
         - name: ntfy
           image: binwiederhier/ntfy:latest
           imagePullPolicy: Always
-          command: ["ntfy"]
-          args: ["serve"]
+          command: [ntfy]
+          args: [serve]
           ports:
             - containerPort: 80
               name: http
           env:
             - name: TZ
-              value: "America/Chicago"
+              value: America/Chicago
             - name: NTFY_BASE_URL
-              value: "https://ntfy.whezzel.com"
+              value: https://ntfy.whezzel.com
             - name: NTFY_CACHE_FILE
-              value: "/var/cache/ntfy/cache.db"
+              value: /var/cache/ntfy/cache.db
             - name: NTFY_CACHE_DURATION
-              value: "24h"
+              value: 24h
             - name: NTFY_AUTH_FILE
-              value: "/var/cache/ntfy/user.db"
+              value: /var/cache/ntfy/user.db
             - name: NTFY_BEHIND_PROXY
               value: "true"
             - name: NTFY_ATTACHMENT_CACHE_DIR
-              value: "/var/cache/ntfy/attachments"
+              value: /var/cache/ntfy/attachments
             - name: NTFY_WEB_ROOT
-              value: "/"
+              value: /
             - name: NTFY_ENABLE_LOGIN
               value: "true"
             - name: NTFY_AUTH_DEFAULT_ACCESS
-              value: "deny-all"
+              value: deny-all
           volumeMounts:
             - name: ntfy
               mountPath: /var/cache/ntfy

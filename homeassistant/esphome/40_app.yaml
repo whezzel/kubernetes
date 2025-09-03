@@ -50,16 +50,16 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           env:
-            - name: "TZ"
-              value: "America/Chicago"
-            - name: "PUID"
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
               value: "1000"
-            - name: "PGID"
+            - name: PGID
               value: "1000"
-            - name: "ESPHOME_DASHBOARD_USE_PING"
-              value: "true"
-            - name: "ESPHOME_BUILD_PATH"
-              value: "/cache"
+            - name: ESPHOME_DASHBOARD_USE_PING
+              value: "false"
+            - name: ESPHOME_BUILD_PATH
+              value: /cache
           volumeMounts:
             - name: nas-esphome
               mountPath: /config

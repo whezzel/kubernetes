@@ -48,11 +48,11 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           env:
-            - name: "TZ"
-              value: "America/Chicago"
-            - name: "PUID"
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
               value: "1000"
-            - name: "PGID"
+            - name: PGID
               value: "1000"
           volumeMounts:
             - name: mosquitto

@@ -11,8 +11,8 @@ parameters:
   numberOfReplicas: "1"
   staleReplicaTimeout: "30"
   fromBackup: ""
-  fsType: "ext4"
-  dataEngine: "v1"
-  dataLocality: "best-effort"
+  fsType: ext4
+  dataEngine: v1
+  dataLocality: best-effort
   disableRevisionCounter: "false"
-  unmapMarkSnapChainRemoved: "ignored"
+  unmapMarkSnapChainRemoved: ignored
