@@ -494,10 +494,9 @@ configMap:
     redis:
       enabled: enabled
       deploy: false
-      #host: authelia-redis.auth
       host: authelia-valkey-headless.valkey.svc.cluster.local
       port: 6379
-      username: default
+      username: autheliasync
       password:
         disabled: false
         secret_name: ~
@@ -515,7 +514,7 @@ configMap:
       high_availability:
         enabled: true
         sentinel_name: valkeyha
-        username: default
+        username: autheliasentinel
         password:
           disabled: false
           secret_name: ~
