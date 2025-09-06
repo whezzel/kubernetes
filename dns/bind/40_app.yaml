@@ -6,6 +6,11 @@ metadata:
   namespace: dns
   labels:
     app: bind
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
 spec:
   strategy:
     type: Recreate
