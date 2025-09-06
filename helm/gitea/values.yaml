@@ -1,0 +1,147 @@
+replicaCount: 1
+
+strategy:
+  type: "Recreate"
+
+service:
+  ssh:
+    type: LoadBalancer
+    port: 22
+    clusterIP:
+    externalTrafficPolicy: Local
+    annotations:
+      io.cilium/lb-ipam-pool: ip1069200
+      external-dns.alpha.kubernetes.io/hostname: git.whezzel.com
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: gitea.whezzel.com
+      paths:
+        - path: /
+  tls:
+    - {}
+
+resources: {}
+
+persistence:
+  enabled: true
+  create: true
+  mount: true
+  claimName: gitea-shared-storage
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: longhorn
+  subPath:
+  volumeName: ""
+  annotations:
+    helm.sh/resource-policy: keep
+
+gitea:
+  admin:
+    existingSecret: gitea-admin-secret
+    email: "admin@whezzel.com"
+    passwordMode: initialOnlyRequireReset
+
+  oauth:
+    - name: Authelia
+      provider: openidConnect
+      existingSecret: gitea-oidc-secret
+      autoDiscoverUrl: https://authelia.whezzel.com/.well-known/openid-configuration
+      useCustomUrls: false
+      skip-local-2fa: true
+      scopes: email profile groups
+      required-claim-name: groups
+      required-claim-value: gitea_user
+      group-claim-name: groups
+      admin-group: gitea_admin
+      restricted-group: gitea_user
+
+  config:
+    APP_NAME: "Gitea: Git with a cup of tea"
+    RUN_MODE: dev
+    server:
+      SSH_PORT: 22
+      SSH_LISTEN_PORT: 22
+      SSH_DOMAIN: git.whezzel.com
+    database:
+      DB_TYPE: postgres
+      HOST: gitea-postgres-rw.postgres.svc.cluster.local
+      NAME: gitea
+      SCHEMA: ''
+      SSL_MODE: disable
+    oauth2:
+      ENABLED: false
+    openid:
+      ENABLE_OPENID_SIGNIN: false
+      ENABLE_OPENID_SIGNUP: true
+      WHITELISTED_URIS: 'authelia.whezzel.com'
+      BLACKLISTED_URIS: ''
+    oauth2_client:
+      REGISTER_EMAIL_CONFIRM: true
+      OPENID_CONNECT_SCOPES: ''
+      ENABLE_AUTO_REGISTRATION: false
+      USERNAME: nickname
+      UPDATE_AVATAR: true
+      ACCOUNT_LINKING: auto
+    mailer:
+      ENABLED: true
+      PROTOCOL: 'smtps'
+      SUBJECT_PREFIX: '[Gitea] '
+      SMTP_ADDR: 'smtp.whezzel.com'
+      SMTP_PORT: '465'
+      FORCE_TRUST_SERVER_CERT: false
+      #USE_CLIENT_CERT: false
+      #CLIENT_CERT_FILE: custom/mailer/cert.pem
+      #CLIENT_KEY_FILE: custom/mailer/key.pem
+      FROM: 'Gitea <hello@whezzel.com>'
+      USER: 'hello@whezzel.com'
+    service:
+      REGISTER_EMAIL_CONFIRM: true
+      DISABLE_REGISTRATION: false
+      ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+      ENABLE_PASSWORD_SIGNIN_FORM: false
+      ENABLE_NOTIFY_MAIL: true
+      SHOW_REGISTRATION_BUTTON: false
+    cache:
+      ADAPTER: redis
+      INTERVAL: 60
+      ITEM_TTL: 16h
+      last_commit:
+        ITEM_TTL: 8760h
+        COMMITS_COUNT: 1000
+    session:
+      PROVIDER: redis
+      COOKIE_NAME: i_like_gitea
+      COOKIE_SECURE: ''
+      GC_INTERVAL_TIME: 86400
+      SESSION_LIFE_TIME: 86400
+      DOMAIN: whezzel.com
+      SAME_SITE: lax
+    queue:
+      TYPE: redis
+    time:
+      DEFAULT_UI_LOCATION: 'America/Chicago'
+    cron:
+      ENABLED: false
+  additionalConfigSources:
+    - secret:
+        secretName: gitea-config-secret
+
+valkey-cluster:
+  enabled: false
+valkey:
+  enabled: false
+postgresql-ha:
+  enabled: false
+postgresql:
+  enabled: false
+      
+checkDeprecation: true
+test:
+  enabled: true
+  image:
+    name: busybox
+    tag: latest
