@@ -5,7 +5,8 @@ Reflector is a Kubernetes addon designed to monitor changes to resources (secret
 ```bash
 helm upgrade --install reflector reflector \
     --repo https://emberstack.github.io/helm-charts \
-    --namespace reflector
+    --namespace reflector \
+    --values ./helm/reflector/values.yaml
 ```
 
 ## Dump chart values
