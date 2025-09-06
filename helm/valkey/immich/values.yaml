@@ -1,0 +1,30 @@
+image:
+  pullPolicy: Always
+  tag: ""
+securityContext:
+  seccompProfile:
+    type: RuntimeDefault
+
+extraSecretValkeyConfigs: immich-valkey-secrets
+
+extraSecretSentinelConfigs: immich-sentinel-secrets
+
+haMode:
+  enabled: true
+  useDnsNames: false
+  replicas: 3
+  quorum: 2
+  downAfterMilliseconds: 30000
+  failoverTimeout: 180000
+  parallelSyncs: 1
+  masterAliveTestTimeout: 2
+  failoverWait: 35
+  dnsFailureWait: 15
+  keepOldLogs: false
+
+storage:
+  persistentVolumeClaimName:
+  volumeName: data
+  requestedSize: 2Gi
+  className: longhorn
+  keepPvc: false
