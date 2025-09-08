@@ -24,24 +24,9 @@ spec:
       labels:
         app: minecraft
     spec:
-#      affinity:
-#        podAffinity:
-#          preferredDuringSchedulingIgnoredDuringExecution:
-#          - weight: 100
-#            podAffinityTerm:
-#              labelSelector:
-#                matchExpressions:
-#                - key: app
-#                  operator: In
-#                  values:
-#                  - arch-01
-#              topologyKey: kubernetes.io/hostname
-#      nodeSelector:
-#        kubernetes.io/hostname: archserv01
       containers:
         - name: minecraft
           image: itzg/minecraft-server:latest
-          #imagePullPolicy: IfNotPresent
           imagePullPolicy: Always
           stdin: true
           tty: true
