@@ -81,7 +81,7 @@ spec:
           resources:
             requests:
               memory: 2Gi
-              cpu: 250m
+              cpu: 1000m
       volumes:
         - name: factorio
           persistentVolumeClaim:
