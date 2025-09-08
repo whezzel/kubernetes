@@ -77,7 +77,7 @@ spec:
             claimName: frigate
         - name: nas-frigate
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /frigate
         - name: cache
           emptyDir:

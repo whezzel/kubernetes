@@ -93,5 +93,5 @@ spec:
             name: ssh-config
         - name: nas-esphome
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /esphome

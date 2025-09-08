@@ -6,7 +6,7 @@ metadata:
   namespace: external-services
 spec:
   type: ExternalName
-  externalName: nas01.whezzel.com
+  externalName: nas01-20.whezzel.com
 ---
 apiVersion: v1
 kind: Service

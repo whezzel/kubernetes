@@ -21,7 +21,7 @@ defaultSettings:
   snapshotDataIntegrity: fast-check
   fastReplicaRebuildEnabled: true
 defaultBackupStore:
-  backupTarget: nfs://nas01.whezzel.com:/longhorn
+  backupTarget: nfs://nas01-20.whezzel.com:/longhorn
 ingress:
   enabled: true
   ingressClassName: nginx

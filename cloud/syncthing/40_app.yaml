@@ -89,9 +89,9 @@ spec:
             claimName: syncthing
         - name: nas-3amigos
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /3amigos
         - name: nas-syncthing
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /syncthing
