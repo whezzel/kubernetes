@@ -20,6 +20,9 @@ controller:
         topologyKey: kubernetes.io/hostname
   replicaCount: 5
   service:
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: nginx.whezzel.com
+    type: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.69.20.197
     ports:
@@ -37,4 +40,3 @@ controller:
     set-real-ip-from: 10.69.0.0/16,10.244.0.0/16
   ingressClassResource:
     default: true
-  allowSnippetAnnotations: true
