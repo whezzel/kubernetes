@@ -66,9 +66,15 @@ spec:
             - name: SAVE_NAME
               value: Whezzel's World
             - name: TOKEN
-              value: 10cceb374a29.04561fdcbab607265b22b94f83848003
+              valueFrom:
+                secretKeyRef:
+                  name: factorio-secrets
+                  key: TOKEN
             - name: USERNAME
-              value: Whezzel
+              valueFrom:
+                secretKeyRef:
+                  name: factorio-secrets
+                  key: USERNAME
           volumeMounts:
             - name: factorio
               mountPath: /factorio
