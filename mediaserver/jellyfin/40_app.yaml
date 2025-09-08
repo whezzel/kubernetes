@@ -36,6 +36,8 @@ spec:
           ports:
             - containerPort: 8096
               name: http
+            - containerPort: 8920
+              name: https
           livenessProbe:
             httpGet:
               path: /
@@ -78,6 +80,14 @@ spec:
               mountPath: /media
             - name: jellyfin-config
               mountPath: /config
+            - name: jellyfin-selfsigned-pkcs12-tls
+              mountPath: /tls/keystore.p12
+              readOnly: true
+              subPath: keystore.p12
+            - name: selfsigned-ca
+              mountPath: /etc/ssl/certs/selfsigned-ca.crt
+              readOnly: true
+              subPath: tls.crt
           resources:
             requests:
               memory: 1800Mi
@@ -85,8 +95,14 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media
         - name: jellyfin-config
           persistentVolumeClaim:
             claimName: jellyfin
+        - name: jellyfin-selfsigned-pkcs12-tls
+          secret:
+            secretName: jellyfin-selfsigned-pkcs12-tls
+        - name: selfsigned-ca
+          secret:
+            secretName: selfsigned-ca

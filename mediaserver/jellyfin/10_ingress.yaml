@@ -6,11 +6,13 @@ metadata:
   namespace: mediaserver
   labels:
     3amigos_tunnel: 'true'
-#  annotations:
+  annotations:
 #    nginx.ingress.kubernetes.io/auth-method: GET
 #    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
 #    nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
 #    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
 spec:
   tls:
     - {}
@@ -25,4 +27,4 @@ spec:
               service:
                 name: jellyfin
                 port:
-                  name: http
+                  name: https
