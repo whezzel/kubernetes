@@ -29,10 +29,13 @@ spec:
           ports:
             - containerPort: 8989
               name: http
+            - containerPort: 9898
+              name: https
           livenessProbe:
             httpGet:
               path: /ping
               port: http
+              scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -42,6 +45,7 @@ spec:
             httpGet:
               path: /ping
               port: http
+              scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
@@ -82,16 +86,16 @@ spec:
             - name: SONARR__SERVER__BINDADDRESS
               value: "*"
             - name: SONARR__SERVER__ENABLESSL
-              value: "false"
+              value: "true"
             - name: SONARR__SERVER__PORT
               value: "8989"
-#            - name: SONARR__SERVER__SSLCERTPATH
-#              value: "/tls/keystore.p12"
-#            - name: SONARR__SERVER__SSLCERTPASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: pkcs12-pass-secrets
-#                  key: pkcs12-pass
+            - name: SONARR__SERVER__SSLCERTPATH
+              value: /tls/keystore.p12
+            - name: SONARR__SERVER__SSLCERTPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sonarr-selfsigned-pkcs12-secret
+                  key: password
             - name: SONARR__SERVER__URLBASE
               value: /
             - name: SONARR__SERVER__SSLPORT
@@ -116,6 +120,14 @@ spec:
               mountPath: /media
             - name: nas-mediacover
               mountPath: /config/MediaCover
+            - name: sonarr-selfsigned-pkcs12-tls
+              mountPath: /tls/keystore.p12
+              readOnly: true
+              subPath: keystore.p12
+            - name: selfsigned-ca
+              mountPath: /etc/ssl/certs/selfsigned-ca.crt
+              readOnly: true
+              subPath: tls.crt
           resources:
             requests:
               memory: 256Mi
@@ -123,9 +135,15 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media
         - name: nas-mediacover
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media/tv_shows/MediaCover
+        - name: sonarr-selfsigned-pkcs12-tls
+          secret:
+            secretName: sonarr-selfsigned-pkcs12-tls
+        - name: selfsigned-ca
+          secret:
+            secretName: selfsigned-ca

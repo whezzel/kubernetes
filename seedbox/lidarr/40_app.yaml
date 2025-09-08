@@ -29,6 +29,8 @@ spec:
           ports:
             - containerPort: 8686
               name: http
+            - containerPort: 6868
+              name: https
           livenessProbe:
             httpGet:
               path: /ping
@@ -85,13 +87,13 @@ spec:
               value: "true"
             - name: LIDARR__SERVER__PORT
               value: "8686"
-#            - name: LIDARR__SERVER__SSLCERTPATH
-#              value: "/tls/keystore.p12"
-#            - name: LIDARR__SERVER__SSLCERTPASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: pkcs12-pass-secrets
-#                  key: pkcs12-pass
+            - name: LIDARR__SERVER__SSLCERTPATH
+              value: /tls/keystore.p12
+            - name: LIDARR__SERVER__SSLCERTPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lidarr-selfsigned-pkcs12-secret
+                  key: password
             - name: LIDARR__SERVER__URLBASE
               value: /
             - name: LIDARR__SERVER__SSLPORT
@@ -116,6 +118,14 @@ spec:
               mountPath: /media
             - name: nas-mediacover
               mountPath: /config/MediaCover
+            - name: lidarr-selfsigned-pkcs12-tls
+              mountPath: /tls/keystore.p12
+              readOnly: true
+              subPath: keystore.p12
+            - name: selfsigned-ca
+              mountPath: /etc/ssl/certs/selfsigned-ca.crt
+              readOnly: true
+              subPath: tls.crt
           resources:
             requests:
               memory: 256Mi
@@ -123,9 +133,15 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media
         - name: nas-mediacover
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media/music/MediaCover
+        - name: lidarr-selfsigned-pkcs12-tls
+          secret:
+            secretName: lidarr-selfsigned-pkcs12-tls
+        - name: selfsigned-ca
+          secret:
+            secretName: selfsigned-ca

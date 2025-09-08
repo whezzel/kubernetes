@@ -29,6 +29,8 @@ spec:
           ports:
             - containerPort: 7878
               name: http
+            - containerPort: 8787
+              name: https
           livenessProbe:
             httpGet:
               path: /ping
@@ -82,16 +84,16 @@ spec:
             - name: RADARR__SERVER__BINDADDRESS
               value: "*"
             - name: RADARR__SERVER__ENABLESSL
-              value: "false"
+              value: "true"
             - name: RADARR__SERVER__PORT
               value: "7878"
-#            - name: RADARR__SERVER__SSLCERTPATH
-#              value: "/tls/keystore.p12"
-#            - name: RADARR__SERVER__SSLCERTPASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: pkcs12-pass-secrets
-#                  key: pkcs12-pass
+            - name: RADARR__SERVER__SSLCERTPATH
+              value: /tls/keystore.p12
+            - name: RADARR__SERVER__SSLCERTPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-selfsigned-pkcs12-secret
+                  key: password
             - name: RADARR__SERVER__URLBASE
               value: /
             - name: RADARR__SERVER__SSLPORT
@@ -116,6 +118,14 @@ spec:
               mountPath: /media
             - name: nas-mediacover
               mountPath: /config/MediaCover
+            - name: radarr-selfsigned-pkcs12-tls
+              mountPath: /tls/keystore.p12
+              readOnly: true
+              subPath: keystore.p12
+            - name: selfsigned-ca
+              mountPath: /etc/ssl/certs/selfsigned-ca.crt
+              readOnly: true
+              subPath: tls.crt
           resources:
             requests:
               memory: 256Mi
@@ -123,9 +133,15 @@ spec:
       volumes:
         - name: nas-media
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media
         - name: nas-mediacover
           nfs:
-            server: nas01.whezzel.com
+            server: nas01-20.whezzel.com
             path: /media/movies/MediaCover
+        - name: radarr-selfsigned-pkcs12-tls
+          secret:
+            secretName: radarr-selfsigned-pkcs12-tls
+        - name: selfsigned-ca
+          secret:
+            secretName: selfsigned-ca
