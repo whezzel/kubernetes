@@ -29,21 +29,27 @@ spec:
           image: eclipse-mosquitto:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 1883
-              name: mqtt
-#            - containerPort: 9001
-#              name: websocket
+#            - containerPort: 1883
+#              name: mqtt
+            - containerPort: 8883
+              name: mqtts
           livenessProbe:
-            tcpSocket:
-              port: mqtt
+            exec:
+              command:
+                - sh
+                - -c
+                - 'pidof mosquitto || exit 1'
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 5
           readinessProbe:
-            tcpSocket:
-              port: mqtt
-            initialDelaySeconds: 10
+            exec:
+              command:
+                - sh
+                - -c
+                - 'pidof mosquitto || exit 1'
+            initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
@@ -64,6 +70,8 @@ spec:
             - name: mosquitto
               mountPath: /mosquitto/log
               subPath: log
+            - name: certs
+              mountPath: /ssl
           resources:
             requests:
               memory: 64Mi
@@ -72,3 +80,6 @@ spec:
         - name: mosquitto
           persistentVolumeClaim:
             claimName: mosquitto
+        - name: certs
+          secret:
+            secretName: mosquitto-tls

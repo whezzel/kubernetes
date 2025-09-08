@@ -10,14 +10,14 @@ spec:
   selector:
     app: mosquitto
   ports:
+#    - protocol: TCP
+#      name: mqtt
+#      port: 1883
+#      targetPort: mqtt
     - protocol: TCP
-      name: mqtt
-      port: 1883
-      targetPort: mqtt
-    - protocol: TCP
-      name: websocket
-      port: 9001
-      targetPort: websocket
+      name: mqtts
+      port: 8883
+      targetPort: mqtts
   type: LoadBalancer
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local

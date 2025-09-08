@@ -31,27 +31,28 @@ spec:
           securityContext:
             privileged: true
           image: allangood/rtlamr2mqtt:latest
+          #image: allangood/rtlamr2mqtt:2.3.4
           imagePullPolicy: Always
-          #livenessProbe:
-          #  exec:
-          #    command:
-          #      - sh
-          #      - -c
-          #      - 'pgrep rtl_433 || exit 1'
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 5
-          #readinessProbe:
-          #  exec:
-          #    command:
-          #      - sh
-          #      - -c
-          #      - 'pgrep rtl_433 || exit 1'
-          #  initialDelaySeconds: 15
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - 'pidof rtlamr || exit 1'
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - 'pidof rtlamr || exit 1'
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
             - name: TZ
               value: America/Chicago
@@ -71,6 +72,10 @@ spec:
               mountPath: /etc/rtlamr2mqtt.yaml
               readOnly: true
               subPath: rtlamr2mqtt.yaml
+            - name: selfsigned-ca
+              mountPath: /etc/ssl/certs/selfsigned-ca.crt
+              readOnly: true
+              subPath: tls.crt
           resources:
             requests:
               memory: 256Mi
@@ -82,3 +87,6 @@ spec:
         - name: rtlamr2mqtt-yaml
           configMap:
             name: rtlamr2mqtt-yaml
+        - name: selfsigned-ca
+          secret:
+            secretName: selfsigned-ca
