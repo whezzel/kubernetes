@@ -619,6 +619,30 @@ configMap:
         allowed_origins_from_client_redirect_uris: false
       clients:
         # k run --image authelia/authelia:latest authelia -it --rm --command -- authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
+        - client_id: actual
+          client_name: Actual
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.actual.value
+          public: false
+          authorization_policy: two_factor
+          consent_mode: implicit
+          require_pkce: false
+          pkce_challenge_method: ''
+          redirect_uris:
+            - https://actual.whezzel.com/openid/callback
+          scopes:
+            - openid
+            - profile
+            - groups
+            - email
+          response_types:
+            - 'code'
+          grant_types:
+            - 'authorization_code'
+          access_token_signed_response_alg: none
+          userinfo_signed_response_alg: none
+          token_endpoint_auth_method: client_secret_basic
         - client_id: dms
           client_name: dms
           client_secret:
@@ -690,7 +714,7 @@ configMap:
           authorization_policy: two_factor
           consent_mode: implicit
           require_pkce: false
-          pkce_challenge_method:
+          pkce_challenge_method: S256
           redirect_uris:
             - https://harbor.whezzel.com/c/oidc/callback
           scopes:
