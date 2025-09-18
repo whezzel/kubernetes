@@ -99,3 +99,51 @@ spec:
                 name: arch01
                 port:
                   number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ntop01
+  namespace: external-services
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
+spec:
+  tls:
+    - {}
+  ingressClassName: nginx
+  rules:
+    - host: ntop01.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: opnsense01
+                port:
+                  number: 3001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ntop02
+  namespace: external-services
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
+spec:
+  tls:
+    - {}
+  ingressClassName: nginx
+  rules:
+    - host: ntop02.whezzel.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: opnsense02
+                port:
+                  number: 3001

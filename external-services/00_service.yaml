@@ -16,3 +16,21 @@ metadata:
 spec:
   type: ExternalName
   externalName: arch01.whezzel.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opnsense01
+  namespace: external-services
+spec:
+  type: ExternalName
+  externalName: opnsense01.whezzel.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opnsense02
+  namespace: external-services
+spec:
+  type: ExternalName
+  externalName: opnsense02.whezzel.com
