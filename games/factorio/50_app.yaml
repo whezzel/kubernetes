@@ -78,6 +78,8 @@ spec:
           volumeMounts:
             - name: factorio
               mountPath: /factorio
+            - name: nas
+              mountPath: /mnt/temp
           resources:
             requests:
               memory: 2Gi
@@ -86,3 +88,7 @@ spec:
         - name: factorio
           persistentVolumeClaim:
             claimName: factorio
+        - name: nas
+          nfs:
+            server: nas01-20.whezzel.com
+            path: /temp
