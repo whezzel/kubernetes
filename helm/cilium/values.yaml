@@ -7,7 +7,7 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 l2announcements:
-  enabled: true
+  enabled: false
 ipam:
   mode: kubernetes
 k8sServiceHost: localhost
