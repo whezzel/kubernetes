@@ -62,7 +62,7 @@ spec:
             - name: TYPE
               value: fabric
             - name: VERSION
-              value: 1.21.9
+              value: 1.21.10
             - name: EULA
               value: "TRUE"
             - name: INIT_MEMORY
