@@ -89,7 +89,30 @@ spec:
               value: "true"
             - name: ONLINE_MODE
               value: 'true'
-
+            - name: MODRINTH_PROJECTS
+              value: |
+                advanced-shulkerboxes:beta
+                appleskin
+                architectury-api
+                badpackets
+                chunky
+                cloth-config
+                clumps
+                essentialaddons
+                fabric-api
+                fabric-language-kotlin
+                invview
+                lithium
+                luckperms
+                placeholder-api
+                servux
+                syncmatica
+                worldedit:beta
+                wthit
+            - name: MODS
+              value: |
+                https://github.com/gnembon/fabric-carpet/releases/download/1.4.188/fabric-carpet-1.21.10-1.4.188+v251016.jar
+                https://cdn.modrinth.com/data/uXXizFIs/versions/CtMpt7Jr/ferritecore-8.0.0-fabric.jar
           volumeMounts:
             - name: minecraft
               mountPath: /data
