@@ -19,10 +19,7 @@ data:
       ha_autodiscovery_topic: homeassistant
       base_topic: rtlamr
       host: mosquitto-tcp.homeassistant.svc.cluster.local
-      port: 8883
-      tls_enabled: true
-      tls_ca: "/etc/ssl/certs/selfsigned-ca.crt"
-      tls_insecure: true
+      port: 1883
       user: rtlamr2mqtt
       password: DZt*2K43q^KjAZ&9o8z*#gsLQ*3G&h8QW@R$9r#p^tonR9d2
 

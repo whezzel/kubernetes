@@ -64,10 +64,6 @@ spec:
               readOnly: true
             - name: zwavejs2mqtt
               mountPath: /usr/src/app/store
-            - name: selfsigned-ca
-              mountPath: /etc/ssl/certs/selfsigned-ca.crt
-              readOnly: true
-              subPath: tls.crt
           resources:
             requests:
               memory: 128Mi
@@ -79,6 +75,3 @@ spec:
         - name: zwavejs2mqtt
           persistentVolumeClaim:
             claimName: zwavejs2mqtt
-        - name: selfsigned-ca
-          secret:
-            secretName: selfsigned-ca

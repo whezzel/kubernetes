@@ -66,10 +66,6 @@ spec:
               readOnly: true
             - name: zigbee2mqtt
               mountPath: /app/data
-            - name: selfsigned-ca
-              mountPath: /etc/ssl/certs/selfsigned-ca.crt
-              readOnly: true
-              subPath: tls.crt
           resources:
             requests:
               memory: 64Mi
@@ -81,6 +77,3 @@ spec:
         - name: zigbee2mqtt
           persistentVolumeClaim:
             claimName: zigbee2mqtt
-        - name: selfsigned-ca
-          secret:
-            secretName: selfsigned-ca

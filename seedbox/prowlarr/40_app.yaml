@@ -29,8 +29,6 @@ spec:
           ports:
             - containerPort: 9696
               name: http
-            - containerPort: 6969
-              name: https
           livenessProbe:
             httpGet:
               path: /ping
@@ -84,16 +82,9 @@ spec:
             - name: PROWLARR__SERVER__BINDADDRESS
               value: "*"
             - name: PROWLARR__SERVER__ENABLESSL
-              value: "true"
+              value: "false"
             - name: PROWLARR__SERVER__PORT
               value: "9696"
-            - name: PROWLARR__SERVER__SSLCERTPATH
-              value: /tls/keystore.p12
-            - name: PROWLARR__SERVER__SSLCERTPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: prowlarr-selfsigned-pkcs12-secret
-                  key: password
             - name: PROWLARR__SERVER__URLBASE
               value: /
             - name: PROWLARR__SERVER__SSLPORT
@@ -116,14 +107,6 @@ spec:
           volumeMounts:
             - name: nas-media
               mountPath: /media
-            - name: prowlarr-selfsigned-pkcs12-tls
-              mountPath: /tls/keystore.p12
-              readOnly: true
-              subPath: keystore.p12
-            - name: selfsigned-ca
-              mountPath: /etc/ssl/certs/selfsigned-ca.crt
-              readOnly: true
-              subPath: tls.crt
           resources:
             requests:
               memory: 256Mi
@@ -133,9 +116,3 @@ spec:
           nfs:
             server: nas01-20.whezzel.com
             path: /media
-        - name: prowlarr-selfsigned-pkcs12-tls
-          secret:
-            secretName: prowlarr-selfsigned-pkcs12-tls
-        - name: selfsigned-ca
-          secret:
-            secretName: selfsigned-ca

@@ -67,10 +67,6 @@ spec:
               mountPath: /dev/shm
             - name: tmp
               mountPath: /tmp
-            - name: selfsigned-ca
-              mountPath: /etc/ssl/certs/selfsigned-ca.crt
-              readOnly: true
-              subPath: tls.crt
           resources:
             requests:
               memory: 3Gi
@@ -91,6 +87,3 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 1Gi
-        - name: selfsigned-ca
-          secret:
-            secretName: selfsigned-ca
