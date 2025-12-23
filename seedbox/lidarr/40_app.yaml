@@ -12,7 +12,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/pollSchedule: "@every 10m"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: lidarr
