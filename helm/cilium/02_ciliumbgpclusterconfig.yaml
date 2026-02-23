@@ -14,11 +14,11 @@ spec:
       peers:
         - name: opnsense01
           peerASN: 64512
-          peerAddress: 10.69.20.2
+          peerAddress: 10.69.21.2
           peerConfigRef:
             name: "bgp-peer"
         - name: opnsense02
           peerASN: 64512
-          peerAddress: 10.69.20.3
+          peerAddress: 10.69.21.3
           peerConfigRef:
             name: "bgp-peer"

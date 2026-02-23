@@ -6,17 +6,5 @@ metadata:
   namespace: cilium
 spec:
   blocks:
-  - cidr: 10.69.21.0/24
-  serviceSelector:
-    matchLabels:
-      lb-pool: ip1069210
----
-apiVersion: cilium.io/v2
-kind: CiliumLoadBalancerIPPool
-metadata:
-  name: ip1069200
-  namespace: cilium
-spec:
-  blocks:
-    - start: 10.69.20.151
-      stop: 10.69.20.200
+    - start: 10.69.21.151
+      stop: 10.69.21.200
