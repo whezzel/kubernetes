@@ -116,8 +116,6 @@ spec:
           volumeMounts:
             - name: minecraft
               mountPath: /data
-            - name: minecraft-bluemap
-              mountPath: /data/bluemap
             - name: nas
               mountPath: /mnt/temp
           resources:
@@ -128,9 +126,6 @@ spec:
         - name: minecraft
           persistentVolumeClaim:
             claimName: minecraft
-        - name: minecraft-bluemap
-          persistentVolumeClaim:
-            claimName: minecraft-bluemap
         - name: nas
           nfs:
             server: nas01-20.whezzel.com
