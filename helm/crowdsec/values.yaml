@@ -172,10 +172,6 @@ lapi:
   env:
     - name: TZ
       value: America/Chicago
-    - name: CUSTOM_HOSTNAME
-      value: crowdsec-lapi
-    - name: DISABLE_ONLINE_API
-      value: "true"
     - name: BOUNCER_KEY_opnsense01
       valueFrom:
         secretKeyRef:
