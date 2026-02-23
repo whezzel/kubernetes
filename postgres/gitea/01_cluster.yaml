@@ -13,7 +13,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   postgresql:
     parameters:
-      shared_buffers: 256MB
+      shared_buffers: 64MB
       pg_stat_statements.max: '10000'
       pg_stat_statements.track: all
       auto_explain.log_min_duration: '10s'
@@ -68,5 +68,7 @@ spec:
   enablePDB: true
   resources:
     requests:
+      memory: 128Mi
+      cpu: 50m
+    limits:
       memory: 512Mi
-      cpu: 250m
