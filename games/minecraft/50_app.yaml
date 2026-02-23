@@ -93,26 +93,31 @@ spec:
               value: |
                 advanced-shulkerboxes:beta
                 appleskin
-                architectury-api
                 badpackets
-                chunky
-                cloth-config
+                c2me-fabric:alpha
+                carpet
                 clumps
+                disconnect-packet-fix
                 essentialaddons
                 fabric-api
+                ferrite-core
+                jade:beta
+                jei:beta
                 fabric-language-kotlin
-                invview
                 lithium
                 luckperms
-                placeholder-api
+                no-chat-reports
+                scalablelux
                 servux
                 syncmatica
                 worldedit:beta
-                wthit
-            - name: MODS
-              value: |
-                https://github.com/gnembon/fabric-carpet/releases/download/1.4.188/fabric-carpet-1.21.10-1.4.188+v251016.jar
-                https://cdn.modrinth.com/data/uXXizFIs/versions/CtMpt7Jr/ferritecore-8.0.0-fabric.jar
+#                architectury-api
+#                cloth-config
+#                placeholder-api
+#            - name: MODS
+#              values: |
+#               https://cdn.modrinth.com/data/rd9rKuJT/versions/Gv74xveQ/disconnect-packet-fix-fabric-2.0.0.jar
+#               https://github.com/gnembon/fabric-carpet/releases/download/1.4.193/fabric-carpet-1.21.11-1.4.193+v251211.jar
           volumeMounts:
             - name: minecraft
               mountPath: /data
