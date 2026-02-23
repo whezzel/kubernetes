@@ -29,10 +29,8 @@ spec:
           image: eclipse-mosquitto:latest
           imagePullPolicy: Always
           ports:
-#            - containerPort: 1883
-#              name: mqtt
-            - containerPort: 8883
-              name: mqtts
+            - containerPort: 1883
+              name: mqtt
           livenessProbe:
             exec:
               command:
@@ -56,10 +54,6 @@ spec:
           env:
             - name: TZ
               value: America/Chicago
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
           volumeMounts:
             - name: mosquitto
               mountPath: /mosquitto/config
