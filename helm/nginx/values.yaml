@@ -24,7 +24,7 @@ controller:
       external-dns.alpha.kubernetes.io/hostname: nginx.whezzel.com
     type: LoadBalancer
     externalTrafficPolicy: Local
-    loadBalancerIP: 10.69.20.197
+    loadBalancerIP: 10.69.21.197
     ports:
       http: 80
       https: 443
