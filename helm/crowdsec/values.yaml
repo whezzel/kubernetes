@@ -57,7 +57,7 @@ config:
           AUTH_FUNC: '[A-Za-z0-9_]+(\(\))?'
         nodes:
           - grok:
-              pattern: "auth: %{DATA:auth_type}\\(%{DATA:dovecot_user},%{IP:dovecot_remote_ip},<%{DATA:auth_func}>\\):%{DATA:dovecot_login_message}$"
+              pattern: "auth: %{DATA:auth_type}\\(%{DATA:dovecot_user},%{IP:dovecot_remote_ip},<%{AUTH_FUNC:auth_func}>\\):%{DATA:dovecot_login_message}$"
               apply_on: message
           - grok:
               pattern: "auth: %{DATA:auth_type}\\(%{DATA:dovecot_user},%{IP:dovecot_remote_ip}\\): (%{AUTH_FUNC:auth_func} failed: )?%{DATA:dovecot_login_message}$"
