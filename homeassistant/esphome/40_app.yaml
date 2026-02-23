@@ -60,6 +60,8 @@ spec:
               value: "false"
             - name: ESPHOME_BUILD_PATH
               value: /cache
+            - name: PLATFORMIO_CORE_DIR
+              value: /cache/.platformio
           volumeMounts:
             - name: nas-esphome
               mountPath: /config
@@ -77,24 +79,6 @@ spec:
           nfs:
             server: nas01-20.whezzel.com
             path: /esphome
-        - name: tmp-cache
-          emptyDir:
-            medium: Memory
-            sizeLimit: 4Gi
         - name: esphome-cache
           persistentVolumeClaim:
             claimName: esphome-cache
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: esphome-cache
-  namespace: homeassistant
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn-db
-  resources:
-    requests:
-      storage: 12Gi
