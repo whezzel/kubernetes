@@ -77,9 +77,13 @@ spec:
               mountPath: /mnt/homeassistant
             - name: ssh-config
               mountPath: /etc/ssh/ssh_config
-              subPath: ssh_config
-            - name: nas-esphome
-              mountPath: /mnt/esphome
+              subPath: ssh-config
+            - name: vscode-config
+              mountPath: /config/data/User/settings.json
+              subPath: vscode-config
+            - name: ssh-key
+              mountPath: /config/.ssh/vscode_id_ed25519
+              subPath: ssh-key
           resources:
             requests:
               memory: 300Mi
@@ -90,8 +94,11 @@ spec:
             claimName: homeassistant
         - name: ssh-config
           configMap:
-            name: ssh-config
-        - name: nas-esphome
-          nfs:
-            server: nas01-20.whezzel.com
-            path: /esphome
+            name: vscode-configmap
+        - name: vscode-config
+          configMap:
+            name: vscode-configmap
+        - name: ssh-key
+          secret:
+            secretName: vscode-secrets
+            defaultMode: 0600
