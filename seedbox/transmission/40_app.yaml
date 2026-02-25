@@ -281,7 +281,7 @@ spec:
             - name: TRANSMISSION_RATIO_LIMIT
               value: "2"
             - name: TRANSMISSION_RATIO_LIMIT_ENABLED
-              value: "true"
+              value: "false"
           volumeMounts:
             - name: nas-media
               mountPath: /media/downloads
