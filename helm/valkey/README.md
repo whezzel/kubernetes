@@ -4,11 +4,11 @@ Groundhog2k Valkey is a Helm chart for deploying Valkey, a high-performance key/
 
 ## Deploy Groundhog2k valkey chart
 ```bash
-helm upgrade --install valkey valkey \
+helm upgrade --install <APPNAME>-valkey valkey \
     --repo https://groundhog2k.github.io/helm-charts \
     --namespace valkey \
     --create-namespace \
-    --values ./helm/valkey/values.yaml
+    --values ./helm/valkey/<APPNAME>/values.yaml
 ```
 
 ## Dump chart values
