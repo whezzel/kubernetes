@@ -28,38 +28,25 @@ spec:
           name: sonarr-postgres-app-user
   bootstrap:
     recovery:
-      database: sonarr
-      owner: sonarr
-      source: sonarr-postgres
-      secret:
-        name: sonarr-postgres-app-user
-      #backup:
-      #  name: manual-sonarr-postgres
-      #recoveryTarget:
-      #  targetTime: 2025-05-04 23:00:00+00:00 # Time in UTC
+      volumeSnapshots:
+        storage:
+          kind: PersistentVolumeClaim
+          name: sonarr-postgres-dr
+          apiGroup: ""
     #initdb:
     #  database: sonarr
     #  owner: sonarr
     #  secret:
     #    name: sonarr-postgres-app-user
-  externalClusters:
-    - name: sonarr-postgres
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        isWALArchiver: true
-        parameters:
-          barmanObjectName: backblaze-b2
-          serverName: sonarr-postgres-1
+  backup:
+    volumeSnapshot:
+      className: longhorn
+      online: true
+      snapshotOwnerReference: backup
   enableSuperuserAccess: true
   storage:
     storageClass: longhorn-db
     size: 2Gi
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: backblaze-b2
-        serverName: sonarr-postgres-0
   affinity:
     enablePodAntiAffinity: true
     topologyKey: failure-domain.beta.kubernetes.io/zone

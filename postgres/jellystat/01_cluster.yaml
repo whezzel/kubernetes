@@ -28,38 +28,25 @@ spec:
           name: jellystat-postgres-app-user
   bootstrap:
     recovery:
-      database: jellystat
-      owner: jellystat
-      source: jellystat-postgres
-      secret:
-        name: jellystat-postgres-app-user
-      #backup:
-      #  name: manual-jellystat-postgres
-      #recoveryTarget:
-      #  targetTime: 2025-05-04 23:00:00+00:00 # Time in UTC
+      volumeSnapshots:
+        storage:
+          kind: PersistentVolumeClaim
+          name: jellystat-postgres-dr
+          apiGroup: ""
     #initdb:
     #  database: jellystat
     #  owner: jellystat
     #  secret:
     #    name: jellystat-postgres-app-user
-  externalClusters:
-    - name: jellystat-postgres
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        isWALArchiver: true
-        parameters:
-          barmanObjectName: backblaze-b2
-          serverName: jellystat-postgres-0
+  backup:
+    volumeSnapshot:
+      className: longhorn
+      online: true
+      snapshotOwnerReference: backup
   enableSuperuserAccess: true
   storage:
     storageClass: longhorn-db
     size: 4Gi
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: backblaze-b2
-        serverName: jellystat-postgres-1
   affinity:
     enablePodAntiAffinity: true
     topologyKey: failure-domain.beta.kubernetes.io/zone

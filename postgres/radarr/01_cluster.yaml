@@ -28,38 +28,25 @@ spec:
           name: radarr-postgres-app-user
   bootstrap:
     recovery:
-      database: radarr
-      owner: radarr
-      source: radarr-postgres
-      secret:
-        name: radarr-postgres-app-user
-      #backup:
-      #  name: manual-radarr-postgres
-      #recoveryTarget:
-      #  targetTime: 2025-07-26 00:00:00+00:00 # Time in UTC
+      volumeSnapshots:
+        storage:
+          kind: PersistentVolumeClaim
+          name: radarr-postgres-dr
+          apiGroup: ""
     #initdb:
     #  database: radarr
     #  owner: radarr
     #  secret:
     #    name: radarr-postgres-app-user
-  externalClusters:
-    - name: radarr-postgres
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        isWALArchiver: true
-        parameters:
-          barmanObjectName: backblaze-b2
-          serverName: radarr-postgres-0
+  backup:
+    volumeSnapshot:
+      className: longhorn
+      online: true
+      snapshotOwnerReference: backup
   enableSuperuserAccess: true
   storage:
     storageClass: longhorn-db
     size: 3Gi
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: backblaze-b2
-        serverName: radarr-postgres-1
   affinity:
     enablePodAntiAffinity: true
     topologyKey: failure-domain.beta.kubernetes.io/zone

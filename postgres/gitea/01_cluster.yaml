@@ -27,41 +27,26 @@ spec:
         passwordSecret:
           name: gitea-postgres-app-user
   bootstrap:
-    #recovery:
+    recovery:
+      volumeSnapshots:
+        storage:
+          kind: PersistentVolumeClaim
+          name: gitea-postgres-dr
+          apiGroup: ""
+    #initdb:
     #  database: gitea
     #  owner: gitea
-    #  source: gitea-postgres
     #  secret:
     #    name: gitea-postgres-app-user
-    #  #backup:
-    #  #  name: manual-gitea-postgres
-    #  #recoveryTarget:
-    #  #  targetTime: 2025-05-04 23:00:00+00:00 # Time in UTC
-    initdb:
-      database: gitea
-      owner: gitea
-      secret:
-        name: gitea-postgres-app-user
-      #backup:
-      #  name: manual-gitea-postgres
-  #externalClusters:
-  #  - name: gitea-postgres
-  #    plugin:
-  #      name: barman-cloud.cloudnative-pg.io
-  #      isWALArchiver: true
-  #      parameters:
-  #        barmanObjectName: backblaze-b2
-  #        serverName: gitea-postgres-1
+  backup:
+    volumeSnapshot:
+      className: longhorn
+      online: true
+      snapshotOwnerReference: backup
   enableSuperuserAccess: true
   storage:
     storageClass: longhorn-db
     size: 3Gi
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: backblaze-b2
-        serverName: gitea-postgres-0
   affinity:
     enablePodAntiAffinity: true
     topologyKey: failure-domain.beta.kubernetes.io/zone

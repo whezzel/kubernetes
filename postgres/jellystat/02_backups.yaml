@@ -2,14 +2,12 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Backup
 metadata:
-  name: init-jellystat-postgres
+  name: jellystat-postgres-manual
   namespace: postgres
 spec:
   cluster:
     name: jellystat-postgres
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
+  method: volumeSnapshot
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
@@ -19,8 +17,6 @@ metadata:
 spec:
   cluster:
     name: jellystat-postgres
-  schedule: 0 0 0 * * *
-  backupOwnerReference: self
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
+  schedule: "0 0 * * * *"
+  method: volumeSnapshot
+  backupOwnerReference: cluster

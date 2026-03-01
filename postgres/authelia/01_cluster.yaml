@@ -28,38 +28,25 @@ spec:
           name: authelia-postgres-app-user
   bootstrap:
     recovery:
-      database: authelia
-      owner: authelia
-      source: authelia-postgres
-      secret:
-        name: authelia-postgres-app-user
-      #backup:
-      #  name: manual-authelia-postgres
-      #recoveryTarget:
-      #  targetTime: 2025-05-04 23:00:00+00:00 # Time in UTC
+      volumeSnapshots:
+        storage:
+          kind: PersistentVolumeClaim
+          name: authelia-postgres-dr
+          apiGroup: ""
     #initdb:
     #  database: authelia
     #  owner: authelia
     #  secret:
     #    name: authelia-postgres-app-user
-  externalClusters:
-    - name: authelia-postgres
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        isWALArchiver: true
-        parameters:
-          barmanObjectName: backblaze-b2
-          serverName: authelia-postgres-0
+  backup:
+    volumeSnapshot:
+      className: longhorn
+      online: true
+      snapshotOwnerReference: backup
   enableSuperuserAccess: true
   storage:
     storageClass: longhorn-db
     size: 3Gi
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: backblaze-b2
-        serverName: authelia-postgres-1
   affinity:
     enablePodAntiAffinity: true
     topologyKey: failure-domain.beta.kubernetes.io/zone

@@ -16,12 +16,6 @@ helm upgrade --install cloudnative-pg cloudnative-pg \
     --values ./helm/cloudnative-pg/values.yaml
 ```
 
-## Deploy Barman Cloud Plugin
-
-```bash
-wget -q -O - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/latest/download/manifest.yaml | sed -E 's/namespace:[[:space:]]*[^[:space:]]+/namespace: cnpg/g' | ka -f -
-```
-
 ## Dump chart values
 
 ```bash

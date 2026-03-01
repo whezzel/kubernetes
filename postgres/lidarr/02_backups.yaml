@@ -1,15 +1,13 @@
----
-apiVersion: postgresql.cnpg.io/v1
-kind: Backup
-metadata:
-  name: init-lidarr-postgres
-  namespace: postgres
-spec:
-  cluster:
-    name: lidarr-postgres
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
+#---
+#apiVersion: postgresql.cnpg.io/v1
+#kind: Backup
+#metadata:
+#  name: lidarr-postgres-manual
+#  namespace: postgres
+#spec:
+#  cluster:
+#    name: lidarr-postgres
+#  method: volumeSnapshot
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
@@ -19,8 +17,6 @@ metadata:
 spec:
   cluster:
     name: lidarr-postgres
-  schedule: 0 0 0 * * *
-  backupOwnerReference: self
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
+  schedule: "0 0 * * * *"
+  method: volumeSnapshot
+  backupOwnerReference: cluster
