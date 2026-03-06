@@ -6,51 +6,37 @@ metadata:
   namespace: longhorn
 spec:
   concurrency: 1
-  cron: 0 0 * * *
+  cron: 0 6 * * *
   groups:
   - backups
   name: daily
-  retain: 7
+  retain: 14
   task: backup
 ---
 apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
-  name: monthly
+  name: trim
   namespace: longhorn
 spec:
   concurrency: 1
-  cron: 0 0 1 * ?
+  cron: 0 7 * * *
   groups:
-  - backups
-  name: monthly
-  retain: 6
-  task: backup
+  - default
+  name: trim
+  retain: 0
+  task: filesystem-trim
 ---
 apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
-  name: weekly
+  name: snapshot-cleanup
   namespace: longhorn
 spec:
   concurrency: 1
-  cron: 0 0 ? * SUN
+  cron: 0 8 * * *
   groups:
-  - backups
-  name: weekly
-  retain: 4
-  task: backup
----
-apiVersion: longhorn.io/v1beta2
-kind: RecurringJob
-metadata:
-  name: yearly
-  namespace: longhorn
-spec:
-  concurrency: 1
-  cron: 0 0 1 1 ?
-  groups:
-  - backups
-  name: yearly
-  retain: 1
-  task: backup
+  - default
+  name: snapshot-cleanup
+  retain: 0
+  task: snapshot-cleanup

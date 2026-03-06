@@ -4,7 +4,7 @@ persistence:
   disableRevisionCounter: "false"
   recurringJobSelector:
     enable: true
-    jobList: '[{"name":"hourly","isGroup":false},{"name":"daily","isGroup":false},{"name":"weekly","isGroup":false},{"name":"monthly","isGroup":false},{"name":"yearly","isGroup":false}]'
+    jobList: '[{"name": "backups", "isGroup": true},{"name": "default", "isGroup": true}]'
   removeSnapshotsDuringFilesystemTrim: ignored
 csi:
   kubeletRootDir: /var/lib/kubelet

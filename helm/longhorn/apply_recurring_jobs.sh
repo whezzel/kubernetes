@@ -9,6 +9,9 @@ kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="l
         kubectl -n longhorn label volume "$volume_name" \
           recurring-job-group.longhorn.io/backups=enabled \
           --overwrite
+        kubectl -n longhorn label volume "$volume_name" \
+          recurring-job-group.longhorn.io/default=enabled \
+          --overwrite
     else
         echo "Skipping PVC $pvc_name in $ns - no volume name found"
     fi
