@@ -26,5 +26,5 @@ storage:
   persistentVolumeClaimName:
   volumeName: data
   requestedSize: 2Gi
-  className: longhorn
+  className: longhorn-db
   keepPvc: false
