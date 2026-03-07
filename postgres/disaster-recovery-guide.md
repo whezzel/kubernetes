@@ -35,7 +35,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 
 Verify:
 ```bash
-kubectl get pods -l app=snapshot-controller -w
+kubectl get pods -l app.kubernetes.io/name=snapshot-controller -Aw
 ```
 
 ### Step 3: Deploy CNPG Operator
