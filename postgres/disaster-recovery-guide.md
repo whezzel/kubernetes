@@ -91,7 +91,7 @@ kubectl patch cluster sonarr-postgres --type=merge -p '
 spec:
   backup:
     volumeSnapshot:
-      className: longhorn-snapshot-vsc-bak
+      className: longhorn
       online: true
       snapshotOwnerReference: backup
 '
@@ -105,7 +105,6 @@ kubectl apply -f ./postgres/sonarr/02_backups.yaml
 ### Verification
 ```bash
 kubectl get cluster sonarr-postgres -o wide
-kubectl get volumesnapshotclass longhorn-snapshot-vsc-bak
-kubectl get scheduledbackup daily-nfs-backup
-kubectl cnpg backup sonarr-postgres --method volumeSnapshot   # manual test
+kubectl get volumesnapshotclass longhorn
+kubectl get scheduledbackup cron-sonarr-postgres
 ```
