@@ -1,8 +1,8 @@
-nameOverride:
-fullnameOverride:
+nameOverride: ""
+fullnameOverride: ""
 image:
-  name: mailserver/docker-mailserver
-  pullPolicy: IfNotPresent
+  name: "mailserver/docker-mailserver"
+  pullPolicy: "IfNotPresent"
 serviceAccount:
   create: true
 certificate: whezzel-com-tls
@@ -16,7 +16,7 @@ deployment:
   priorityClassName:
   nodeSelector: {}
   strategy:
-    type: Recreate
+    type: "Recreate"
   env:
     OVERRIDE_HOSTNAME: mail.whezzel.com
     LOG_LEVEL: info
@@ -62,7 +62,7 @@ deployment:
     POSTFIX_MAILBOX_SIZE_LIMIT:
     ENABLE_QUOTAS: 1
     POSTFIX_MESSAGE_SIZE_LIMIT:
-    CLAMAV_MESSAGE_SIZE_LIMIT: ""
+    CLAMAV_MESSAGE_SIZE_LIMIT:
     PFLOGSUMM_TRIGGER:
     PFLOGSUMM_RECIPIENT:
     PFLOGSUMM_SENDER:
@@ -107,7 +107,7 @@ deployment:
     ENABLE_POSTGREY: 0
     POSTGREY_DELAY: 300
     POSTGREY_MAX_AGE: 35
-    POSTGREY_TEXT: Delayed by Postgrey
+    POSTGREY_TEXT: "Delayed by Postgrey"
     POSTGREY_AUTO_WHITELIST_CLIENTS: 5
     ENABLE_SASLAUTHD: 0
     SASLAUTHD_MECHANISMS: ldap
@@ -136,13 +136,14 @@ deployment:
     privileged: false
   resources:
     requests:
-      cpu: 1
-      memory: 1536Mi
-      ephemeral-storage: 100Mi
+      cpu: "1"
+      memory: "1536Mi"
+      ephemeral-storage: "100Mi"
     limits:
-      cpu: 2
-      memory: 2048Mi
-      ephemeral-storage: 500Mi
+      cpu: "2"
+      memory: "2048Mi"
+      ephemeral-storage: "500Mi"
+  resizePolicy: []
   tolerations: []
   initContainers: []
   extraVolumeMounts:
@@ -155,8 +156,9 @@ deployment:
       secret:
         secretName: selfsigned-ca
 service:
-  type: LoadBalancer
-  externalTrafficPolicy: Local
+  type: "LoadBalancer"
+  externalTrafficPolicy: "Local"
+  trafficDistribution: ""
   annotations:
     external-dns.alpha.kubernetes.io/hostname: mail.whezzel.com,smtp.whezzel.com,imap.whezzel.com,pop3.whezzel.com
   labels: {}
@@ -190,6 +192,7 @@ persistent_volume_claims:
     selector: {}
   mail-log:
     enabled: true
+    existingClaim: ""
     size: 1Gi
     annotations: {}
     accessModes:
@@ -213,12 +216,12 @@ monitoring:
   service:
     scrape: "true"
     probe: "false"
-    path: /metrics
+    path: "/metrics"
     port: "9102"
   pod:
     scrape: "true"
     probe: "false"
-    path: /metrics
+    path: "/metrics"
     port: "9102"
 rspamd:
   ingress:
@@ -241,16 +244,17 @@ dovecot:
       schedule: 0 4 * * *
 proxyProtocol:
   enabled: false
-  trustedNetworks: 10.69.0.0/16 10.244.0.0/16
+  trustedNetworks: "10.69.0.0/16 10.244.0.0/16"
 metrics:
   enabled: false
   image:
     name: blackflysolutions/postfix-exporter@sha256
     tag: 7ed7c0534112aff5b44757ae84a206bf659171631edfc325c3c1638d78e74f73
-    pullPolicy: IfNotPresent
+    pullPolicy: "IfNotPresent"
   resources:
     requests:
-      memory: 256Mi
+      memory: "256Mi"
+  resizePolicy: []
   serviceMonitor:
     enabled: false
     scrapeInterval: 15s
@@ -274,13 +278,13 @@ configMaps:
                 ssl = yes
             }
 
-            inet_listener imap_proxy {
+            inet_listener imap_proxyprotocol {
                 haproxy = yes
                 port = 10143
                 ssl = no
             }
 
-            inet_listener imaps_proxy {
+            inet_listener imaps_proxyprotocol {
                 haproxy = yes
                 port = 10993
                 ssl = yes
@@ -299,13 +303,13 @@ configMaps:
                 ssl = yes
             }
 
-            inet_listener pop3_proxy {
+            inet_listener pop3_proxyprotocol {
                 haproxy = yes
                 port = 10110
                 ssl = no
             }
 
-            inet_listener pop3s_proxy {
+            inet_listener pop3s_proxyprotocol {
                 haproxy = yes
                 port = 10995
                 ssl = yes
@@ -319,7 +323,7 @@ configMaps:
                 port = 4190
             }
 
-            inet_listener sieve_proxy {
+            inet_listener sieve_proxyprotocol {
                 port = 14190
             }
         }
@@ -365,47 +369,27 @@ configMaps:
       echo "tls_require_cert = demand" >> /etc/dovecot/dovecot-ldap.conf.ext
 
       {{- if .Values.proxyProtocol.enabled }}
-      # Make sure to keep this file in sync with https://github.com/docker-mailserver/docker-mailserver/blob/master/target/postfix/master.cf!
-      cat <<EOS >> /etc/postfix/master.cf
+      # NOTE: Keep in sync with upstream advice:
+      # https://github.com/docker-mailserver/docker-mailserver/blob/v15.0.0/docs/content/examples/tutorials/mailserver-behind-proxy.md?plain=1#L238-L268
 
-      # Submission with proxy
-      10587     inet  n       -       n       -       -       smtpd
-        -o syslog_name=postfix/submission
-        -o smtpd_tls_security_level=encrypt
-        -o smtpd_sasl_auth_enable=yes
-        -o smtpd_sasl_type=dovecot
-        -o smtpd_reject_unlisted_recipient=no
-        -o smtpd_sasl_authenticated_header=yes
-        -o smtpd_client_restrictions=permit_sasl_authenticated,reject
-        -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
-        -o smtpd_sender_restrictions=\$mua_sender_restrictions
-        -o smtpd_discard_ehlo_keywords=
-        -o milter_macro_daemon_name=ORIGINATING
-        -o cleanup_service_name=sender-cleanup
-        -o smtpd_upstream_proxy_protocol=haproxy
+      # Duplicate the config for the submission(s) service ports (587 / 465) with adjustments for the PROXY ports (10587 / 10465) and `syslog_name` setting:
+      postconf -Mf submission/inet | sed -e s/^submission/10587/ -e 's/submission/submission-proxyprotocol/' >> /etc/postfix/master.cf
+      postconf -Mf submissions/inet | sed -e s/^submissions/10465/ -e 's/submissions/submissions-proxyprotocol/' >> /etc/postfix/master.cf
+      # Enable PROXY Protocol support for these new service variants:
+      postconf -P 10587/inet/smtpd_upstream_proxy_protocol=haproxy
+      postconf -P 10465/inet/smtpd_upstream_proxy_protocol=haproxy
+      
+      # Create a variant for port 25 too (NOTE: Port 10025 is already assigned in DMS to Amavis):
+      postconf -Mf smtp/inet | sed -e s/^smtp/12525/ >> /etc/postfix/master.cf
+      # Enable PROXY Protocol support:
+      # - Uses a different setting as port 25 is handled via the postscreen service
+      # - Optionally configure a `syslog_name` to distinguish in logs:
+      postconf -P \
+        12525/inet/postscreen_upstream_proxy_protocol=haproxy \
+        12525/inet/syslog_name=postfix/smtpd-proxyprotocol
 
-      # Submissions with proxy
-      10465     inet  n       -       n       -       -       smtpd
-        -o syslog_name=postfix/submissions
-        -o smtpd_tls_wrappermode=yes
-        -o smtpd_sasl_auth_enable=yes
-        -o smtpd_sasl_type=dovecot
-        -o smtpd_reject_unlisted_recipient=no
-        -o smtpd_sasl_authenticated_header=yes
-        -o smtpd_client_restrictions=permit_sasl_authenticated,reject
-        -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
-        -o smtpd_sender_restrictions=\$mua_sender_restrictions
-        -o smtpd_discard_ehlo_keywords=
-        -o milter_macro_daemon_name=ORIGINATING
-        -o cleanup_service_name=sender-cleanup
-        -o smtpd_upstream_proxy_protocol=haproxy
-
-      # Smtp with proxy
-      12525     inet  n       -       n       -       1       postscreen
-        -o syslog_name=postfix/smtpd-proxy
-        -o postscreen_upstream_proxy_protocol=haproxy
-        -o postscreen_cache_map=btree:$data_directory/postscreen_10025_cache
-      EOS
+      # Add the `proxy:` prefix to share this cache between each running postscreen service via `proxymap`:
+      postconf 'postscreen_cache_map = proxy:btree:$data_directory/postscreen_cache'
       {{- end }}
 secrets:
   rspamd.whezzel.com:
