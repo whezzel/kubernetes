@@ -359,6 +359,8 @@ configMaps:
     data: |
       #!/bin/bash
 
+      set -euo pipefail
+
       # Update CA certificates
       update-ca-certificates
 
@@ -366,6 +368,80 @@ configMaps:
 
       # Valid values: never, hard, demand, allow, try
       echo "tls_require_cert = demand" >> /etc/dovecot/dovecot-ldap.conf.ext
+
+      SIEVE_SOURCE_DIR="/tmp/docker-mailserver"
+      VMAIL_BASE="/var/mail"
+      VMAIL_UID=5000
+      VMAIL_GID=5000
+
+      if [[ ! -d "$SIEVE_SOURCE_DIR" ]]; then
+        echo "No /tmp/docker-mailserver found – skipping sieve auto-copy."
+        exit 0
+      fi
+
+      shopt -s nullglob
+      for src_file in "$SIEVE_SOURCE_DIR"/*.dovecot.sieve; do
+        [[ -f "$src_file" ]] || continue
+
+        filename=$(basename "$src_file")
+
+        if [[ $filename =~ ^(.+)@(.+)\.dovecot\.sieve$ ]]; then
+          localpart="${BASH_REMATCH[1]}"
+          domain="${BASH_REMATCH[2]}"
+          full_user="${localpart}@${domain}"
+        else
+          echo "Invalid sieve filename skipped: $filename (expected localpart@domain.dovecot.sieve)"
+          continue
+        fi
+
+        domain_dir="$VMAIL_BASE/$domain"
+        user_dir="$domain_dir/$localpart"
+
+        home_dir="$user_dir/home"
+        target_sieve="$home_dir/.dovecot.sieve"
+
+        if [[ ! -d "$domain_dir" ]]; then
+          mkdir -p "$domain_dir"
+          chmod 700 "$domain_dir"
+          chown "${VMAIL_UID}:${VMAIL_GID}" "$domain_dir"
+          echo "Created domain dir: $domain_dir (700, owned by vmail)"
+        fi
+
+        if [[ ! -d "$user_dir" ]]; then
+          mkdir -p "$user_dir"
+          chmod 700 "$user_dir"
+          chown "${VMAIL_UID}:${VMAIL_GID}" "$user_dir"
+          echo "Created user dir: $user_dir (700, owned by vmail)"
+        fi
+
+        mkdir -p "$home_dir"
+        chmod 700 "$home_dir"
+        chown "${VMAIL_UID}:${VMAIL_GID}" "$home_dir" 2>/dev/null || true
+
+        cp -f "$src_file" "$target_sieve"
+        chmod 600 "$target_sieve"
+        chown "${VMAIL_UID}:${VMAIL_GID}" "$target_sieve" 2>/dev/null || true
+
+        if command -v sievec >/dev/null 2>&1; then
+          su -s /bin/bash docker -c "sievec \"$target_sieve\"" >/dev/null 2>&1 || echo "sievec warning for $filename"
+        fi
+        
+        chown "${VMAIL_UID}:${VMAIL_GID}" "${target_sieve}.svbin" 2>/dev/null || true
+        chmod 644 "${target_sieve}.svbin" 2>/dev/null || true
+        
+        echo "Installed sieve script for $full_user → $target_sieve"
+      done
+
+      echo "Sieve auto-install complete."
+      
+      echo "Applying Postfix LMTP original-recipient fix..."
+
+      postconf -e 'lmtp_destination_recipient_limit = 1'
+      postconf -F 'lmtp/unix/command=lmtp flags=DO'
+
+      echo "Postfix LMTP fix applied (X-Original-To will now be preserved)"
+
+      echo "user-patches.sh completed."
 
       {{- if .Values.proxyProtocol.enabled }}
       # NOTE: Keep in sync with upstream advice:
@@ -390,6 +466,24 @@ configMaps:
       # Add the `proxy:` prefix to share this cache between each running postscreen service via `proxymap`:
       postconf 'postscreen_cache_map = proxy:btree:$data_directory/postscreen_cache'
       {{- end }}
+  sieve-hello:
+    create: true
+    path: hello@whezzel.com.dovecot.sieve
+    data: |
+      require ["fileinto", "mailbox", "variables", "regex"];
+      if header :regex "X-Original-To" "^([^@]+)@whezzel\\.com$" {
+          set "localpart" "${1}";
+          set :lower "folder" "${localpart}";
+          if string :is "${localpart}" "hello" {
+              stop;
+          }
+          if string :contains "${localpart}" "dmarc" {
+              set "folder" "DMARC";
+          }
+          set :upperfirst "folder" "${folder}";
+          fileinto :create "INBOX.${folder}";
+          stop;
+      }
 secrets:
   rspamd.whezzel.com:
     name: rspamd.whezzel.com
