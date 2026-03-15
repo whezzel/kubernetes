@@ -602,32 +602,24 @@ configMap:
             - email
           userinfo_signed_response_alg: none
           token_endpoint_auth_method: client_secret_basic
-        - client_id: harbor
-          client_name: Harbor
+        - client_id: immich
+          client_name: immich
           client_secret:
             value: ''
-            path: /secrets/authelia-oidc/oidc.client.harbor.value
+            path: /secrets/authelia-oidc/oidc.client.immich.value
           public: false
           authorization_policy: two_factor
           consent_mode: implicit
-          require_pkce: false
-          pkce_challenge_method: S256
-          redirect_uris:
-            - https://harbor.whezzel.com/c/oidc/callback
+                    redirect_uris:
+            - https://immich.whezzel.com/auth/login
+            - https://immich.whezzel.com/user-settings
+            - app.immich:///oauth-callback
           scopes:
             - openid
-            - offline_access
-            - profile
-            - groups
-            - email
-          response_types:
-            - code
-          grant_types:
-            - authorization_code
-            - refresh_token
-          access_token_signed_response_alg: none
-          userinfo_signed_response_alg: none
-          token_endpoint_auth_method: client_secret_basic
+                        - profile
+                        - email
+                    userinfo_signed_response_alg: none
+          token_endpoint_auth_method: client_secret_post
         - client_id: jellyfin
           client_name: Jellyfin
           client_secret:
