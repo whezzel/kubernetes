@@ -17,6 +17,6 @@ metadata:
 spec:
   cluster:
     name: authelia-postgres
-  schedule: "0 0 * * * *"
+  schedule: "0 0 2 * * *"
   method: volumeSnapshot
   backupOwnerReference: cluster
