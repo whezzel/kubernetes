@@ -535,6 +535,7 @@ configMap:
         allowed_origins_from_client_redirect_uris: false
       clients:
         # k run --image authelia/authelia:latest authelia -it --rm --command -- authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
+        # docker run -it --rm authelia/authelia:latest authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
         - client_id: actual
           client_name: Actual
           client_secret:
