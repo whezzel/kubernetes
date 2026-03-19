@@ -38,7 +38,7 @@ spec:
 #            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: homeassistant
-          image: homeassistant/home-assistant:latest
+          image: harbor.whezzel.com/proxy-docker.io/homeassistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123

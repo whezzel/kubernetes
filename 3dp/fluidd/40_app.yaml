@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: fluidd
-          image: ghcr.io/fluidd-core/fluidd:latest
+          image: harbor.whezzel.com/proxy-ghcr.io/fluidd-core/fluidd:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

@@ -1,3 +1,5 @@
+image:
+  registry: 'harbor.whezzel.com/proxy-ghcr.io'
 ingress:
   enabled: true
   rulesOverride:

@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: transmission
-          image: haugene/transmission-openvpn:latest
+          image: harbor.whezzel.com/proxy-docker.io/haugene/transmission-openvpn:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 9091

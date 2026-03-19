@@ -31,7 +31,7 @@ spec:
         nvidia-present: "true"
       containers:
         - name: jellyfin
-          image: lscr.io/linuxserver/jellyfin:latest
+          image: harbor.whezzel.com/proxy-lscr.io/linuxserver/jellyfin:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8096

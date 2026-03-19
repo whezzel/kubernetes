@@ -28,7 +28,7 @@ spec:
         fsGroup: 53
       containers:
         - name: bind
-          image: internetsystemsconsortium/bind9:9.20
+          image: harbor.whezzel.com/proxy-docker.io/internetsystemsconsortium/bind9:9.20
           imagePullPolicy: Always
           command: [named]
           args:

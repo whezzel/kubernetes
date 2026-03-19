@@ -1,4 +1,5 @@
 global:
+  imageRegistry: "harbor.whezzel.com/proxy-docker.io"
   ldapDomain: whezzel.com
   ldapPort: 389
   sslLdapPort: 636

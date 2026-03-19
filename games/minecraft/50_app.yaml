@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: minecraft
-          image: itzg/minecraft-server:latest
+          image: harbor.whezzel.com/proxy-docker.io/itzg/minecraft-server:latest
           imagePullPolicy: Always
           stdin: true
           tty: true

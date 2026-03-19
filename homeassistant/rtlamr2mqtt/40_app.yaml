@@ -30,8 +30,8 @@ spec:
         - name: rtlamr2mqtt
           securityContext:
             privileged: true
-          image: allangood/rtlamr2mqtt:latest
-          #image: allangood/rtlamr2mqtt:2.3.4
+          image: harbor.whezzel.com/proxy-docker.io/allangood/rtlamr2mqtt:latest
+          #image: harbor.whezzel.com/proxy-docker.io/allangood/rtlamr2mqtt:2.3.4
           imagePullPolicy: Always
           livenessProbe:
             exec:

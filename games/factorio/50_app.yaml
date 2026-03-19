@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: factorio
-          image: factoriotools/factorio:stable
+          image: harbor.whezzel.com/proxy-docker.io/factoriotools/factorio:stable
           imagePullPolicy: Always
           stdin: true
           tty: true

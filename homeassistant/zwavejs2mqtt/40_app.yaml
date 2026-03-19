@@ -30,7 +30,7 @@ spec:
         - name: zwavejs2mqtt
           securityContext:
             privileged: true
-          image: zwavejs/zwavejs2mqtt:latest
+          image: harbor.whezzel.com/proxy-docker.io/zwavejs/zwavejs2mqtt:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8091

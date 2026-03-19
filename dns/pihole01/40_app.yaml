@@ -36,7 +36,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
         - name: pihole01
-          image: pihole/pihole:latest
+          image: harbor.whezzel.com/proxy-ghcr.io/pi-hole/pihole:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

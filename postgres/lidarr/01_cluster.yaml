@@ -6,7 +6,7 @@ metadata:
   namespace: postgres
 spec:
   description: Lidarr Database
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.2
+  imageName: harbor.whezzel.com/proxy-ghcr.io/cloudnative-pg/postgresql:17.2
   instances: 3
   startDelay: 300
   stopDelay: 300

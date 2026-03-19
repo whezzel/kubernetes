@@ -1,3 +1,9 @@
+global:
+  imageRegistry: "harbor.whezzel.com/proxy-docker.io"
+
+image:
+  repository: gitea/gitea
+
 replicaCount: 1
 
 strategy:

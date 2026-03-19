@@ -22,7 +22,7 @@ spec:
       #- operator: "Exists"
       #  effect: "NoSchedule"
       containers:
-      - image: squat/generic-device-plugin
+      - image: harbor.whezzel.com/proxy-docker.io/squat/generic-device-plugin
         args:
         - --device
         - |
