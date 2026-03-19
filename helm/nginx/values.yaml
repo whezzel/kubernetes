@@ -2,6 +2,7 @@
 controller:
   image:
     registry: harbor.whezzel.com/proxy-registry.k8s.io
+  kind: DaemonSet
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -20,7 +21,6 @@ controller:
             values:
             - controller
         topologyKey: kubernetes.io/hostname
-  replicaCount: 5
   service:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: nginx.whezzel.com
