@@ -489,7 +489,7 @@ secrets:
     name: rspamd.dkim.rsa-2048-mail-whezzel.com.private.txt
     create: false
     path: rspamd/dkim/rsa-2048-mail-whezzel.com.private.txt
-      rspamd.dkim.rsa-2048-mail-whezzel.com.public.txt:
+  rspamd.dkim.rsa-2048-mail-whezzel.com.public.txt:
     name: rspamd.dkim.rsa-2048-mail-whezzel.com.public.txt
     create: false
     path: rspamd/dkim/rsa-2048-mail-whezzel.com.public.txt
