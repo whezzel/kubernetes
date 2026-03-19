@@ -26,27 +26,17 @@ spec:
       labels:
         app: homeassistant
     spec:
-#      affinity:
-#        podAffinity:
-#          requiredDuringSchedulingIgnoredDuringExecution:
-#          - labelSelector:
-#              matchExpressions:
-#              - key: app
-#                operator: In
-#                values:
-#                - esphome
-#            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: homeassistant
           image: harbor.whezzel.com/proxy-docker.io/homeassistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123
-              name: http
+              name: ha-http
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: ha-http
               scheme: HTTP
             initialDelaySeconds: 60
             periodSeconds: 10
@@ -55,7 +45,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: ha-http
               scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -73,17 +63,74 @@ spec:
           volumeMounts:
             - name: homeassistant
               mountPath: /config
-          #  - name: nas-media
-          #    mountPath: /media
           resources:
             requests:
               memory: 700Mi
               cpu: 500m
+        - name: vscode
+          image: harbor.whezzel.com/proxy-lscr.io/linuxserver/code-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8443
+              name: vscode-http
+            - containerPort: 22
+              name: ssh
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: vscode-http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: vscode-http
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+            - name: GIT_SSH_COMMAND
+              value: ssh -4
+            - name: DEFAULT_WORKSPACE
+              value: /mnt
+          volumeMounts:
+            - name: homeassistant
+              mountPath: /mnt/homeassistant
+            - name: ssh-config
+              mountPath: /etc/ssh/ssh_config
+              subPath: ssh-config
+            - name: vscode-config
+              mountPath: /config/data/User/settings.json
+              subPath: vscode-config
+            - name: ssh-key
+              mountPath: /config/.ssh/vscode_id_ed25519
+              subPath: ssh-key
+          resources:
+            requests:
+              memory: 300Mi
+              cpu: 100m
       volumes:
         - name: homeassistant
           persistentVolumeClaim:
             claimName: homeassistant
-      #  - name: nas-media
-      #    nfs:
-      #      server: nas01-20.whezzel.com
-      #      path: /media
+        - name: ssh-config
+          configMap:
+            name: vscode-configmap
+        - name: vscode-config
+          configMap:
+            name: vscode-configmap
+        - name: ssh-key
+          secret:
+            secretName: vscode-secrets
+            defaultMode: 0600

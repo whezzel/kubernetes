@@ -11,4 +11,18 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: http
+      targetPort: ha-http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vscode
+  namespace: homeassistant
+spec:
+  selector:
+    app: homeassistant
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: vscode-http
