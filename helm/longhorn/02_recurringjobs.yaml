@@ -33,10 +33,10 @@ metadata:
   name: snapshot-delete
   namespace: longhorn
 spec:
-  concurrency: 30
+  concurrency: 1
   cron: 0 8 * * *
   groups:
   - default
   name: snapshot-delete
-  retain: 0
+  retain: 30
   task: snapshot-delete
