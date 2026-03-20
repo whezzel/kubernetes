@@ -53,7 +53,8 @@ spec:
     size: 2Gi
   affinity:
     enablePodAntiAffinity: true
-    topologyKey: failure-domain.beta.kubernetes.io/zone
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
   enablePDB: true
   resources:
     requests:

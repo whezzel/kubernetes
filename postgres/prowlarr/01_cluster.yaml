@@ -72,7 +72,8 @@ spec:
   #      serverName: prowlarr-postgres-0
   affinity:
     enablePodAntiAffinity: true
-    topologyKey: failure-domain.beta.kubernetes.io/zone
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred
   enablePDB: true
   resources:
     requests:
