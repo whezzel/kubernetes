@@ -382,10 +382,10 @@ configMap:
           - group:zigbee
         policy: two_factor
       - domain:
-          - zwave.whezzel.com
+          - zwavejs.whezzel.com
         subject:
           - group:admins
-          - group:zwave
+          - group:zwavejs
         policy: two_factor
       - domain: "*.whezzel.com"
         subject:
