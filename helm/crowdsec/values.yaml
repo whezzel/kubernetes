@@ -157,7 +157,7 @@ config:
         "priority": 0,
         {{range .Decisions -}}
         "title": "Crowdsec",
-        "message": "{{.Type }} {{ .Value }} for {{.Duration}}  \n{{.Scenario}}  \n[crowdsec cti](https://app.crowdsec.net/cti/{{.Value -}})  \n[shodan](https://shodan.io/host/{{.Value -}})"
+        "message": "Node: {{ $alert.MachineID }}  \n{{.Type }} {{ .Value }} for {{.Duration}}  \n{{.Scenario}}  \n[crowdsec cti](https://app.crowdsec.net/cti/{{.Value -}})"
         {{end -}}
         }
         {{ end -}}
