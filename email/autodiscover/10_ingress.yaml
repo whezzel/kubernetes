@@ -1,0 +1,31 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: autoconfig-ingress
+  namespace: email
+spec:
+  tls:
+    - {}
+  ingressClassName: nginx
+  rules:
+    - host: autoconfig.whezzel.com
+      http:
+        paths:
+          - path: /mail/config-v1.1.xml
+            pathType: Exact
+            backend:
+              service:
+                name: autoconfig
+                port:
+                  number: 80
+    - host: autodiscover.whezzel.com
+      http:
+        paths:
+          - path: /autodiscover/autodiscover.xml
+            pathType: Exact
+            backend:
+              service:
+                name: autoconfig
+                port:
+                  number: 80

@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: autoconfig
+  namespace: email
+spec:
+  selector:
+    app: autoconfig
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http

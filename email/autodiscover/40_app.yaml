@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoconfig
+  namespace: email
+  labels:
+    app: autoconfig
+  annotations:
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 10m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autoconfig
+  template:
+    metadata:
+      name: autoconfig
+      labels:
+        app: autoconfig
+    spec:
+      containers:
+        - name: nginx
+          image: harbor.whezzel.com/proxy-docker.io/nginx:alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: config
+          configMap:
+            name: autoconfig-xml
+            items:
+              - key: config-v1.1.xml
+                path: mail/config-v1.1.xml
+              - key: autodiscover.xml
+                path: autodiscover/autodiscover.xml
