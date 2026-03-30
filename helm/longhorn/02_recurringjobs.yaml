@@ -5,7 +5,7 @@ metadata:
   name: daily
   namespace: longhorn
 spec:
-  concurrency: 1
+  concurrency: 3
   cron: 0 6 * * *
   groups:
   - backups
@@ -19,7 +19,7 @@ metadata:
   name: trim
   namespace: longhorn
 spec:
-  concurrency: 1
+  concurrency: 3
   cron: 0 7 * * *
   groups:
   - default
@@ -33,7 +33,7 @@ metadata:
   name: snapshot-delete
   namespace: longhorn
 spec:
-  concurrency: 1
+  concurrency: 3
   cron: 0 8 * * *
   groups:
   - default
