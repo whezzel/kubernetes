@@ -404,11 +404,10 @@ configMap:
       path: session.encryption.key
     cookies:
       - name: authelia_session
+        subdomain: authelia
         domain: whezzel.com
-        authelia_url: https://authelia.whezzel.com
         inactivity: 5 minutes
         expiration: 1 hour
-        remember_me: 2 month
     redis:
       enabled: enabled
       deploy: false
