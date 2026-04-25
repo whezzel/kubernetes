@@ -36,7 +36,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos01
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS01_INFLUXDB_TOKEN
@@ -113,7 +113,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos02
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS02_INFLUXDB_TOKEN
@@ -190,7 +190,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos03
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS03_INFLUXDB_TOKEN
@@ -262,7 +262,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos04
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS04_INFLUXDB_TOKEN
@@ -334,7 +334,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos05
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS05_INFLUXDB_TOKEN
@@ -406,7 +406,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos06
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS06_INFLUXDB_TOKEN
@@ -478,7 +478,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos07
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS07_INFLUXDB_TOKEN
@@ -550,7 +550,7 @@ spec:
         fsGroup: 999
       containers:
         - name: telegraf-talos08
-          image: harbor.whezzel.com/proxy-docker.io/telegraf:latest
+          image: docker.io/telegraf:latest
           imagePullPolicy: Always
           env:
             - name: TALOS08_INFLUXDB_TOKEN

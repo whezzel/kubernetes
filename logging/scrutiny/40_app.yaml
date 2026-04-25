@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: scrutiny-master-web
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-web
+          image: ghcr.io/analogj/scrutiny:master-web
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -89,7 +89,7 @@ spec:
         kubernetes.io/hostname: talos01
       containers:
         - name: scrutiny-collector-talos01
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -145,7 +145,7 @@ spec:
         kubernetes.io/hostname: talos02
       containers:
         - name: scrutiny-collector-talos02
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -201,7 +201,7 @@ spec:
         kubernetes.io/hostname: talos03
       containers:
         - name: scrutiny-collector-talos03
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -252,7 +252,7 @@ spec:
         kubernetes.io/hostname: talos04
       containers:
         - name: scrutiny-collector-talos04
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -303,7 +303,7 @@ spec:
         kubernetes.io/hostname: talos05
       containers:
         - name: scrutiny-collector-talos05
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -354,7 +354,7 @@ spec:
         kubernetes.io/hostname: talos06
       containers:
         - name: scrutiny-collector-talos06
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -405,7 +405,7 @@ spec:
         kubernetes.io/hostname: talos07
       containers:
         - name: scrutiny-collector-talos07
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -456,7 +456,7 @@ spec:
         kubernetes.io/hostname: talos08
       containers:
         - name: scrutiny-collector-talos08
-          image: harbor.whezzel.com/proxy-ghcr.io/analogj/scrutiny:master-collector
+          image: ghcr.io/analogj/scrutiny:master-collector
           imagePullPolicy: Always
           securityContext:
             privileged: true

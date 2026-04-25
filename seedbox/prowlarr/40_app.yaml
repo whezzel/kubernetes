@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: prowlarr
-          image: harbor.whezzel.com/proxy-lscr.io/linuxserver/prowlarr:latest
+          image: lscr.io/linuxserver/prowlarr:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 9696

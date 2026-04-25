@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: syncthing
-          image: harbor.whezzel.com/proxy-lscr.io/linuxserver/syncthing:latest
+          image: lscr.io/linuxserver/syncthing:latest
           imagePullPolicy: Always
           #command: [syncthing]
           #args: [--reset-deltas]

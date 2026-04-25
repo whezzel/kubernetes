@@ -1,6 +1,4 @@
 image:
-  registry: "harbor.whezzel.com/proxy-docker.io"
-  repository: "valkey/valkey"
   pullPolicy: Always
   tag: ""
 securityContext:

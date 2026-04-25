@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: homeassistant
-          image: harbor.whezzel.com/proxy-docker.io/homeassistant/home-assistant:latest
+          image: docker.io/homeassistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123

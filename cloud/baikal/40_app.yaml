@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: baikal
-          image: harbor.whezzel.com/proxy-docker.io/ckulka/baikal:latest
+          image: docker.io/ckulka/baikal:nginx
           imagePullPolicy: Always
           ports:
             - containerPort: 80

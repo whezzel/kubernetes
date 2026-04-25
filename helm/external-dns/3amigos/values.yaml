@@ -1,5 +1,3 @@
-image:
-  repository: harbor.whezzel.com/proxy-registry.k8s.io/external-dns/external-dns
 env:
   - name: RFC2136_HOST
     valueFrom:

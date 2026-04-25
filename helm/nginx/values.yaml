@@ -1,7 +1,5 @@
 ---
 controller:
-  image:
-    registry: harbor.whezzel.com/proxy-registry.k8s.io
   kind: DaemonSet
   affinity:
     podAntiAffinity:
@@ -42,7 +40,3 @@ controller:
     set-real-ip-from: 10.69.0.0/16,10.244.0.0/16
   ingressClassResource:
     default: true
-  admissionWebhooks:
-    patch:
-      image:
-        registry: harbor.whezzel.com/proxy-registry.k8s.io

@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: mainsail
-          image: harbor.whezzel.com/proxy-ghcr.io/mainsail-crew/mainsail:latest
+          image: ghcr.io/mainsail-crew/mainsail:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

@@ -1,28 +1,3 @@
-global:
-  imageRegistry: harbor.whezzel.com/proxy-docker.io
-image:
-  longhorn:
-    engine:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/longhorn-engine
-    manager:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/longhorn-manager
-    ui:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/longhorn-ui
-    instanceManager:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/longhorn-instance-manager
-    shareManager:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/longhorn-share-manager
-    backingImageManager:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/backing-image-manager
-    supportBundleKit:
-      registry: harbor.whezzel.com/proxy-docker.io
-      repository: longhornio/support-bundle-kit
 persistence:
   defaultDataLocality: best-effort
   reclaimPolicy: Retain

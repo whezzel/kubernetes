@@ -6,7 +6,7 @@ metadata:
   namespace: postgres
 spec:
   description: Immich Database
-  imageName: harbor.whezzel.com/proxy-ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.3.0
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.3.0
   instances: 3
   startDelay: 300
   stopDelay: 300

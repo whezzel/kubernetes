@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: harbor.whezzel.com/proxy-docker.io/nginx:alpine
+          image: docker.io/nginx:alpine
           imagePullPolicy: Always
           ports:
             - containerPort: 80

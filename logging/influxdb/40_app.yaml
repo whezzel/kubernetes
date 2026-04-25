@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: influxdb
-          image: harbor.whezzel.com/proxy-docker.io/influxdb:latest
+          image: docker.io/influxdb:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8086

@@ -19,12 +19,12 @@ spec:
     spec:
       containers:
         - name: whoami
-          image: harbor.whezzel.com/proxy-docker.io/traefik/whoami
+          image: docker.io/traefik/whoami
           imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http
-          resources:
-            requests:
-              memory: 16Mi
-              cpu: 50m
+#          resources:
+#            requests:
+#              memory: 16Mi
+#              cpu: 50m

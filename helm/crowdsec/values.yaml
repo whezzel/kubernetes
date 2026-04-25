@@ -1,7 +1,6 @@
 ---
 container_runtime: containerd
 image:
-  repository: harbor.whezzel.com/proxy-docker.io/crowdsecurity/crowdsec
   pullPolicy: Always
   #tag: dev
   tag: latest

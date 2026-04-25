@@ -1,5 +1,4 @@
 image:
-  repository: harbor.whezzel.com/proxy-docker.io/emberstack/kubernetes-reflector
   pullPolicy: IfNotPresent
 replicaCount: 2
 resources:

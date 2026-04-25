@@ -32,7 +32,7 @@ spec:
         - name: frigate
           securityContext:
             privileged: true
-          image: harbor.whezzel.com/proxy-ghcr.io/blakeblackshear/frigate:stable
+          image: ghcr.io/blakeblackshear/frigate:stable
           imagePullPolicy: Always
           env:
             - name: NVIDIA_VISIBLE_DEVICES

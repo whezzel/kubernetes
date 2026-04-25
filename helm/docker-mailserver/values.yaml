@@ -1,7 +1,6 @@
 nameOverride: ""
 fullnameOverride: ""
 image:
-  name: "harbor.whezzel.com/proxy-docker.io/mailserver/docker-mailserver"
   pullPolicy: "IfNotPresent"
 serviceAccount:
   create: true

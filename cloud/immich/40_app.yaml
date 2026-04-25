@@ -25,7 +25,7 @@ spec:
       enableServiceLinks: false
       containers:
         - name: immich-machine-learning
-          image: harbor.whezzel.com/proxy-ghcr.io/immich-app/immich-machine-learning:release
+          image: ghcr.io/immich-app/immich-machine-learning:release
           imagePullPolicy: Always
           env:
             - name: TZ
@@ -63,7 +63,7 @@ spec:
               memory: 2Gi
               cpu: 2000m
         - name: immich
-          image: harbor.whezzel.com/proxy-ghcr.io/immich-app/immich-server:release
+          image: ghcr.io/immich-app/immich-server:release
           imagePullPolicy: Always
           ports:
             - containerPort: 2283

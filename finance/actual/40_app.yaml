@@ -27,7 +27,7 @@ spec:
       enableServiceLinks: false
       containers:
         - name: actual
-          image: harbor.whezzel.com/proxy-ghcr.io/actualbudget/actual-server:latest
+          image: ghcr.io/actualbudget/actual-server:latest
           imagePullPolicy: Always
           ports:
             - name: http
