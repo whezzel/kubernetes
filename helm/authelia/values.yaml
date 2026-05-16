@@ -217,9 +217,16 @@ configMap:
           - authelia.whezzel.com
         policy: bypass
       - domain:
+          - alertmanager.whezzel.com
+        subject:
+          - group:admins
+          - group:alertmanager
+        policy: two_factor
+      - domain:
           - baikal.whezzel.com
         resources:
           - ^/dav.php.*$
+          - ^/.well-known.*$
         policy: bypass
       - domain:
           - baikal.whezzel.com
@@ -297,6 +304,12 @@ configMap:
         subject:
           - group:admins
           - group:nodered
+        policy: two_factor
+      - domain:
+          - prometheus.whezzel.com
+        subject:
+          - group:admins
+          - group:prometheus
         policy: two_factor
       - domain:
           - prowlarr.whezzel.com

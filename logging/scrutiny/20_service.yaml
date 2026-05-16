@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: scrutiny
   namespace: logging
+  labels:
+    app: scrutiny-master-web
 spec:
   selector:
     app: scrutiny-master-web
@@ -12,3 +14,6 @@ spec:
       protocol: TCP
       port: 80
       targetPort: http
+    - name: metrics
+      port: 9900
+      targetPort: metrics

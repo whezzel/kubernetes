@@ -5,7 +5,7 @@ dns01RecursiveNameserversOnly: true
 replicaCount: 2
 deploymentAnnotations:
   reloader.stakater.com/auto: "true"
-#prometheus:
-#  enabled: true
-#  servicemonitor:
-#    enabled: true
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: true

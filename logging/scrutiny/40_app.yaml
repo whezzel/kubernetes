@@ -49,6 +49,14 @@ spec:
           volumeMounts:
             - name: scrutiny
               mountPath: /opt/scrutiny/config
+        - name: scrutiny-exporter
+          image: jianyun8023/scrutiny-exporter:latest
+          ports:
+            - containerPort: 9900
+              name: metrics
+          env:
+            - name: SCRUTINY_API_URL
+              value: "http://localhost:8080"
       volumes:
         - name: scrutiny
           persistentVolumeClaim:

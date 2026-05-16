@@ -220,10 +220,11 @@ lapi:
       enabled: false
       existingClaim: crowdsec-config
       size: 100Mi
-#  metrics:
-#    enabled: true
-#    serviceMonitor:
-#      enabled: true
+  metrics:
+    serviceMonitor:
+      enabled: true
+    podMonitor:
+      enabled: true
   storeCAPICredentialsInSecret: false
 agent:
   daemonsetAnnotations:

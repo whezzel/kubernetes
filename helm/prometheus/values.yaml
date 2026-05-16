@@ -1,0 +1,190 @@
+# Disable bundled Grafana (using existing internal Grafana)
+grafana:
+  enabled: false
+
+# Configure Kubelet/cAdvisor to strip high-cardinality IDs while preserving uniqueness
+kubelet:
+  enabled: true
+  serviceMonitor:
+    metricRelabelings:
+      # Drop the specific high-cardinality IDs and histograms
+      - action: labeldrop
+        regex: '(id|name|image|instance)'
+      - action: drop
+        sourceLabels: [__name__]
+        regex: 'rest_client_request_duration_seconds_bucket'
+      # Normalize pod names to 'workload' for clean history
+      - sourceLabels: [pod]
+        regex: '(.+)-[0-9a-f]{8,10}-[a-z0-9]{5}'
+        targetLabel: workload
+        replacement: '$1'
+
+kubeStateMetrics:
+  enabled: true
+  prometheus:
+    monitor:
+      metricRelabelings:
+        - action: labeldrop
+          regex: '(pod_uid|container_id|image_id|instance|resource_version|generation)'
+        - sourceLabels: [pod]
+          regex: '(.+)-[0-9a-f]{8,10}-[a-z0-9]{5}'
+          targetLabel: workload
+          replacement: '$1'
+
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/auth-method: GET
+      nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
+      nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
+      nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+    hosts:
+      - prometheus.whezzel.com
+    paths:
+      - /
+    pathType: Prefix
+
+  prometheusSpec:
+    # GLOBAL PRUNING: This targets the bloat from apiserver/etcd histograms.
+    metricRelabelings:
+      - action: drop
+        sourceLabels: [__name__]
+        regex: '(apiserver|etcd|kubelet|storage|container_cpu|container_fs)_.*_bucket'
+      # Drop the container_tasks_state metric which is high-cardinality and not useful for long-term storage.
+      - action: drop
+        sourceLabels: [__name__]
+        regex: 'container_tasks_state'
+
+    # Keep monitor selection explicit so additional monitors are always discovered.
+    podMonitorNamespaceSelector: {}
+    podMonitorSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleNamespaceSelector: {}
+    ruleSelector: {}
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
+    serviceMonitorSelectorNilUsesHelmValues: false
+    walCompression: true
+
+    # Storage for Prometheus TSDB
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+
+    # Retention settings
+    #retention: 7d
+    retentionSize: "40GB"
+    scrapeInterval: "60s"
+
+    # Scrape Talos API & Telegraf exporters running outside Kubernetes.
+    additionalScrapeConfigs:
+      - job_name: talos-nodes
+        scrape_interval: 60s
+        static_configs:
+          - targets:
+              - '10.69.20.11:9100'
+              - '10.69.20.12:9100'
+              - '10.69.20.13:9100'
+              - '10.69.20.14:9100'
+              - '10.69.20.15:9100'
+              - '10.69.20.16:9100'
+              - '10.69.20.17:9100'
+              - '10.69.20.18:9100'
+            labels:
+              source: talos-internal
+              host_role: k8s-node
+      - job_name: telegraf-external
+        scrape_interval: 60s
+        metrics_path: /metrics
+        scheme: http
+        static_configs:
+          - targets:
+              - 10.69.20.2:9273 # opnsense01
+            labels:
+              source: telegraf
+              host_role: router
+          - targets:
+              - 10.69.20.3:9273 # opnsense02
+            labels:
+              source: telegraf
+              host_role: router
+          - targets:
+              - 10.69.20.51:9273 # NAS
+            labels:
+              source: telegraf
+              host_role: nas
+
+  additionalServiceMonitors:
+    - name: longhorn
+      additionalLabels:
+        app.kubernetes.io/part-of: kube-prometheus-stack
+      namespaceSelector:
+        matchNames:
+          - longhorn
+      selector:
+        matchLabels:
+          app: longhorn-manager
+      endpoints:
+        - port: manager
+          path: /metrics
+          interval: 60s
+    - name: scrutiny-metrics
+      additionalLabels:
+        app.kubernetes.io/part-of: kube-prometheus-stack
+      namespaceSelector:
+        matchNames:
+          - logging
+      selector:
+        matchLabels:
+          app: scrutiny-master-web
+      endpoints:
+        - port: metrics
+          path: /metrics
+          interval: 60s
+          #scrapeTimeout: 10s
+
+# Disable direct etcd/controller-manager/scheduler probing—Talos doesn't expose them
+# on standard ports. Use talos-machine-metrics (port 9100) instead for control plane health.
+kubeEtcd:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+# Disable kube-proxy monitoring since using Cilium.
+kubeProxy:
+  enabled: false
+
+nodeExporter:
+  enabled: true
+
+# Talos node-exporter settings: avoid traditional rootfs mount.
+prometheus-node-exporter:
+  hostRootFsMount:
+    enabled: false
+
+alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/auth-method: GET
+      nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
+      nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
+      nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+    hosts:
+      - alertmanager.whezzel.com
+    paths:
+      - /
+    pathType: Prefix
