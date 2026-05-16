@@ -1,3 +1,4 @@
+replicas: 2
 webhook:
   enabled: true
   endpoint: http://nodered.homeassistant/hooks/ndN656rVjA6E5V26nxXgGmRHo99Cm7wg
