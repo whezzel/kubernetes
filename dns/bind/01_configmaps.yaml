@@ -46,16 +46,7 @@ data:
         zone "localhost" { type primary; file "/var/lib/bind/localhost.db"; };
         zone "127.in-addr.arpa" { type primary; file "/var/lib/bind/127.in-addr.arpa.db"; };
         zone "whezzel.com" { type primary; file "/var/lib/bind/internal/whezzel.com.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "2.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/2.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "20.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/20.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "40.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/40.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "41.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/41.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "42.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/42.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "43.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/43.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "44.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/44.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "50.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/50.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "99.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/99.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
-        zone "100.69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/100.69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
+        zone "69.10.in-addr.arpa" { type primary; file "/var/lib/bind/internal/69.10.in-addr.arpa.db"; also-notify { 10.69.20.2 key internal; 10.69.20.3 key internal; }; };
         zone "nomacsec.com" { type forward; forward only; forwarders { 10.0.3.1; }; };
     };
 
