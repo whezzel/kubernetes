@@ -17,5 +17,5 @@ helm upgrade --install keel keel \
 ## Dump chart values
 
 ```bash
-helm show values keel --repo https://charts.keel.sh > ./helm/keel/temp-values.yaml
+helm show values keel --repo https://charts.keel.sh > ./helm/keel/default-values.yaml
 ```

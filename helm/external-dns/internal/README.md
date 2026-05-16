@@ -23,5 +23,5 @@ helm upgrade --install external-dns-internal external-dns \
 ## Dump chart values
 
 ```bash
-helm show values external-dns --repo https://kubernetes-sigs.github.io/external-dns > ./helm/external-dns/internal/temp-values.yaml
+helm show values external-dns --repo https://kubernetes-sigs.github.io/external-dns > ./helm/external-dns/default-values.yaml
 ```

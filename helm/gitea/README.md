@@ -25,5 +25,5 @@ helm upgrade --install gitea gitea \
 ## Dump chart values
 
 ```bash
-helm show values gitea --repo https://dl.gitea.com/charts > ./helm/gitea/temp-values.yaml
+helm show values gitea --repo https://dl.gitea.com/charts > ./helm/gitea/default-values.yaml
 ```

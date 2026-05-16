@@ -30,5 +30,5 @@ helm upgrade --install openldap openldap-stack-ha \
 ## Dump chart values
 
 ```bash
-helm show values openldap-stack-ha --repo https://jp-gouin.github.io/helm-openldap > ./helm/openldap/temp-values.yaml
+helm show values openldap-stack-ha --repo https://jp-gouin.github.io/helm-openldap > ./helm/openldap/default-values.yaml
 ```

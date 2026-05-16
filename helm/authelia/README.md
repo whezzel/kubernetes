@@ -25,5 +25,5 @@ helm upgrade --install authelia authelia \
 ## Dump chart values
 
 ```bash
-helm show values authelia --repo https://charts.authelia.com > ./helm/authelia/temp-values.yaml
+helm show values authelia --repo https://charts.authelia.com > ./helm/authelia/default-values.yaml
 ```

@@ -17,5 +17,5 @@ helm upgrade --install nginx ingress-nginx \
 ## Dump chart values
 
 ```bash
-helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx > ./helm/nginx/temp-values.yaml
+helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx > ./helm/nginx/default-values.yaml
 ```

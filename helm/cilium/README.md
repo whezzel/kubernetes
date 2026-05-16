@@ -11,7 +11,7 @@ helm upgrade --install cilium cilium \
 ## Dump chart values
 
 ```bash
-helm show values cilium --repo https://helm.cilium.io > ./helm/cilium/temp-values.yaml
+helm show values cilium --repo https://helm.cilium.io > ./helm/cilium/default-values.yaml
 ```
 
 helm upgrade --install cilium-preflight cilium \

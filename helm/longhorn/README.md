@@ -23,5 +23,5 @@ k apply -Rf ./helm/longhorn/
 ## Dump chart values
 
 ```bash
-helm show values longhorn --repo https://charts.longhorn.io > ./helm/longhorn/temp-values.yaml
+helm show values longhorn --repo https://charts.longhorn.io > ./helm/longhorn/default-values.yaml
 ```

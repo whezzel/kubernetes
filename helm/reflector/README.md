@@ -12,5 +12,5 @@ helm upgrade --install reflector reflector \
 ## Dump chart values
 
 ```bash
-helm show values reflector --repo https://emberstack.github.io/helm-charts > ./helm/reflector/temp-values.yaml
+helm show values reflector --repo https://emberstack.github.io/helm-charts > ./helm/reflector/default-values.yaml
 ```

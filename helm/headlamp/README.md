@@ -25,5 +25,5 @@ kubectl create token headlamp --namespace kube-system
 ## Dump chart values
 
 ```bash
-helm show values headlamp --repo https://kubernetes-sigs.github.io/headlamp > ./helm/headlamp/temp-values.yaml
+helm show values headlamp --repo https://kubernetes-sigs.github.io/headlamp > ./helm/headlamp/default-values.yaml
 ```

@@ -23,5 +23,5 @@ kubectl apply -Rf ./helm/cert-manager
 ## Dump chart values
 
 ```bash
-helm show values cert-manager --repo https://charts.jetstack.io > ./helm/cert-manager/temp-values.yaml
+helm show values cert-manager --repo https://charts.jetstack.io > ./helm/cert-manager/default-values.yaml
 ```

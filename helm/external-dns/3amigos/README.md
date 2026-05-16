@@ -19,3 +19,9 @@ helm upgrade --install external-dns-3amigos external-dns \
     --create-namespace \
     --values ./helm/external-dns/3amigos/values.yaml
 ```
+
+## Dump chart values
+
+```bash
+helm show values external-dns --repo https://kubernetes-sigs.github.io/external-dns > ./helm/external-dns/default-values.yaml
+```

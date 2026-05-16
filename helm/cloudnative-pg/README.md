@@ -19,5 +19,5 @@ helm upgrade --install cloudnative-pg cloudnative-pg \
 ## Dump chart values
 
 ```bash
-helm show values cloudnative-pg --repo https://cloudnative-pg.github.io/charts > ~/repos/k8s/helm/cloudnative-pg/temp-values.yaml
+helm show values cloudnative-pg --repo https://cloudnative-pg.github.io/charts > ./helm/cloudnative-pg/default-values.yaml
 ```

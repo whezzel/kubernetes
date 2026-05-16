@@ -13,5 +13,5 @@ helm upgrade --install <APPNAME>-valkey valkey \
 
 ## Dump chart values
 ```bash
-helm show values valkey --repo https://groundhog2k.github.io/helm-charts > ./helm/valkey/temp-values.yaml
+helm show values valkey --repo https://groundhog2k.github.io/helm-charts > ./helm/valkey/default-values.yaml
 ```

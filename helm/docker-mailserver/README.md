@@ -24,7 +24,7 @@ helm upgrade --install docker-mailserver docker-mailserver \
 ## Dump chart values
 
 ```bash
-helm show values docker-mailserver --repo https://docker-mailserver.github.io/docker-mailserver-helm > ./helm/docker-mailserver/temp-values.yaml
+helm show values docker-mailserver --repo https://docker-mailserver.github.io/docker-mailserver-helm > ./helm/docker-mailserver/default-values.yaml
 ```
 
 ## Generate new client secret

@@ -23,7 +23,7 @@ helm upgrade --install crowdsec crowdsec \
 ## Dump chart values
 
 ```bash
-helm show values crowdsec --repo https://crowdsecurity.github.io/helm-charts > ./helm/crowdsec/temp-values.yaml
+helm show values crowdsec --repo https://crowdsecurity.github.io/helm-charts > ./helm/crowdsec/default-values.yaml
 ```
 
 ## Remove extra machines from lapi
