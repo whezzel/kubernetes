@@ -24,4 +24,4 @@ spec:
               service:
                 name: frigate
                 port:
-                  name: http-auth
+                  name: http-unauth
