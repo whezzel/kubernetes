@@ -41,18 +41,35 @@ Open `multus-daemonset-thick.yml` in your preferred text editor (e.g., vim, nano
   - "thick"
   ```
 
+### Generate Secret with github Personal Access Token
+
+  ```bash
+  kubectl create secret generic github-token \
+    --from-literal=token=ghp_your_token_here_or_github_pat_... \
+    -n <your-namespace>
+  ```
+
 ### Add Init Container for Macvlan Plugin
 
 - In the same `initContainers` section, add a new init container entry (e.g., after the `install-multus-binary` container) to dynamically download the latest CNI plugins archive for the node's architecture, extract only the macvlan binary, and copy it to `/opt/cni/bin`. Insert the following YAML block:
 
   ```yaml
   - name: install-macvlan
-    image: alpine:latest
+    image: docker.io/alpine:latest
+    env:
+      - name: GITHUB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: github-token
+            key: token
     command:
     - sh
     - -c
     - |
-      TAG=$(wget -qO- https://api.github.com/repos/containernetworking/plugins/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') &&
+      set -e
+      TAG=$(wget -qO- --header="Authorization: Bearer $GITHUB_TOKEN" \
+        https://api.github.com/repos/containernetworking/plugins/releases/latest \
+        | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') &&
       ARCH=$(uname -m) &&
       case "$ARCH" in
         x86_64) ARCH_SUFFIX="amd64" ;;
@@ -61,16 +78,18 @@ Open `multus-daemonset-thick.yml` in your preferred text editor (e.g., vim, nano
         *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
       esac &&
       echo "Downloading: https://github.com/containernetworking/plugins/releases/download/$TAG/cni-plugins-linux-${ARCH_SUFFIX}-$TAG.tgz" &&
-      wget https://github.com/containernetworking/plugins/releases/download/$TAG/cni-plugins-linux-${ARCH_SUFFIX}-$TAG.tgz -O /tmp/cni.tgz &&
+      wget --header="Authorization: Bearer $GITHUB_TOKEN" \
+        "https://github.com/containernetworking/plugins/releases/download/$TAG/cni-plugins-linux-${ARCH_SUFFIX}-$TAG.tgz" \
+        -O /tmp/cni.tgz &&
       tar -xzf /tmp/cni.tgz -C /tmp ./macvlan &&
       cp /tmp/macvlan /host/opt/cni/bin/macvlan &&
       rm -rf /tmp/cni.tgz /tmp/macvlan
     securityContext:
       privileged: true
     volumeMounts:
-    - mountPath: /host/opt/cni/bin
-      name: cnibin
-      mountPropagation: Bidirectional
+      - mountPath: /host/opt/cni/bin
+        name: cnibin
+        mountPropagation: Bidirectional
   ```
 
 This init container:
