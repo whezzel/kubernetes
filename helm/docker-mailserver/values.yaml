@@ -470,6 +470,47 @@ configMaps:
           fileinto :create "INBOX.${folder}";
           stop;
       }
+  sieve-zach:
+    create: true
+    path: zach@whezzel.com.dovecot.sieve
+    data: |
+      require ["fileinto", "mailbox", "variables", "regex"];
+      
+      if header :regex "X-Original-To" "^([^@+]+)(\\+([^@]+))?@whezzel\\.com$" {
+          set "base" "${1}";
+          set "tag" "${3}";
+      
+          if string :is "${tag}" "" {
+              set :lower "folder" "${base}";
+          } else {
+              set :lower "base_l" "${base}";
+              set :lower "tag_l" "${tag}";
+      
+              # Sanitize dots in tag (replace . with _)
+              set "tag_clean" "${tag_l}";
+              if string :matches "${tag_clean}" "*.*" {
+                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
+                      set "tag_clean" "${1}_${2}";
+                  }
+              }
+              if string :matches "${tag_clean}" "*.*" {
+                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
+                      set "tag_clean" "${1}_${2}";
+                  }
+              }
+              if string :matches "${tag_clean}" "*.*" {
+                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
+                      set "tag_clean" "${1}_${2}";
+                  }
+              }
+      
+              set "folder" "${base_l}.${tag_clean}";
+          }
+      
+          set :upperfirst "folder" "${folder}";
+          fileinto :create "INBOX.${folder}";
+          stop;
+      }
 secrets:
   rspamd.dkim.rsa-2048-mail-whezzel.com.private.txt:
     name: rspamd.dkim.rsa-2048-mail-whezzel.com.private.txt
