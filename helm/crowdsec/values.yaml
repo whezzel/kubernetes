@@ -2,49 +2,11 @@
 container_runtime: containerd
 image:
   pullPolicy: Always
-  #tag: dev
   tag: latest
 config:
   parsers:
     s00-raw: {}
     s01-parse:
-      gotify-logs.yaml: |
-        ---
-        filter: evt.Parsed.program == "gotify"
-        debug: false
-        onsuccess: next_stage
-        name: whezzel/gotify-logs
-        description: parser for Gotify server
-        pattern_syntax:
-          OLD_TIMESTAMP: '^\[GIN\] %{YEAR:year}/%{MONTHDAY:month}/%{DAY2:day} - %{TIME:time}'
-          NEW_TIMESTAMP: '^%{YEAR:year}-%{MONTHDAY:month}-%{DAY2:day}T%{TIME:time}%{ISO8601_TIMEZONE}'
-          SEPERATOR: '%{SPACE}[|]%{SPACE}'
-        nodes:
-          - grok:
-              pattern: '%{OLD_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
-              # example: [GIN] 2022/02/07 - 10:49:33 | 401 |     505.317µs |       156.146.39.213 | POST     "/client"
-              apply_on: message
-              statics:
-                - meta: log_type
-                  value: gotify_failed_auth
-                - target: StrTime
-                  expression: |-
-                    evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
-          - grok:
-              pattern: '%{NEW_TIMESTAMP}%{SEPERATOR}%{NUMBER:http_status}%{SEPERATOR}%{DATA:request_time_tool}%{SEPERATOR}%{IP:source_ip}%{SEPERATOR}%{WORD:request_type}%{SPACE}\"\/%{WORD:endpoint}\"$'
-              # example: 2023-10-08T14:02:49-05:00 | 401 |    5.719155ms |  156.146.39.213 | POST     "/client"
-              apply_on: message
-              statics:
-                - meta: log_type
-                  value: gotify_failed_auth
-                - target: StrTime
-                  expression: |-
-                    evt.Parsed.year + "-" + evt.Parsed.month + "-" + evt.Parsed.day + "T" + evt.Parsed.time
-        statics:
-          - meta: source_ip
-            expression: evt.Parsed.source_ip
-          - meta: http_status
-            expression: evt.Parsed.http_status
       dovecot-logs.yaml: |
         ---
         onsuccess: next_stage
@@ -69,26 +31,7 @@ config:
             - meta: dovecot_login_result
               expression: "any(['Authentication failure', 'Password mismatch', 'password mismatch', 'auth failed', 'unknown user'], {evt.Parsed.dovecot_login_message contains #}) ? 'auth_failed' : ''"
     s02-enrich: {}
-  scenarios:
-    gotify-bf.yaml: |
-      ---
-      type: leaky
-      name: whezzel/gotify-bf
-      description: "Detect bruteforce"
-      filter: "evt.Meta.log_type  == 'gotify_failed_auth'"
-      groupby: "evt.Meta.source_ip"
-      capacity: 4
-      leakspeed: "10s"
-      blackhole: 1m
-      labels:
-        service: gotify
-        behavior: "http:bruteforce"
-        classification:
-          - attack.T1110
-        spoofable: 0
-        confidence: 3
-        label: "Gotify Bruteforce"
-        remediation: true
+  scenarios: {}
   postoverflows:
     s00-enrich: {}
     s01-whitelist: {}
