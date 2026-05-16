@@ -68,7 +68,7 @@ spec:
         - name: zwavejs
           securityContext:
             privileged: true
-          image: harbor.whezzel.com/proxy-docker.io/zwavejs/zwave-js-ui:latest
+          image: docker.io/zwavejs/zwave-js-ui:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8091
@@ -101,7 +101,7 @@ spec:
               mountPath: /usr/src/app/store
               subPath: zwavejs
         - name: vscode
-          image: harbor.whezzel.com/proxy-lscr.io/linuxserver/code-server:latest
+          image: lscr.io/linuxserver/code-server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
