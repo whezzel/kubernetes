@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: baikal-nginx-config
+  namespace: cloud
+data:
+  default.conf: |
+    # Based on http://sabre.io/baikal/install/
+    
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name _;
+    
+      # Trust ingress-nginx and use the real client IP
+      set_real_ip_from 10.244.0.0/16;
+      set_real_ip_from 10.69.21.2;
+      set_real_ip_from 10.69.21.3;
+      real_ip_header X-Forwarded-For;
+      real_ip_recursive on;
+    
+      root   /var/www/baikal/html;
+      index index.php;
+    
+      location = /.well-known/caldav {
+        return 301 $http_x_forwarded_proto://$host/dav.php;
+      }
+      location = /.well-known/carddav {
+        return 301 $http_x_forwarded_proto://$host/dav.php;
+      }
+    
+      charset utf-8;
+    
+      location ~ /(\.ht|Core|Specific) {
+        deny all;
+        return 404;
+      }
+    
+      # Pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+      location ~ ^(.+\.php)(.*)$ {
+        try_files $fastcgi_script_name =404;
+        include        /etc/nginx/fastcgi_params;
+        fastcgi_split_path_info  ^(.+\.php)(.*)$;
+        fastcgi_pass   unix:/var/run/php-fpm.sock;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param  PATH_INFO        $fastcgi_path_info;
+      }
+    
+      # Deny access to Apache httpd .htaccess files, see https://github.com/JsBergbau/BaikalAnleitung#webserver-konfiguration
+      location ~ /.ht {
+        deny all;
+      }
+    }
