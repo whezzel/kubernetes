@@ -114,7 +114,7 @@ configMap:
       prohibited_aaguids: []
       prohibit_backup_eligibility: false
     selection_criteria:
-      attachment:
+      attachment: ''
       discoverability: preferred
       user_verification: preferred
     metadata:
@@ -134,7 +134,7 @@ configMap:
   authentication_backend:
     password_reset:
       disable: false
-      custom_url:
+      custom_url: ''
     password_change:
       disable: false
     refresh_interval: 5 minutes
@@ -145,7 +145,7 @@ configMap:
       timeout: 5 seconds
       start_tls: false
       tls:
-        server_name:
+        server_name: ''
         skip_verify: false
         minimum_version: TLS1.2
         maximum_version: TLS1.3
@@ -172,24 +172,24 @@ configMap:
         distinguished_name: distinguishedName
         username: uid
         display_name: displayName
-        family_name:
-        given_name:
-        middle_name:
-        nickname:
-        gender:
-        birthdate:
-        website:
-        profile:
-        picture:
-        zoneinfo:
-        locale:
-        phone_number:
-        phone_extension:
-        street_address:
-        locality:
-        region:
-        postal_code:
-        country:
+        family_name: ''
+        given_name: ''
+        middle_name: ''
+        nickname: ''
+        gender: ''
+        birthdate: ''
+        website: ''
+        profile: ''
+        picture: ''
+        zoneinfo: ''
+        locale: ''
+        phone_number: ''
+        phone_extension: ''
+        street_address: ''
+        locality: ''
+        region: ''
+        postal_code: ''
+        country: ''
         mail: mail
         member_of: memberOf
         group_name: cn
@@ -210,7 +210,7 @@ configMap:
     secret:
       enabled: false
       key: configuration.acl.yaml
-      existingSecret:
+      existingSecret: ''
     default_policy: deny
     rules:
       - domain:
@@ -405,7 +405,7 @@ configMap:
         inactivity: 5 minutes
         expiration: 1 hour
     redis:
-      enabled: enabled
+      enabled: true
       deploy: false
       host: authelia-valkey-headless.valkey.svc.cluster.local
       port: 6379
@@ -420,7 +420,7 @@ configMap:
       minimum_idle_connections: 0
       tls:
         enabled: false
-        server_name:
+        server_name: ''
         skip_verify: false
         minimum_version: TLS1.2
         maximum_version: TLS1.3
@@ -469,7 +469,7 @@ configMap:
         path: storage.postgres.password.txt
       tls:
         enabled: false
-        server_name:
+        server_name: ''
         skip_verify: false
         minimum_version: TLS1.2
         maximum_version: TLS1.3
