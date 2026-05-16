@@ -36,7 +36,3 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
-          resources:
-            requests:
-              memory: 16Mi
-              cpu: 10m

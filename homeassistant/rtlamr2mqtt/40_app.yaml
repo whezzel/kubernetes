@@ -72,10 +72,6 @@ spec:
               mountPath: /etc/rtlamr2mqtt.yaml
               readOnly: true
               subPath: rtlamr2mqtt.yaml
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 300m
       volumes:
         - name: usb
           hostPath:

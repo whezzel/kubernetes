@@ -48,10 +48,6 @@ spec:
           volumeMounts:
             - name: scrutiny
               mountPath: /opt/scrutiny/config
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: scrutiny
           persistentVolumeClaim:
@@ -101,10 +97,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -157,10 +149,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -213,10 +201,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -264,10 +248,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -315,10 +295,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -366,10 +342,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -417,10 +389,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:
@@ -468,10 +436,6 @@ spec:
               mountPath: /opt/scrutiny/config/collector.yaml
               readOnly: true
               subPath: collector.yaml
-          resources:
-            requests:
-              memory: 32Mi
-              cpu: 50m
       volumes:
         - name: udev
           hostPath:

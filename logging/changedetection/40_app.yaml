@@ -65,10 +65,6 @@ spec:
           volumeMounts:
             - name: changedetection
               mountPath: /datastore
-          resources:
-            requests:
-              memory: 64Mi
-              cpu: 100m
       volumes:
         - name: changedetection
           persistentVolumeClaim:

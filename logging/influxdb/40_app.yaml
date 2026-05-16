@@ -46,10 +46,6 @@ spec:
             - name: influxdb
               mountPath: /etc/influxdb2
               subPath: config
-          resources:
-            requests:
-              memory: 1800Mi
-              cpu: 500m
       volumes:
         - name: influxdb
           persistentVolumeClaim:

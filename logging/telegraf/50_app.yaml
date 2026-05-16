@@ -64,10 +64,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -141,10 +137,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -218,10 +210,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -290,10 +278,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -362,10 +346,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -434,10 +414,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -506,10 +482,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:
@@ -578,10 +550,6 @@ spec:
             - name: host
               mountPath: /host
               readOnly: true
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: host
           hostPath:

@@ -67,10 +67,6 @@ spec:
             - name: grafana
               mountPath: /etc/grafana
               subPath: grafana
-          resources:
-            requests:
-              memory: 320Mi
-              cpu: 250m
       volumes:
         - name: grafana
           persistentVolumeClaim:

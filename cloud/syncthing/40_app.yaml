@@ -79,10 +79,6 @@ spec:
               mountPath: /syncthing
             - name: nas-3amigos
               mountPath: /3amigos
-          resources:
-            requests:
-              memory: 1Gi
-              cpu: 1000m
       volumes:
         - name: syncthing
           persistentVolumeClaim:

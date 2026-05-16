@@ -66,10 +66,6 @@ spec:
               subPath: log
             - name: certs
               mountPath: /ssl
-          resources:
-            requests:
-              memory: 64Mi
-              cpu: 50m
       volumes:
         - name: mosquitto
           persistentVolumeClaim:

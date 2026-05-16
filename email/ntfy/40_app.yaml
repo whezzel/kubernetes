@@ -57,10 +57,6 @@ spec:
           volumeMounts:
             - name: ntfy
               mountPath: /var/cache/ntfy
-          resources:
-            requests:
-              memory: 64Mi
-              cpu: 50m
       volumes:
         - name: ntfy
           persistentVolumeClaim:

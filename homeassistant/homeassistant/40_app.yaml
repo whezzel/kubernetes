@@ -64,10 +64,6 @@ spec:
             - name: homeassistant
               mountPath: /config
               subPath: homeassistant
-          resources:
-            requests:
-              memory: 700Mi
-              cpu: 500m
         - name: zwavejs
           securityContext:
             privileged: true
@@ -103,10 +99,6 @@ spec:
             - name: homeassistant
               mountPath: /usr/src/app/store
               subPath: zwavejs
-          resources:
-            requests:
-              memory: 128Mi
-              cpu: 150m
         - name: vscode
           image: harbor.whezzel.com/proxy-lscr.io/linuxserver/code-server:latest
           imagePullPolicy: Always
@@ -156,10 +148,6 @@ spec:
             - name: ssh-key
               mountPath: /config/.ssh/vscode_id_ed25519
               subPath: ssh-key
-          resources:
-            requests:
-              memory: 300Mi
-              cpu: 100m
       volumes:
         - name: homeassistant
           persistentVolumeClaim:

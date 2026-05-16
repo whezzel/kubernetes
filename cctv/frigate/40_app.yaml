@@ -67,10 +67,6 @@ spec:
               mountPath: /dev/shm
             - name: tmp
               mountPath: /tmp
-          resources:
-            requests:
-              memory: 3Gi
-              cpu: 4000m
       volumes:
         - name: frigate
           persistentVolumeClaim:

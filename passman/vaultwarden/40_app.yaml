@@ -75,10 +75,6 @@ spec:
             - name: vaultwarden
               mountPath: /data
               subPath: data
-          resources:
-            requests:
-              memory: 128Mi
-              cpu: 50m
       volumes:
         - name: vaultwarden
           persistentVolumeClaim:

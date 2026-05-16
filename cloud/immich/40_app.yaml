@@ -58,10 +58,6 @@ spec:
           volumeMounts:
             - name: ml-cache
               mountPath: /cache
-          resources:
-            requests:
-              memory: 2Gi
-              cpu: 2000m
         - name: immich
           image: ghcr.io/immich-app/immich-server:release
           imagePullPolicy: Always
@@ -99,10 +95,6 @@ spec:
           volumeMounts:
             - name: photos
               mountPath: /photos
-#          resources:
-#            requests:
-#              memory: 2Gi
-#              cpu: 2000m
       volumes:
         - name: photos
           nfs:

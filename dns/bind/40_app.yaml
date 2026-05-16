@@ -71,10 +71,6 @@ spec:
             - name: bind
               mountPath: /var/log/bind
               subPath: log
-          resources:
-            requests:
-              memory: 64Mi
-              cpu: 50m
       volumes:
         - name: bind
           persistentVolumeClaim:

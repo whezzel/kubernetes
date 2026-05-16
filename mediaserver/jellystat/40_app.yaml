@@ -79,7 +79,3 @@ spec:
                   key: jwt_secret
             - name: POSTGRES_DB
               value: jellystat
-          resources:
-            requests:
-              memory: 200Mi
-              cpu: 50m

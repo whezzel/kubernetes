@@ -290,9 +290,6 @@ spec:
             - name: nas-config
               mountPath: /data/transmission-home
           resources:
-            requests:
-              memory: 256Mi
-              cpu: 150m
             limits:
               squat.ai/tun: "1"
           securityContext:

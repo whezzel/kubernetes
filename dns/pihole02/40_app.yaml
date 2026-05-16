@@ -71,10 +71,6 @@ spec:
             - name: pihole02
               mountPath: /etc/dnsmasq.d
               subPath: dnsmasq
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 50m
       volumes:
         - name: pihole02
           persistentVolumeClaim:

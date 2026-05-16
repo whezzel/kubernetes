@@ -38,7 +38,3 @@ spec:
               value: "false"
             - name: CRON
               value: "*/10 * * * *"
-          resources:
-            requests:
-              memory: 64Mi
-              cpu: 50m

@@ -41,10 +41,6 @@ spec:
               mountPath: /usr/share/nginx/html/config.json
               readOnly: false
               subPath: config.json
-          resources:
-            requests:
-              memory: 16Mi
-              cpu: 50m
       volumes:
         - name: mainsail-config
           configMap:

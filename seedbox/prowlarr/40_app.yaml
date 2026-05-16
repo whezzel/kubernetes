@@ -107,10 +107,6 @@ spec:
           volumeMounts:
             - name: nas-media
               mountPath: /media
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
       volumes:
         - name: nas-media
           nfs:

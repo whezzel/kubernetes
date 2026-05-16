@@ -132,15 +132,6 @@ deployment:
   containerSecurityContext:
     readOnlyRootFilesystem: false
     privileged: false
-  resources:
-    requests:
-      cpu: "1"
-      memory: "1536Mi"
-      ephemeral-storage: "100Mi"
-    limits:
-      cpu: "2"
-      memory: "2048Mi"
-      ephemeral-storage: "500Mi"
   resizePolicy: []
   tolerations: []
   initContainers: []
