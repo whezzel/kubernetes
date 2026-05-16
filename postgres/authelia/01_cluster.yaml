@@ -4,6 +4,8 @@ kind: Cluster
 metadata:
   name: authelia-postgres
   namespace: postgres
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   description: Authelia Database
   imageName: ghcr.io/cloudnative-pg/postgresql:17.2

@@ -1,1 +1,3 @@
 replicaCount: 2
+commonAnnotations:
+  reloader.stakater.com/auto: "true"

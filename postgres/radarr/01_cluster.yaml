@@ -4,6 +4,8 @@ kind: Cluster
 metadata:
   name: radarr-postgres
   namespace: postgres
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   description: Radarr Database
   imageName: ghcr.io/cloudnative-pg/postgresql:17.2

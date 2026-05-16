@@ -1,5 +1,5 @@
-image:
-  registry: 'harbor.whezzel.com/proxy-ghcr.io'
+annotations:
+  reloader.stakater.com/auto: "true"
 ingress:
   enabled: true
   rulesOverride:

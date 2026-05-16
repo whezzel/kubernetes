@@ -1,6 +1,8 @@
 ---
 controller:
   kind: DaemonSet
+  annotations:
+    reloader.stakater.com/auto: "true"
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:

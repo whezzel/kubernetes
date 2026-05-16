@@ -25,6 +25,9 @@ ingress:
 
 resources: {}
 
+deployment:
+  annotations:
+    reloader.stakater.com/auto: "true"
 persistence:
   enabled: true
   create: true

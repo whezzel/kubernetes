@@ -4,6 +4,8 @@ kind: Cluster
 metadata:
   name: gitea-postgres
   namespace: postgres
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   description: Gitea Database
   imageName: ghcr.io/cloudnative-pg/postgresql:17.2

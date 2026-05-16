@@ -4,6 +4,8 @@ kind: Cluster
 metadata:
   name: prowlarr-postgres
   namespace: postgres
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   description: Prowlarr Database
   imageName: ghcr.io/cloudnative-pg/postgresql:17.2

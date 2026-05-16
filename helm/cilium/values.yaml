@@ -1,3 +1,5 @@
+annotations:
+  reloader.stakater.com/auto: "true"
 cni:
   exclusive: false
 bgpControlPlane:

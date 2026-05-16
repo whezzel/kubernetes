@@ -1,3 +1,5 @@
+deploymentAnnotations:
+  reloader.stakater.com/auto: "true"
 env:
   - name: RFC2136_HOST
     valueFrom:

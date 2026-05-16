@@ -4,6 +4,8 @@ global:
   sslLdapPort: 636
 nameOverride: openldap
 fullnameOverride: openldap
+commonAnnotations:
+  reloader.stakater.com/auto: "true"
 replicaCount: 3
 #logLevel: info
 service:

@@ -1,0 +1,7 @@
+fullnameOverride: "reloader"
+reloader:
+  enableHA: true
+  deployment:
+    replicas: 2
+  reloadOnCreate: true
+  syncAfterRestart: true

@@ -11,6 +11,7 @@ metadata:
     keel.sh/match-tag: "true"
     keel.sh/trigger: poll
     keel.sh/pollSchedule: "@every 10m"
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

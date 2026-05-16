@@ -6,11 +6,12 @@ metadata:
   namespace: games
   labels:
     app: factorio
-#  annotations:
+  annotations:
 #    keel.sh/policy: force
 #    keel.sh/match-tag: "true"
 #    keel.sh/trigger: poll
 #    keel.sh/pollSchedule: "@every 10m"
+    reloader.stakater.com/auto: "true"
 spec:
   strategy:
     type: Recreate

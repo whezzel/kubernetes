@@ -194,6 +194,8 @@ lapi:
     host: crowdsec-api.whezzel.com
     tls:
       - {}
+  deployAnnotations:
+    reloader.stakater.com/auto: "true"
   extraVolumes:
     - name: crowdsec-capi-credentials
       secret:
@@ -224,6 +226,8 @@ lapi:
 #      enabled: true
   storeCAPICredentialsInSecret: false
 agent:
+  daemonsetAnnotations:
+    reloader.stakater.com/auto: "true"
   acquisition:
     - namespace: auth
       podName: authelia-*
