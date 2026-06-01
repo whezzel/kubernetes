@@ -76,8 +76,6 @@ spec:
               mountPath: /media
             - name: jellyfin-config
               mountPath: /config
-            - name: jellyfin-transcode
-              mountPath: /transcode
           resources:
             requests:
               memory: 1800Mi
@@ -90,9 +88,6 @@ spec:
         - name: jellyfin-config
           persistentVolumeClaim:
             claimName: jellyfin
-        - name: jellyfin-transcode
-          persistentVolumeClaim:
-            claimName: jellyfin-transcode
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
