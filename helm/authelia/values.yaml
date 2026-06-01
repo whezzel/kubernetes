@@ -613,6 +613,24 @@ configMap:
             - email
           userinfo_signed_response_alg: none
           token_endpoint_auth_method: client_secret_basic
+        - client_id: homeassistant
+          client_name: homeassistant
+          client_secret:
+            value: ''
+            path: /secrets/authelia-oidc/oidc.client.homeassistant.value
+          public: false
+          require_pkce: true
+          pkce_challenge_method: 'S256'
+          authorization_policy: two_factor
+          consent_mode: implicit
+          redirect_uris:
+            - https://homeassistant.whezzel.com/auth/oidc/callback
+          scopes:
+            - openid
+            - profile
+            - groups
+          userinfo_signed_response_alg: none
+          token_endpoint_auth_method: client_secret_post
         - client_id: immich
           client_name: immich
           client_secret:
