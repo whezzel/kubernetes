@@ -4,6 +4,8 @@ kind: Ingress
 metadata:
   name: ntfy
   namespace: email
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
 spec:
   tls:
     - {}

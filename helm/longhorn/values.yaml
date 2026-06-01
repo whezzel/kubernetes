@@ -28,3 +28,5 @@ ingress:
   host: longhorn.whezzel.com
   tls: true
   tleSecret: ""
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"

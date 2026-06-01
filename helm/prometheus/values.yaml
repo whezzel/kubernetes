@@ -40,6 +40,7 @@ prometheus:
       nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
       nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
       nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+      nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
     hosts:
       - prometheus.whezzel.com
     paths:
@@ -183,6 +184,7 @@ alertmanager:
       nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
       nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
       nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
+      nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
     hosts:
       - alertmanager.whezzel.com
     paths:

@@ -133,6 +133,7 @@ lapi:
     enabled: true
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: HTTP
+      nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
     ingressClassName: nginx
     host: crowdsec-api.whezzel.com
     tls:

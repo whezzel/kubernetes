@@ -16,6 +16,8 @@ service:
 ingress:
   enabled: true
   className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
   hosts:
     - host: gitea.whezzel.com
       paths:
