@@ -15,8 +15,8 @@ defaultSettings:
   replicaAutoBalance: best-effort
   defaultLonghornStaticStorageClass: longhorn
   replicaZoneSoftAntiAffinity: true
-  concurrentReplicaRebuildPerNodeLimit: 10
-  concurrentAutomaticEngineUpgradePerNodeLimit: 5
+  concurrentReplicaRebuildPerNodeLimit: "10"
+  concurrentAutomaticEngineUpgradePerNodeLimit: "5"
   deletingConfirmationFlag: true
   snapshotDataIntegrity: fast-check
   fastReplicaRebuildEnabled: true
