@@ -21,10 +21,3 @@ haMode:
   failoverWait: 35
   dnsFailureWait: 15
   keepOldLogs: false
-
-storage:
-  persistentVolumeClaimName:
-  volumeName: data
-  requestedSize: 2Gi
-  className: longhorn-db
-  keepPvc: false
