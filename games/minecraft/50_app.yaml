@@ -31,12 +31,8 @@ spec:
           stdin: true
           tty: true
           ports:
-            - containerPort: 8100
-              name: bluemap
             - containerPort: 25565
               name: minecraft
-#            - containerPort: 25575
-#              name: rcon
           livenessProbe:
             tcpSocket:
               port: minecraft
