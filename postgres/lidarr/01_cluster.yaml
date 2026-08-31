@@ -48,7 +48,7 @@ spec:
   enableSuperuserAccess: true
   storage:
     storageClass: longhorn-db
-    size: 3Gi
+    size: 4Gi
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
