@@ -88,16 +88,3 @@ spec:
         - name: jellyfin-config
           persistentVolumeClaim:
             claimName: jellyfin
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: jellyfin-transcode
-  namespace: mediaserver
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn-db
-  resources:
-    requests:
-      storage: 10Gi
