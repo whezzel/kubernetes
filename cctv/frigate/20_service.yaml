@@ -7,6 +7,10 @@ metadata:
 spec:
   selector:
     app: frigate
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv4
+    - IPv6
   ports:
     - name: http-auth
       protocol: TCP

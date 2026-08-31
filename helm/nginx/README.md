@@ -11,7 +11,8 @@ helm upgrade --install nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace nginx \
     --create-namespace \
-    --values ./helm/nginx/values.yaml
+    --values ./helm/nginx/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values

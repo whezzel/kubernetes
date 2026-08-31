@@ -19,7 +19,8 @@ helm upgrade --install authelia authelia \
     --repo https://charts.authelia.com \
     --namespace auth \
     --create-namespace \
-    --values ./helm/authelia/values.yaml
+    --values ./helm/authelia/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values

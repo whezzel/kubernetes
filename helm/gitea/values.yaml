@@ -4,7 +4,16 @@ strategy:
   type: "Recreate"
 
 service:
+  http:
+    ipFamilyPolicy: PreferDualStack
+    ipFamilies:
+      - IPv4
+      - IPv6
   ssh:
+    ipFamilyPolicy: PreferDualStack
+    ipFamilies:
+      - IPv4
+      - IPv6
     type: LoadBalancer
     port: 22
     clusterIP:
@@ -17,7 +26,7 @@ ingress:
   enabled: true
   className: "nginx"
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
   hosts:
     - host: gitea.whezzel.com
       paths:

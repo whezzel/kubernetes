@@ -7,6 +7,10 @@ metadata:
 spec:
   selector:
     app: syncthing
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv4
+    - IPv6
   ports:
     - name: http
       protocol: TCP
@@ -25,6 +29,10 @@ metadata:
 spec:
   selector:
     app: syncthing
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv4
+    - IPv6
   ports:
     - protocol: UDP
       name: discovery-udp

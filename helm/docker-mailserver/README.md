@@ -18,7 +18,8 @@ helm upgrade --install docker-mailserver docker-mailserver \
     --namespace=email \
     --create-namespace \
     --values ./helm/docker-mailserver/values.yaml \
-    --values ./helm/docker-mailserver/secret-values.yaml
+    --values ./helm/docker-mailserver/secret-values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values

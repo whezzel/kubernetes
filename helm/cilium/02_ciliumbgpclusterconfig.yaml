@@ -17,8 +17,18 @@ spec:
           peerAddress: 10.69.21.2
           peerConfigRef:
             name: "bgp-peer"
+        - name: opnsense01-v6
+          peerASN: 64512
+          peerAddress: fd69:0:0:21::2
+          peerConfigRef:
+            name: "bgp-peer"
         - name: opnsense02
           peerASN: 64512
           peerAddress: 10.69.21.3
+          peerConfigRef:
+            name: "bgp-peer"
+        - name: opnsense02-v6
+          peerASN: 64512
+          peerAddress: fd69:0:0:21::3
           peerConfigRef:
             name: "bgp-peer"

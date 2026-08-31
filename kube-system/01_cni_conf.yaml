@@ -6,20 +6,35 @@ metadata:
   namespace: kube-system
 spec:
   config: '{
-      "cniVersion": "0.3.0",
+      "cniVersion": "0.3.1",
       "name": "macvlan-conf",
       "type": "macvlan",
       "master": "eth0",
       "mode": "bridge",
       "ipam": {
         "type": "host-local",
-        "subnet": "10.69.20.0/24",
-        "rangeStart": "10.69.20.201",
-        "rangeEnd": "10.69.20.254",
+        "ranges": [
+          [
+            {
+              "subnet": "10.69.20.0/24",
+              "rangeStart": "10.69.20.201",
+              "rangeEnd": "10.69.20.254",
+              "gateway": "10.69.20.1"
+            }
+          ],
+          [
+            {
+              "subnet": "fd69:0:0:20::/64",
+              "rangeStart": "fd69:0:0:20::201",
+              "rangeEnd": "fd69:0:0:20::254",
+              "gateway": "fd69:0:0:20::1"
+            }
+          ]
+        ],
         "routes": [
           { "dst": "224.0.0.0/24" },
-          {	"dst": "255.255.255.255/32" }
-        ],
-        "gateway": "10.69.20.1"
+          { "dst": "255.255.255.255/32" },
+          { "dst": "ff00::/8" }
+        ]
       }
     }'

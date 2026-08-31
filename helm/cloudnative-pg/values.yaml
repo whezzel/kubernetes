@@ -1,3 +1,8 @@
 replicaCount: 2
 commonAnnotations:
   reloader.stakater.com/auto: "true"
+service:
+  ipFamilyPolicy: "PreferDualStack"
+  ipFamilies:
+    - IPv4
+    - IPv6

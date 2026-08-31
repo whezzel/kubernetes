@@ -24,9 +24,9 @@ controller:
   service:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: nginx.whezzel.com
+      lbipam.cilium.io/ips: "10.69.21.197,fd69:0:0:21::197"
     type: LoadBalancer
     externalTrafficPolicy: Local
-    loadBalancerIP: 10.69.21.197
     ports:
       http: 80
       https: 443

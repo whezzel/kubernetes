@@ -5,7 +5,8 @@ helm upgrade --install cilium cilium \
     --repo https://helm.cilium.io \
     --namespace cilium \
     --create-namespace \
-    --values ./helm/cilium/values.yaml
+    --values ./helm/cilium/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values

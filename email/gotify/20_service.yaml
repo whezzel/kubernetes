@@ -7,6 +7,10 @@ metadata:
 spec:
   selector:
     app: gotify
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv4
+    - IPv6
   ports:
     - name: http
       protocol: TCP

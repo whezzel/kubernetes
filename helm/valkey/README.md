@@ -8,10 +8,23 @@ helm upgrade --install <APPNAME>-valkey valkey \
     --repo https://groundhog2k.github.io/helm-charts \
     --namespace valkey \
     --create-namespace \
-    --values ./helm/valkey/<APPNAME>/values.yaml
+    --values ./helm/valkey/<APPNAME>/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values
 ```bash
 helm show values valkey --repo https://groundhog2k.github.io/helm-charts > ./helm/valkey/default-values.yaml
+```
+
+## Patch service for dualstack
+```bash
+kubectl get svc -n valkey -o name | while read svc; do
+  kubectl patch "$svc" -n valkey --type merge -p '{
+    "spec": {
+      "ipFamilyPolicy": "PreferDualStack",
+      "ipFamilies": ["IPv4", "IPv6"]
+    }
+  }'
+done
 ```

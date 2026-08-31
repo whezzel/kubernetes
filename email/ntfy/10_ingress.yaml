@@ -5,7 +5,7 @@ metadata:
   name: ntfy
   namespace: email
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}

@@ -4,9 +4,15 @@ kind: Service
 metadata:
   name: bind-lb
   namespace: dns
+  annotations:
+    lbipam.cilium.io/ips: "10.69.21.200,fd69:0:0:21::200"
 spec:
   selector:
     app: bind
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv4
+    - IPv6
   ports:
     - protocol: TCP
       name: dns-tcp
@@ -27,4 +33,3 @@ spec:
   type: LoadBalancer
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
-  loadBalancerIP: 10.69.21.200

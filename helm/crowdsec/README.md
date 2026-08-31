@@ -17,7 +17,8 @@ helm upgrade --install crowdsec crowdsec \
     --repo https://crowdsecurity.github.io/helm-charts \
     --namespace crowdsec \
     --create-namespace \
-    --values ./helm/crowdsec/values.yaml
+    --values ./helm/crowdsec/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values

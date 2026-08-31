@@ -9,6 +9,10 @@ metadata:
 spec:
   selector:
     app: scrutiny-master-web
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+    - IPv4
+    - IPv6
   ports:
     - name: http
       protocol: TCP

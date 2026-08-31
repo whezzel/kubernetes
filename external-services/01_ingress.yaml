@@ -11,7 +11,7 @@ metadata:
 #    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-max-temp-file-size: 96384m
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}
@@ -38,7 +38,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
     nginx.ingress.kubernetes.io/auth-signin: https://authelia.whezzel.com?rm=$request_method
     nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}
@@ -60,8 +60,8 @@ kind: Ingress
 metadata:
   name: harbor
   namespace: external-services
-  annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+#  annotations:
+#    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}
@@ -84,7 +84,7 @@ metadata:
   name: ollama
   namespace: external-services
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}
@@ -109,7 +109,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}
@@ -134,7 +134,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.69.0.0/16, fd69:0:0:2::/64, fd69:0:0:40::/64, fd69:0:0:100::/64"
 spec:
   tls:
     - {}

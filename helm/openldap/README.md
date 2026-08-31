@@ -24,7 +24,8 @@ helm upgrade --install openldap openldap-stack-ha \
     --namespace auth \
     --create-namespace \
     --values ./helm/openldap/values.yaml \
-    --values ./helm/openldap/secret-values.yaml
+    --values ./helm/openldap/secret-values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Dump chart values

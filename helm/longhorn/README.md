@@ -11,7 +11,8 @@ helm upgrade --install longhorn longhorn \
     --repo https://charts.longhorn.io \
     --namespace longhorn \
     --create-namespace \
-    --values ./helm/longhorn/values.yaml
+    --values ./helm/longhorn/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Deploy supporting manifests

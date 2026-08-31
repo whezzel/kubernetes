@@ -11,7 +11,8 @@ helm upgrade --install cert-manager cert-manager \
     --repo https://charts.jetstack.io \
     --namespace cert-manager \
     --create-namespace \
-    --values ./helm/cert-manager/values.yaml
+    --values ./helm/cert-manager/values.yaml \
+    --post-renderer dualstack
 ```
 
 ## Apply your issuers, and certs from local manifests
