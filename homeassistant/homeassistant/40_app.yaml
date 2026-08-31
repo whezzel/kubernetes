@@ -140,15 +140,12 @@ spec:
           volumeMounts:
             - name: homeassistant
               mountPath: /mnt/homeassistant
+            - name: homeassistant
+              mountPath: /config
+              subPath: vscode
             - name: ssh-config
               mountPath: /etc/ssh/ssh_config
               subPath: ssh-config
-            - name: vscode-config
-              mountPath: /config/data/User/settings.json
-              subPath: vscode-config
-            - name: ssh-key
-              mountPath: /config/.ssh/vscode_id_ed25519
-              subPath: ssh-key
       volumes:
         - name: homeassistant
           persistentVolumeClaim:
@@ -156,10 +153,3 @@ spec:
         - name: ssh-config
           configMap:
             name: vscode-configmap
-        - name: vscode-config
-          configMap:
-            name: vscode-configmap
-        - name: ssh-key
-          secret:
-            secretName: vscode-secrets
-            defaultMode: 0600

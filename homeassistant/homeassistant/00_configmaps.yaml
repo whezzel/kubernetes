@@ -9,11 +9,6 @@ data:
     Host github.com
       HostName github.com
       User git
-      IdentityFile /config/.ssh/vscode_id_ed25519
+      IdentityFile /config/.ssh/id_ed25519
       UserKnownHostsFile /config/.ssh/known_hosts
-  vscode-config: |
-    {
-    "workbench.colorTheme": "Default Dark+"
-    }
-
 
