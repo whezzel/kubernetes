@@ -1,0 +1,114 @@
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: alpine01
+#  namespace: default
+#spec:
+#  tls:
+#    - {}
+#  ingressClassName: nginx
+#  rules:
+#    - host: alpine01.whezzel.com
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: alpine01
+#                port:
+#                  name: http
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: alpine01
+#  namespace: default
+#  annotations:
+#    external-dns.kubernetes.io/hostname: alpin01.whezzel.com
+#spec:
+#  selector:
+#    app: alpine01
+#  ipFamilyPolicy: PreferDualStack
+#  ipFamilies:
+#    - IPv4
+#    - IPv6
+#  ports:
+#    - name: http
+#      protocol: TCP
+#      port: 80
+#      targetPort: http
+#  type: LoadBalancer
+#  sessionAffinity: ClientIP
+#  externalTrafficPolicy: Local
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine
+  namespace: default
+  labels:
+    app: alpine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine
+  template:
+    metadata:
+      name: alpine
+      labels:
+        app: alpine
+    spec:
+#      affinity:
+#        podAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                - pihole02
+#            topologyKey: kubernetes.io/hostname
+#        podAntiAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                - pihole02
+#            topologyKey: kubernetes.io/hostname
+      containers:
+        - name: alpine
+          securityContext:
+            privileged: true
+          image: ghcr.io/whezzel/alpine-tools:latest
+          imagePullPolicy: Always
+          tty: true
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - name: nas
+              mountPath: /mnt/temp
+#            - name: frigate
+#              mountPath: /frigate
+#            - name: minecraft-test
+#              mountPath: /minecraft-test
+      volumes:
+        - name: nas
+          nfs:
+            server: nas01-20.whezzel.com
+            path: /temp
+#        - name: frigate
+#          persistentVolumeClaim:
+#            claimName: frigate
+#        - name: minecraft-test
+#          persistentVolumeClaim:
+#            claimName: minecraft-test
