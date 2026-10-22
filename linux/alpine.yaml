@@ -101,6 +101,8 @@ spec:
 #              mountPath: /frigate
 #            - name: minecraft-test
 #              mountPath: /minecraft-test
+#            - name: mosquitto
+#              mountPath: /mosquitto
       volumes:
         - name: nas
           nfs:
@@ -112,3 +114,6 @@ spec:
 #        - name: minecraft-test
 #          persistentVolumeClaim:
 #            claimName: minecraft-test
+#        - name: mosquitto
+#          persistentVolumeClaim:
+#            claimName: mosquitto
