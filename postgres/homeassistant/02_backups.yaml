@@ -1,0 +1,22 @@
+#---
+#apiVersion: postgresql.cnpg.io/v1
+#kind: Backup
+#metadata:
+#  name: homeassistant-postgres-manual
+#  namespace: postgres
+#spec:
+#  cluster:
+#    name: homeassistant-postgres
+#  method: volumeSnapshot
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: cron-homeassistant-postgres
+  namespace: postgres
+spec:
+  cluster:
+    name: homeassistant-postgres
+  schedule: 0 0 2 * * *
+  method: volumeSnapshot
+  backupOwnerReference: cluster
