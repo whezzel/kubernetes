@@ -7,17 +7,17 @@ External-DNS tracks svc/ing and creates dns records
 ## Apply secrets
 
 ```bash
-kubectl apply -f ./helm/external-dns/internal/00_secrets.yaml
+kubectl apply -f ./helm/external-dns/00_secrets.yaml
 ```
 
 ## Deploy External-DNS using helm
 
 ```bash
-helm upgrade --install external-dns-internal external-dns \
+helm upgrade --install external-dns external-dns \
     --repo https://kubernetes-sigs.github.io/external-dns \
     --namespace dns \
     --create-namespace \
-    --values ./helm/external-dns/internal/values.yaml
+    --values ./helm/external-dns/values.yaml
 ```
 
 ## Dump chart values

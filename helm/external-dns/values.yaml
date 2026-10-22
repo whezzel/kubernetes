@@ -4,22 +4,22 @@ env:
   - name: RFC2136_HOST
     valueFrom:
       secretKeyRef:
-        name: external-dns-internal-secrets
+        name: external-dns-secrets
         key: RFC2136_HOST
   - name: RFC2136_ZONE
     valueFrom:
       secretKeyRef:
-        name: external-dns-internal-secrets
+        name: external-dns-secrets
         key: RFC2136_ZONE
   - name: DOMAIN_FILTER
     valueFrom:
       secretKeyRef:
-        name: external-dns-internal-secrets
+        name: external-dns-secrets
         key: DOMAIN_FILTER
   - name: RFC2136_TSIG_SECRET
     valueFrom:
       secretKeyRef:
-        name: external-dns-internal-secrets
+        name: external-dns-secrets
         key: RFC2136_TSIG_SECRET
 interval: 15s
 sources:
@@ -27,8 +27,8 @@ sources:
   - ingress
 policy: sync
 registry: txt
-txtOwnerId: external-dns-internal
-txtPrefix: external-dns-internal-
+txtOwnerId: external-dns
+txtPrefix: external-dns
 txtSuffix:
 domainFilters:
   - $(DOMAIN_FILTER)
