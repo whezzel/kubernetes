@@ -106,7 +106,7 @@ config:
       url: http://gotify.email.svc.cluster.local/message
       method: POST
       headers:
-        X-Gotify-Key: AhvQ2l4Bwle8t99
+        X-Gotify-Key: "${GOTIFY_TOKEN}"
         Content-Type: application/json
 lapi:
   enabled: true
@@ -129,6 +129,11 @@ lapi:
         secretKeyRef:
           name: crowdsec-secrets
           key: DB_PASSWORD
+    - name: GOTIFY_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-secrets
+          key: GOTIFY_TOKEN
   ingress:
     enabled: true
     annotations:
