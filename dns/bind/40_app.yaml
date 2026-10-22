@@ -37,7 +37,6 @@ spec:
             - -g
             - -c
             - /etc/bind/named.conf
-            - "-4"
             - -u
             - "53"
           ports:

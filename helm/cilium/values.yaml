@@ -24,3 +24,10 @@ ipv4:
   enabled: true
 ipv6:
   enabled: true
+ipv4NativeRoutingCIDR: "10.244.0.0/16"
+ipv6NativeRoutingCIDR: "fd6a:0:244::/56"
+enableIPv4Masquerade: true
+enableIPv6Masquerade: true
+enableMasqueradeRouteSource: false
+bpf:
+  masquerade: false

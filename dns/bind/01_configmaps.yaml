@@ -6,7 +6,7 @@ metadata:
   namespace: dns
 data:
   named.conf: |
-    acl "internal" { localhost; 10.244.0.0/16; 10.69.0.0/16; fd69::/48; };
+    acl "internal" { localhost; 10.244.0.0/16; fd6a:0:244::/56; 10.69.0.0/16; fd69::/48; };
     acl "external" { 0.0.0.0/0; };
     acl "opnsense" { 10.69.20.2; 10.69.20.3; fd69:0:0:20::2; fd69:0:0:20::3; };
     acl "internal-keys" { key internal; key arch01-internal; key external-dns-internal; };
@@ -24,8 +24,8 @@ data:
         recursion no;
         version none;
         statistics-file "/var/lib/bind/stats/named.stats";
-        listen-on port 53 { any; };
-        listen-on-v6 port 53 { any; };
+        listen-on { any; };
+        listen-on-v6 { any; };
     };
 
     include "/etc/bind/rndc-keys.conf";

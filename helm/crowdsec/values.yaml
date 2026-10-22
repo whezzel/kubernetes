@@ -30,7 +30,15 @@ config:
               expression: "evt.Parsed.dovecot_remote_ip"
             - meta: dovecot_login_result
               expression: "any(['Authentication failure', 'Password mismatch', 'password mismatch', 'auth failed', 'unknown user'], {evt.Parsed.dovecot_login_message contains #}) ? 'auth_failed' : ''"
-    s02-enrich: {}
+    s02-enrich:
+      local-whitelist.yaml: |
+        name: local/whitelists
+        description: "Whitelist local ips"
+        whitelist:
+          reason: "private ipv4/ipv6 ip/ranges"
+          cidr:
+            - "10.69.0.0/16"
+            - "fd69::/48"
   scenarios: {}
   postoverflows:
     s00-enrich: {}
@@ -59,16 +67,20 @@ config:
           allowed_ranges:
             - "127.0.0.1/32"
             - "10.244.0.0/16"
-            - "10.69.20.2/32"
-            - "10.69.20.3/32"
+            - "10.69.21.2/32"
+            - "10.69.21.3/32"
+            - "fd69:0:0:21::2/128"
+            - "fd69:0:0:21::3/128"
         use_forwarded_for_headers: true
         online_client:
           credentials_path: "/etc/crowdsec/online_api_credentials.yaml"
         trusted_ips:
           - 127.0.0.1
           - ::1
-          - 10.69.20.2
-          - 10.69.20.3
+          - 10.69.21.2
+          - 10.69.21.3
+          - fd69:0:0:21::2
+          - fd69:0:0:21::3
     db_config:
       type:     postgresql
       user:     crowdsec

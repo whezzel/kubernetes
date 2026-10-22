@@ -16,6 +16,7 @@ service:
   externalTrafficPolicy: Local
   enableLdapPort: true
   enableSslLdapPort: true
+  ipFamilyPolicy: PreferDualStack
 env:
  BITNAMI_DEBUG: "true"
  LDAP_LOGLEVEL: "256"

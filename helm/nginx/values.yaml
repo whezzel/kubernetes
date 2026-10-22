@@ -36,9 +36,9 @@ controller:
     compute-full-forwarded-for: true
     use-forwarded-headers: true
     #annotations-risk-level: Critical
-    proxy-real-ip-cidr: 10.69.0.0/16,10.244.0.0/16
+    proxy-real-ip-cidr: 10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::/56
     enable-real-ip: "true"
     real-ip-header: X-Forwarded-For
-    set-real-ip-from: 10.69.0.0/16,10.244.0.0/16
+    set-real-ip-from: 10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::/56
   ingressClassResource:
     default: true

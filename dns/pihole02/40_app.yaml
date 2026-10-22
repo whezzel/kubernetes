@@ -55,7 +55,7 @@ spec:
             - name: PGID
               value: "1000"
             - name: FTLCONF_DNS_UPSTREAMS
-              value: 10.69.20.2;10.69.20.3
+              value: 10.69.20.2;10.69.20.3;fd69:0:0:20::2;fd69:0:0:20::3
             - name: FTLCONF_DNS_DOMAINNEEDED
               value: "false"
             - name: FTLCONF_DNS_DNSSEC
