@@ -92,6 +92,8 @@ spec:
               value: /
             - name: SONARR__SERVER__SSLPORT
               value: "9898"
+            - name: SONARR__SERVER__TRUSTEDNETWORKS
+              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::56"
             - name: SONARR__POSTGRES__HOST
               value: sonarr-postgres-rw.postgres
             - name: SONARR__POSTGRES__PORT

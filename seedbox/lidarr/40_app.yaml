@@ -34,6 +34,7 @@ spec:
             httpGet:
               path: /ping
               port: http
+              scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -43,6 +44,7 @@ spec:
             httpGet:
               path: /ping
               port: http
+              scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
@@ -90,6 +92,8 @@ spec:
               value: /
             - name: LIDARR__SERVER__SSLPORT
               value: "6868"
+            - name: LIDARR__SERVER__TRUSTEDNETWORKS
+              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::56"
             - name: LIDARR__POSTGRES__HOST
               value: lidarr-postgres-rw.postgres
             - name: LIDARR__POSTGRES__PORT
