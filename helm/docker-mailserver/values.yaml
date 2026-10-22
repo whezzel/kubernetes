@@ -135,6 +135,15 @@ deployment:
   containerSecurityContext:
     readOnlyRootFilesystem: false
     privileged: false
+  resources:
+    requests:
+      cpu: "1"
+      memory: "1536Mi"
+      ephemeral-storage: "100Mi"
+    limits:
+      cpu: "2"
+      memory: "2048Mi"
+      ephemeral-storage: "500Mi"
   resizePolicy: []
   tolerations: []
   initContainers: []
@@ -229,6 +238,8 @@ dovecot:
   fullTextSearch:
     enabled: false
     verbose: 0
+    resources:
+      memory: 2GB
     cron:
       enabled: true
       schedule: 0 4 * * *
@@ -241,6 +252,9 @@ metrics:
     name: blackflysolutions/postfix-exporter@sha256
     tag: 7ed7c0534112aff5b44757ae84a206bf659171631edfc325c3c1638d78e74f73
     pullPolicy: "IfNotPresent"
+  resources:
+    requests:
+      memory: "256Mi"
   resizePolicy: []
   serviceMonitor:
     enabled: false
