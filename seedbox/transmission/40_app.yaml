@@ -132,15 +132,15 @@ spec:
 #            - name: TRANSMISSION_ALT_SPEED_DOWN
 #              value: "50"
             - name: TRANSMISSION_SPEED_LIMIT_DOWN
-              value: "3072"
+              value: "10240"
             - name: TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED
               value: "true"
             - name: TRANSMISSION_SPEED_LIMIT_UP
-              value: "384"
+              value: "341"
             - name: TRANSMISSION_SPEED_LIMIT_UP_ENABLED
               value: "true"
-            - name: TRANSMISSION_UPLOAD_SLOTS_PER_TORRENT
-              value: "10"
+#            - name: TRANSMISSION_UPLOAD_SLOTS_PER_TORRENT
+#              value: "10"
 ## Blocklists ##
 #            - name: TRANSMISSION_BLOCKLIST_URL
 #              value: http://www.example.com/blocklist
@@ -201,8 +201,8 @@ spec:
 #              value: ""
 #            - name: TRANSMISSION_PEER_ID_TTL_HOURS
 #              value: "6"
-            - name: TRANSMISSION_PEER_LIMIT_GLOBAL
-              value: "480"
+#            - name: TRANSMISSION_PEER_LIMIT_GLOBAL
+#              value: "480"
 #            - name: TRANSMISSION_PEER_LIMIT_PER_TORRENT
 #              value: "60"
 #            - name: TRANSMISSION_PEER_SOCKET_TOS
