@@ -47,12 +47,6 @@ spec:
             - containerPort: 53
               protocol: TCP
               name: dns-tcp
-            - containerPort: 953
-              protocol: TCP
-              name: dns-rndc
-            - containerPort: 8053
-              protocol: TCP
-              name: dns-stats
           volumeMounts:
             - name: bind-dns-config
               mountPath: /etc/bind/named.conf

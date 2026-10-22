@@ -23,14 +23,6 @@ spec:
       name: dns-udp
       port: 53
       targetPort: dns-udp
-    - protocol: TCP
-      name: dns-rndc
-      port: 953
-      targetPort: dns-rndc
-    - protocol: TCP
-      name: dns-stats
-      port: 8053
-      targetPort: dns-stats
   type: LoadBalancer
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
