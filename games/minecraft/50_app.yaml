@@ -58,13 +58,9 @@ spec:
             - name: TYPE
               value: fabric
             - name: VERSION
-              value: "26.2"
+              value: "26.3"
             - name: EULA
               value: "TRUE"
-            - name: INIT_MEMORY
-              value: 1G
-            - name: MAX_MEMORY
-              value: 8G
             - name: MEMORY
               value: 8G
             - name: SET_CONTAINER
@@ -87,29 +83,30 @@ spec:
               value: 'true'
             - name: MODRINTH_PROJECTS
               value: |
-                advanced-shulkerboxes:beta
+                #advanced-shulkerboxes:beta
                 appleskin
-                badpackets
+                #badpackets
                 c2me-fabric:alpha
                 carpet
-                clumps
                 disconnect-packet-fix
-                essentialaddons
                 fabric-api
-                ferrite-core
-                jade:beta
-                jei:beta
                 fabric-language-kotlin
+                ferrite-core
+                jade
+                jei:beta
+                krypton
                 lithium
                 luckperms
                 no-chat-reports
-                scalablelux
+                scalablelux:alpha
+                servercore
                 servux
-                syncmatica
-                worldedit:beta
-#                architectury-api
-#                cloth-config
-#                placeholder-api
+                spark
+                #syncmatica
+                vanilla-permissions
+                veinminer
+                villager-inventory-hwyla-plugin
+                xp-stream
 #            - name: MODS
 #              values: |
 #               https://cdn.modrinth.com/data/rd9rKuJT/versions/Gv74xveQ/disconnect-packet-fix-fabric-2.0.0.jar
@@ -117,8 +114,8 @@ spec:
           volumeMounts:
             - name: minecraft
               mountPath: /data
-            - name: nas
-              mountPath: /mnt/temp
+            #- name: nas
+            #  mountPath: /mods
           resources:
             requests:
               memory: 4Gi
@@ -127,7 +124,7 @@ spec:
         - name: minecraft
           persistentVolumeClaim:
             claimName: minecraft
-        - name: nas
-          nfs:
-            server: nas01-20.whezzel.com
-            path: /temp
+        #- name: nas
+        #  nfs:
+        #    server: nas01-20.whezzel.com
+        #    path: /temp
