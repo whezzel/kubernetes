@@ -20,7 +20,7 @@ service:
     externalTrafficPolicy: Local
     annotations:
       io.cilium/lb-ipam-pool: ip1069200
-      external-dns.alpha.kubernetes.io/hostname: git.whezzel.com
+      external-dns.kubernetes.io/hostname: git.whezzel.com
 
 ingress:
   enabled: true

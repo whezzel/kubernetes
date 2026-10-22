@@ -5,7 +5,7 @@ metadata:
   name: mosquitto-tcp
   namespace: homeassistant
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: mqtt.whezzel.com
+    external-dns.kubernetes.io/hostname: mqtt.whezzel.com
 spec:
   selector:
     app: mosquitto

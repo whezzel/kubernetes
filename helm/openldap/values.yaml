@@ -10,7 +10,7 @@ replicaCount: 3
 #logLevel: info
 service:
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: openldap.whezzel.com
+    external-dns.kubernetes.io/hostname: openldap.whezzel.com
   type: LoadBalancer
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local

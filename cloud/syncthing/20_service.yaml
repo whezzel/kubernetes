@@ -23,7 +23,7 @@ metadata:
   name: syncthing-lb
   namespace: cloud
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: sync.whezzel.com
+    external-dns.kubernetes.io/hostname: sync.whezzel.com
 spec:
   selector:
     app: syncthing

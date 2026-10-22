@@ -23,7 +23,7 @@ spec:
 #  name: whoami
 #  namespace: kube-system
 #  annotations:
-#    external-dns.alpha.kubernetes.io/hostname: whoami-lb.whezzel.com
+#    external-dns.kubernetes.io/hostname: whoami-lb.whezzel.com
 #spec:
 #  selector:
 #    app: whoami

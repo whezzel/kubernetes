@@ -6,6 +6,7 @@ metadata:
   namespace: dns
   annotations:
     lbipam.cilium.io/ips: "10.69.21.200,fd69:0:0:21::200"
+    external-dns.kubernetes.io/hostname: bind.whezzel.com
 spec:
   selector:
     app: bind

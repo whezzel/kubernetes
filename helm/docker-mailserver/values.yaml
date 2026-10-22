@@ -150,7 +150,7 @@ service:
   externalTrafficPolicy: "Local"
   trafficDistribution: ""
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: mail.whezzel.com,smtp.whezzel.com,imap.whezzel.com,pop3.whezzel.com
+    external-dns.kubernetes.io/hostname: mail.whezzel.com,smtp.whezzel.com,imap.whezzel.com,pop3.whezzel.com
   labels: {}
 persistent_volume_claims:
   mail-config:
