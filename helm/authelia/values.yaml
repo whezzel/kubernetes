@@ -6,6 +6,7 @@ ingress:
     - host: authelia.whezzel.com
       path: /
   className: nginx
+  certManager: true
   tls:
     enabled: true
     secret: ''
