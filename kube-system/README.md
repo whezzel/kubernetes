@@ -55,7 +55,7 @@ Open `multus-daemonset-thick.yml` in your preferred text editor (e.g., vim, nano
 
   ```yaml
   - name: install-macvlan
-    image: docker.io/alpine:latest
+    image: ghcr.io/whezzel/alpine-tools:latest
     env:
       - name: GITHUB_TOKEN
         valueFrom:

@@ -1,7 +1,9 @@
 nameOverride: ""
 fullnameOverride: ""
 image:
-  pullPolicy: "IfNotPresent"
+  name: "ghcr.io/docker-mailserver/docker-mailserver"
+  tag: "latest"
+  pullPolicy: "Always"
 serviceAccount:
   create: true
 certificate: whezzel-com-tls

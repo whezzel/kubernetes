@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: homeassistant
-          image: docker.io/homeassistant/home-assistant:latest
+          image: ghcr.io/home-assistant/home-assistant:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8123
@@ -68,7 +68,7 @@ spec:
         - name: zwavejs
           securityContext:
             privileged: true
-          image: docker.io/zwavejs/zwave-js-ui:latest
+          image: ghcr.io/zwave-js/zwave-js-ui:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8091

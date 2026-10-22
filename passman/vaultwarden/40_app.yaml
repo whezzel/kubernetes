@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: vaultwarden
-          image: docker.io/vaultwarden/server:latest
+          image: ghcr.io/dani-garcia/vaultwarden:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

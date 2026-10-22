@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: jellystat
-          image: docker.io/cyfershepard/jellystat:latest
+          image: ghcr.io/cyfershepard/jellystat:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
