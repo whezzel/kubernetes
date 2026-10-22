@@ -264,7 +264,7 @@ configMap:
       - domain:
           - frigate.whezzel.com
         resources:
-          - ^/api([/?].*)?$
+          - '^/api/events/[^/]+/(snapshot|thumbnail)\.jpg([?].*)?$'
         policy: bypass
       - domain:
           - frigate.whezzel.com
@@ -367,7 +367,9 @@ configMap:
       - domain:
           - vaultwarden.whezzel.com
         resources:
-          - ^*/admin.*$
+          - '^/admin([/?].*)?$'
+        subject:
+          - group:admins
         policy: two_factor
       - domain:
           - vaultwarden.whezzel.com
