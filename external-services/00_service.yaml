@@ -24,7 +24,7 @@ metadata:
   namespace: external-services
 spec:
   type: ExternalName
-  externalName: opnsense01.whezzel.com
+  externalName: opnsense01-20.whezzel.com
 ---
 apiVersion: v1
 kind: Service
@@ -33,4 +33,4 @@ metadata:
   namespace: external-services
 spec:
   type: ExternalName
-  externalName: opnsense02.whezzel.com
+  externalName: opnsense02-20.whezzel.com

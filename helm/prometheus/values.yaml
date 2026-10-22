@@ -108,17 +108,17 @@ prometheus:
         scheme: http
         static_configs:
           - targets:
-              - 10.69.20.2:9273 # opnsense01
+              - opnsense01-20.whezzel.com:9273 # opnsense01
             labels:
               source: telegraf
               host_role: router
           - targets:
-              - 10.69.20.3:9273 # opnsense02
+              - opnsense02-20.whezzel.com:9273 # opnsense02
             labels:
               source: telegraf
               host_role: router
           - targets:
-              - 10.69.20.51:9273 # NAS
+              - nas01-20.whezzel.com:9273 # NAS
             labels:
               source: telegraf
               host_role: nas
