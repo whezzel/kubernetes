@@ -43,8 +43,6 @@ kubectl apply -Rf ./dns
 
 See [Deploying External DNS - Internal](./helm/external-dns/internal/README.md)
 
-See [Deploying External DNS - 3amigos](./helm/external-dns/3amigos/README.md)
-
 ## Deploy Cloudnative-PG Operator
 
 See [Deploying Cloudnative-PG](./helm/cloudnative-pg/README.md)

@@ -4,8 +4,6 @@ kind: Ingress
 metadata:
   name: jellyfin
   namespace: mediaserver
-  labels:
-    3amigos_tunnel: 'true'
 #  annotations:
 #    nginx.ingress.kubernetes.io/auth-method: GET
 #    nginx.ingress.kubernetes.io/auth-url: http://authelia.auth.svc.cluster.local/api/authz/auth-request
