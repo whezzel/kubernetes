@@ -1,0 +1,150 @@
+# etcd-backup-age: public age recipient (not secret). The private key is kept offline.
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etcd-backup-age
+  namespace: talos-backup
+data:
+  recipients.txt: |
+    age1rrnylyy955jdlkdu6j3envpup6dnrv0m4ugqdff6ewvn8j2c3fhq9hv0tr
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etcd-backup-script
+  namespace: talos-backup
+data:
+  etcd-backup.sh: |
+    #!/bin/sh
+    # Takes an etcd snapshot, age-encrypts it, writes it to the NFS volume and prunes old ones.
+    set -eu
+
+    ENCRYPT="${ENCRYPT:-age}"
+    NODES="${TALOS_NODES:-10.69.20.11 10.69.20.12 10.69.20.13}"
+    BACKUP_ROOT="${BACKUP_ROOT:-/backup}"
+    SCRATCH="${SCRATCH_DIR:-/scratch}"
+    RECIPIENTS="${AGE_RECIPIENTS_FILE:-/age/recipients.txt}"
+    KEEP_COUNT="${KEEP_COUNT:-28}"
+    DAILY_KEEP_DAYS="${DAILY_KEEP_DAYS:-30}"
+    SIX_DIR="${BACKUP_ROOT}/6h"
+    DAILY_DIR="${BACKUP_ROOT}/daily"
+    ERRLOG="/tmp/etcd-backup.err"
+    : > "${ERRLOG}"
+    STEP="init"
+    PLAIN=""
+    PART=""
+
+    # Print an error and keep it for the failure notification.
+    err() { echo "$*" >&2; echo "$*" >> "${ERRLOG}"; }
+
+    on_exit() {
+      rc=$?
+      if [ -n "${PLAIN}" ] && [ -f "${PLAIN}" ]; then shred -u "${PLAIN}" 2>/dev/null || rm -f "${PLAIN}"; fi
+      rm -f "${SCRATCH}"/etcd-*.snapshot.part 2>/dev/null || true
+      if [ -n "${PART}" ]; then rm -f "${PART}"; fi
+      if [ "${rc}" -ne 0 ]; then
+        [ -s "${ERRLOG}" ] && cat "${ERRLOG}" >&2
+        echo "etcd-backup FAILED rc=${rc} step=${STEP}" >&2
+        DETAIL="$(awk '!seen[$0]++' "${ERRLOG}" 2>/dev/null | tail -n 3 | cut -c1-250 | tr '\n' ' ' | tr -c 'A-Za-z0-9 ._:/,()-' '?')"
+        if [ -n "${GOTIFY_URL:-}" ] && [ -n "${GOTIFY_TOKEN:-}" ]; then
+          wget -q -O /dev/null -T 15 \
+            --header "X-Gotify-Key: ${GOTIFY_TOKEN}" \
+            --post-data "title=etcd backup FAILED&priority=8&message=pod ${HOSTNAME:-unknown} step ${STEP} rc ${rc}: ${DETAIL}" \
+            "${GOTIFY_URL}" || echo "gotify notification also failed" >&2
+        else
+          echo "GOTIFY_URL/GOTIFY_TOKEN unset, no notification sent" >&2
+        fi
+      fi
+      exit "${rc}"
+    }
+    trap on_exit EXIT
+    # SIGTERM (deadline, pod deletion) becomes a failing exit so the trap notifies.
+    trap 'exit 143' TERM INT HUP
+
+    STEP="config"
+    case "${ENCRYPT}" in
+      age)
+        EXT=".snapshot.age"
+        command -v age >/dev/null || { err "age binary missing"; exit 1; }
+        grep -q '^age1[0-9a-z]\{58\}$' "${RECIPIENTS}" || { err "no valid age1 recipient in ${RECIPIENTS}"; exit 1; }
+        ;;
+      none) EXT=".snapshot" ;;
+      *) err "ENCRYPT must be age or none, got ${ENCRYPT}"; exit 1 ;;
+    esac
+
+    STEP="mkdir"
+    mkdir -p "${SIX_DIR}" "${DAILY_DIR}" "${SCRATCH}" 2>>"${ERRLOG}"
+
+    TS="$(date -u +%Y%m%dT%H%M%SZ)"
+    DAY="$(date -u +%Y%m%d)"
+    NODE=""
+    for n in ${NODES}; do
+      case "${n}" in
+        10.69.20.11) name=talos01 ;;
+        10.69.20.12) name=talos02 ;;
+        10.69.20.13) name=talos03 ;;
+        *) name="${n}" ;;
+      esac
+      STEP="snapshot ${name}"
+      PLAIN="${SCRATCH}/etcd-${TS}-${name}.snapshot"
+      echo "trying ${name} (${n})"
+      if talosctl -e "${n}" -n "${n}" etcd snapshot "${PLAIN}" 2>>"${ERRLOG}"; then
+        NODE="${name}"
+        break
+      fi
+      echo "snapshot from ${name} failed, trying next" >&2
+      rm -f "${PLAIN}" "${PLAIN}.part"
+      PLAIN=""
+    done
+    STEP="snapshot all-nodes"
+    [ -n "${NODE}" ] || { err "no control plane node returned a snapshot"; exit 1; }
+
+    STEP="size-check"
+    [ -s "${PLAIN}" ] || { err "snapshot is empty: ${PLAIN}"; exit 1; }
+
+    BASE="etcd-${TS}-${NODE}${EXT}"
+    PART="${SIX_DIR}/.${BASE}.part"
+    if [ "${ENCRYPT}" = "age" ]; then
+      STEP="encrypt"
+      age -R "${RECIPIENTS}" -o "${PART}" "${PLAIN}" 2>>"${ERRLOG}"
+    else
+      STEP="copy"
+      cp "${PLAIN}" "${PART}" 2>>"${ERRLOG}"
+    fi
+    STEP="write-check"
+    [ -s "${PART}" ] || { err "output is empty: ${PART}"; exit 1; }
+    STEP="finalize"
+    mv "${PART}" "${SIX_DIR}/${BASE}" 2>>"${ERRLOG}"
+    PART=""
+    ( cd "${SIX_DIR}" && sha256sum "${BASE}" > "${BASE}.sha256" )
+    echo "wrote ${SIX_DIR}/${BASE} ($(wc -c < "${SIX_DIR}/${BASE}") bytes)"
+    cat "${SIX_DIR}/${BASE}.sha256"
+
+    STEP="scrub-scratch"
+    shred -u "${PLAIN}" 2>/dev/null || rm -f "${PLAIN}"
+    PLAIN=""
+
+    STEP="daily-copy"
+    if ! find "${DAILY_DIR}" -maxdepth 1 -type f \( -name "etcd-${DAY}T*.snapshot" -o -name "etcd-${DAY}T*.snapshot.age" \) | grep -q .; then
+      PART="${DAILY_DIR}/.${BASE}.part"
+      cp "${SIX_DIR}/${BASE}" "${PART}" 2>>"${ERRLOG}"
+      cmp "${SIX_DIR}/${BASE}" "${PART}" 2>>"${ERRLOG}"
+      mv "${PART}" "${DAILY_DIR}/${BASE}"
+      PART=""
+      cp "${SIX_DIR}/${BASE}.sha256" "${DAILY_DIR}/${BASE}.sha256"
+      echo "daily copy: ${DAILY_DIR}/${BASE}"
+    fi
+
+    STEP="prune-6h"
+    find "${SIX_DIR}" -maxdepth 1 -type f \( -name 'etcd-*.snapshot' -o -name 'etcd-*.snapshot.age' \) \
+      | sort -r | tail -n +"$((KEEP_COUNT + 1))" | while read -r f; do
+        echo "prune ${f}"
+        rm -f "${f}" "${f}.sha256"
+      done
+
+    STEP="prune-daily"
+    find "${DAILY_DIR}" -maxdepth 1 -type f -name 'etcd-*.snapshot*' -mtime +"${DAILY_KEEP_DAYS}" -exec rm -f {} \;
+
+    STEP="done"
+    echo "etcd-backup OK: ${BASE}"

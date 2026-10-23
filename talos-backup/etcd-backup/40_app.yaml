@@ -1,0 +1,129 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etcd-backup
+  namespace: talos-backup
+  labels:
+    app: etcd-backup
+spec:
+  suspend: false
+  schedule: "17 */6 * * *"
+  timeZone: America/Chicago
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 1800
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        app: etcd-backup
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 900
+      template:
+        metadata:
+          labels:
+            app: etcd-backup
+        spec:
+          serviceAccountName: talos-backup
+          automountServiceAccountToken: false
+          restartPolicy: Never
+          # Talos API access from Kubernetes only works on control plane nodes.
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+          tolerations:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+              effect: NoSchedule
+          securityContext:
+            runAsNonRoot: true
+            # Matches the NFS export's anonuid/anongid=1000.
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: etcd-backup
+              # github.com/whezzel/alpine-tools (age, talosctl). Uses :latest by choice.
+              image: ghcr.io/whezzel/alpine-tools:latest
+              imagePullPolicy: Always
+              command:
+                - /bin/sh
+                - /scripts/etcd-backup.sh
+              env:
+                - name: ENCRYPT
+                  value: age
+                - name: HOME
+                  value: /tmp
+                - name: TZ
+                  value: America/Chicago
+                - name: TALOS_NODES
+                  value: "10.69.20.11 10.69.20.12 10.69.20.13"
+                - name: BACKUP_ROOT
+                  value: /backup
+                - name: SCRATCH_DIR
+                  value: /scratch
+                - name: AGE_RECIPIENTS_FILE
+                  value: /age/recipients.txt
+                - name: KEEP_COUNT
+                  value: "28"
+                - name: DAILY_KEEP_DAYS
+                  value: "30"
+                - name: GOTIFY_URL
+                  value: http://gotify.email.svc.cluster.local/message
+                - name: GOTIFY_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: etcd-backup-secrets
+                      key: GOTIFY_TOKEN
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                  ephemeral-storage: 1Gi
+                limits:
+                  memory: 256Mi
+                  ephemeral-storage: 1280Mi
+              volumeMounts:
+                - name: talos-secrets
+                  mountPath: /var/run/secrets/talos.dev
+                  readOnly: true
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
+                - name: age-recipients
+                  mountPath: /age
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+                - name: scratch
+                  mountPath: /scratch
+                - name: etcd-backups
+                  mountPath: /backup
+          volumes:
+            - name: talos-secrets
+              secret:
+                secretName: talos-backup-secrets
+            - name: scripts
+              configMap:
+                name: etcd-backup-script
+                defaultMode: 0444
+            - name: age-recipients
+              configMap:
+                name: etcd-backup-age
+                defaultMode: 0444
+            - name: tmp
+              emptyDir:
+                sizeLimit: 64Mi
+            # Holds the plaintext snapshot briefly before encryption; shredded afterwards.
+            - name: scratch
+              emptyDir:
+                sizeLimit: 1Gi
+            - name: etcd-backups
+              persistentVolumeClaim:
+                claimName: etcd-backups
