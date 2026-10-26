@@ -26,8 +26,18 @@ spec:
       labels:
         app: esphome
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
       containers:
         - name: esphome
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: ["ALL"]}
           image: ghcr.io/esphome/esphome:latest
           imagePullPolicy: Always
           ports:
@@ -52,16 +62,12 @@ spec:
           env:
             - name: TZ
               value: America/Chicago
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: ESPHOME_DASHBOARD_USE_PING
-              value: "false"
             - name: ESPHOME_BUILD_PATH
               value: /cache
             - name: PLATFORMIO_CORE_DIR
               value: /cache/.platformio
+            - name: HOME
+              value: /cache/home
           volumeMounts:
             - name: nas-esphome
               mountPath: /config
