@@ -65,7 +65,6 @@ config:
           enabled: true
           token: "${REGISTRATION_TOKEN}"
           allowed_ranges:
-            - "127.0.0.1/32"
             - "10.244.0.0/16"
             - "10.69.21.2/32"
             - "10.69.21.3/32"
