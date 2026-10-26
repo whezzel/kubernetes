@@ -62,19 +62,23 @@ cd /mnt/vg1000-lv/backups/etcd/6h
 sha256sum -c etcd-<ts>-<node>.snapshot.age.sha256
 ```
 
-On the machine holding the private key:
+On the machine holding the private key (`~/documents/age.key`, passphrase-protected; age prompts for the passphrase):
 
 ```bash
-age -d -i etcd-backup.key etcd-<ts>-<node>.snapshot.age > snap && ls -l snap && rm snap
+V=$(mktemp -d)
+age -d -i ~/documents/age.key -o "$V/snap" etcd-<ts>-<node>.snapshot.age && ls -l "$V/snap"
+shred -fu "$V/snap" && rm -rf "$V"
 ```
 
 ## Restore
 
-See the Talos disaster recovery docs. In short:
+Restore uses the official Talos disaster recovery procedure, which covers both a single control plane failure and a full etcd loss: [Talos disaster recovery](https://docs.siderolabs.com/talos/latest/build-and-extend-talos/cluster-operations-and-maintenance/disaster-recovery). The steps below only add the decryption of the snapshot from this backup.
 
 ```bash
-age -d -i etcd-backup.key etcd-<ts>-<node>.snapshot.age > snap
-talosctl -n <cp> bootstrap --recover-from=./snap
+V=$(mktemp -d)
+age -d -i ~/documents/age.key -o "$V/snap" etcd-<ts>-<node>.snapshot.age
+talosctl -n <cp> bootstrap --recover-from="$V/snap"
+shred -fu "$V/snap" && rm -rf "$V"
 ```
 
 ## Rollback
