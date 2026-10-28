@@ -1,0 +1,12 @@
+creation_rules:
+  - path_regex: secret[^/]*\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    mac_only_encrypted: true
+    key_groups:
+      - age:
+          # arch01-tpm
+          - age1tag1q0t2797uqymgn2zu42lawnun5swxzvzg3sy4u7tu88nnhfk2dg3wvkleutc
+          # arch02-tpm
+          - age1tag1q0vmttpwcvtqw4krmpjllh53slnsa4srp68wylsa9s37gkrsptmug94mwxs
+          # backup (Bitwarden)
+          - age1xu4elf8gh6kctyfsf0pu8r7gm5y2teukqurhl3yxg5ezg7aw9c8st8cx2a
