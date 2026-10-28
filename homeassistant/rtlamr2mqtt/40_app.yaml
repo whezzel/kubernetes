@@ -69,7 +69,7 @@ spec:
             - name: usb
               mountPath: /dev/bus/usb
               readOnly: true
-            - name: rtlamr2mqtt-yaml
+            - name: rtlamr2mqtt-config
               mountPath: /etc/rtlamr2mqtt.yaml
               readOnly: true
               subPath: rtlamr2mqtt.yaml
@@ -77,6 +77,6 @@ spec:
         - name: usb
           hostPath:
             path: /dev/bus/usb
-        - name: rtlamr2mqtt-yaml
-          configMap:
-            name: rtlamr2mqtt-yaml
+        - name: rtlamr2mqtt-config
+          secret:
+            secretName: rtlamr2mqtt-config
