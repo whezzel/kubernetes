@@ -64,6 +64,8 @@ spec:
               value: "0"
             - name: FTLCONF_DNS_BOGUSPRIV
               value: "false"
+            - name: FTLCONF_WEBSERVER_API_APP_SUDO
+              value: "true"
           volumeMounts:
             - name: pihole02
               mountPath: /etc/pihole
