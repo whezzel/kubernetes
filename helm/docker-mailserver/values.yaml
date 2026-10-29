@@ -677,9 +677,6 @@ configMaps:
 
       sed -i 's/message_size_limit = 10240000/message_size_limit = 104857600/' /etc/postfix/main.cf
 
-      # Valid values: never, hard, demand, allow, try
-      echo "tls_require_cert = demand" >> /etc/dovecot/dovecot-ldap.conf.ext
-
       SIEVE_SOURCE_DIR="/tmp/docker-mailserver"
       VMAIL_BASE="/var/mail"
       VMAIL_UID=5000
@@ -709,7 +706,9 @@ configMaps:
         user_dir="$domain_dir/$localpart"
 
         home_dir="$user_dir/home"
+        sieve_dir="$user_dir/sieve"
         target_sieve="$home_dir/.dovecot.sieve"
+        script="$sieve_dir/managed.sieve"
 
         if [[ ! -d "$domain_dir" ]]; then
           mkdir -p "$domain_dir"
@@ -725,26 +724,24 @@ configMaps:
           echo "Created user dir: $user_dir (700, owned by vmail)"
         fi
 
-        mkdir -p "$home_dir"
-        chmod 700 "$home_dir"
-        chown "${VMAIL_UID}:${VMAIL_GID}" "$home_dir" 2>/dev/null || true
+        mkdir -p "$home_dir" "$sieve_dir"
+        chmod 700 "$home_dir" "$sieve_dir"
+        chown "${VMAIL_UID}:${VMAIL_GID}" "$home_dir" "$sieve_dir"
 
-        cp -f "$src_file" "$target_sieve"
-        chmod 600 "$target_sieve"
-        chown "${VMAIL_UID}:${VMAIL_GID}" "$target_sieve" 2>/dev/null || true
+        # Dovecot 2.4: the script lives in ~/sieve, the active path must be a symlink to it.
+        # Dovecot compiles it itself on first use, so no sievec here.
+        cp -f "$src_file" "$script"
+        chmod 600 "$script"
+        chown "${VMAIL_UID}:${VMAIL_GID}" "$script"
+        rm -f "$target_sieve" "${target_sieve}.svbin"
+        ln -s ../sieve/managed.sieve "$target_sieve"
+        chown -h "${VMAIL_UID}:${VMAIL_GID}" "$target_sieve"
 
-        if command -v sievec >/dev/null 2>&1; then
-          su -s /bin/bash docker -c "sievec \"$target_sieve\"" >/dev/null 2>&1 || echo "sievec warning for $filename"
-        fi
-        
-        chown "${VMAIL_UID}:${VMAIL_GID}" "${target_sieve}.svbin" 2>/dev/null || true
-        chmod 644 "${target_sieve}.svbin" 2>/dev/null || true
-        
-        echo "Installed sieve script for $full_user → $target_sieve"
+        echo "Installed sieve script for $full_user -> $script (active)"
       done
 
       echo "Sieve auto-install complete."
-      
+
       echo "Applying Postfix LMTP original-recipient fix..."
 
       postconf -e 'lmtp_destination_recipient_limit = 1'
@@ -795,47 +792,47 @@ configMaps:
           fileinto :create "INBOX.${folder}";
           stop;
       }
-  sieve-zach:
-    create: true
-    path: zach@whezzel.com.dovecot.sieve
-    data: |
-      require ["fileinto", "mailbox", "variables", "regex"];
-      
-      if header :regex "X-Original-To" "^([^@+]+)(\\+([^@]+))?@whezzel\\.com$" {
-          set "base" "${1}";
-          set "tag" "${3}";
-      
-          if string :is "${tag}" "" {
-              set :lower "folder" "${base}";
-          } else {
-              set :lower "base_l" "${base}";
-              set :lower "tag_l" "${tag}";
-      
-              # Sanitize dots in tag (replace . with _)
-              set "tag_clean" "${tag_l}";
-              if string :matches "${tag_clean}" "*.*" {
-                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
-                      set "tag_clean" "${1}_${2}";
-                  }
-              }
-              if string :matches "${tag_clean}" "*.*" {
-                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
-                      set "tag_clean" "${1}_${2}";
-                  }
-              }
-              if string :matches "${tag_clean}" "*.*" {
-                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
-                      set "tag_clean" "${1}_${2}";
-                  }
-              }
-      
-              set "folder" "${base_l}.${tag_clean}";
-          }
-      
-          set :upperfirst "folder" "${folder}";
-          fileinto :create "INBOX.${folder}";
-          stop;
-      }
+#  sieve-zach:
+#    create: true
+#    path: zach@whezzel.com.dovecot.sieve
+#    data: |
+#      require ["fileinto", "mailbox", "variables", "regex"];
+#
+#      if header :regex "X-Original-To" "^([^@+]+)(\\+([^@]+))?@whezzel\\.com$" {
+#          set "base" "${1}";
+#          set "tag" "${3}";
+#
+#          if string :is "${tag}" "" {
+#              set :lower "folder" "${base}";
+#          } else {
+#              set :lower "base_l" "${base}";
+#              set :lower "tag_l" "${tag}";
+#
+#              # Sanitize dots in tag (replace . with _)
+#              set "tag_clean" "${tag_l}";
+#              if string :matches "${tag_clean}" "*.*" {
+#                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
+#                      set "tag_clean" "${1}_${2}";
+#                  }
+#              }
+#              if string :matches "${tag_clean}" "*.*" {
+#                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
+#                      set "tag_clean" "${1}_${2}";
+#                  }
+#              }
+#              if string :matches "${tag_clean}" "*.*" {
+#                  if string :regex "${tag_clean}" "^([^.]*)\\.(.+)$" {
+#                      set "tag_clean" "${1}_${2}";
+#                  }
+#              }
+#
+#              set "folder" "${base_l}.${tag_clean}";
+#          }
+#
+#          set :upperfirst "folder" "${folder}";
+#          fileinto :create "INBOX.${folder}";
+#          stop;
+#      }
 
 ## The secrets key works the same way as the configs key. Use secrets to store sensitive information,
 ## such as DKIM signing keys.
