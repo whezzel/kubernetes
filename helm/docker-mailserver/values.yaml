@@ -93,17 +93,53 @@ deployment:
     ENABLE_GETMAIL: 1
     GETMAIL_POLL: 5
     LDAP_START_TLS:
-    LDAP_SERVER_HOST: ldaps://openldap.auth.svc.cluster.local:636
-    LDAP_SEARCH_BASE: dc=whezzel,dc=com
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_START_TLS}}
+    LDAP_SERVER_HOST:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_SERVER_HOST}}
+    LDAP_SEARCH_BASE:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_SEARCH_BASE}}
+    # set those unless you're using a secret
+    LDAP_BIND_DN:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_BIND_DN}}
+    LDAP_BIND_PW:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_BIND_PW}}
     LDAP_QUERY_FILTER_USER:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_QUERY_FILTER_USER}}
     LDAP_QUERY_FILTER_GROUP:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_QUERY_FILTER_GROUP}}
     LDAP_QUERY_FILTER_ALIAS:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_QUERY_FILTER_ALIAS}}
     LDAP_QUERY_FILTER_DOMAIN:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_QUERY_FILTER_DOMAIN}}
+    LDAP_QUERY_FILTER_SENDERS:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: LDAP_QUERY_FILTER_SENDERS}}
+
+    # -----------------------------------------------
+    # --- Dovecot Section ---------------------------
+    # -----------------------------------------------
     DOVECOT_TLS:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_TLS}}
     DOVECOT_USER_FILTER:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_USER_FILTER}}
     DOVECOT_PASS_FILTER:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_PASS_FILTER}}
     DOVECOT_MAILBOX_FORMAT: maildir
     DOVECOT_AUTH_BIND:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_AUTH_BIND}}
+    DOVECOT_BASE:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_BASE}}
+    DOVECOT_DN:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_DN}}
+    DOVECOT_DNPASS:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_DNPASS}}
+    DOVECOT_PASS_ATTRS:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_PASS_ATTRS}}
+    DOVECOT_USER_ATTRS:
+      valueFrom: {secretKeyRef: {name: docker-mailserver-secrets, key: DOVECOT_USER_ATTRS}}
+
+    # -----------------------------------------------
+    # --- Postgrey Section --------------------------
+    # -----------------------------------------------
     ENABLE_POSTGREY: 0
     POSTGREY_DELAY: 300
     POSTGREY_MAX_AGE: 35
@@ -529,11 +565,21 @@ configMaps:
       }
 secrets:
   rspamd.dkim.rsa-2048-mail-whezzel.com.private.txt:
-    name: rspamd.dkim.rsa-2048-mail-whezzel.com.private.txt
+    name: rspamd-dkim-rsa-2048-mail-whezzel-com-private-txt
     create: false
+    key: rspamd-dkim-rsa-2048-mail-whezzel-com-private-txt
     path: rspamd/dkim/rsa-2048-mail-whezzel.com.private.txt
   rspamd.dkim.rsa-2048-mail-whezzel.com.public.txt:
-    name: rspamd.dkim.rsa-2048-mail-whezzel.com.public.txt
+    name: rspamd-dkim-rsa-2048-mail-whezzel-com-public-txt
     create: false
+    key: rspamd-dkim-rsa-2048-mail-whezzel-com-public-txt
     path: rspamd/dkim/rsa-2048-mail-whezzel.com.public.txt
+  rspamd-custom-commands.conf:
+    name: rspamd-custom-commands.conf
+    create: false
+    key: rspamd-custom-commands-conf
+    path: /tmp/docker-mailserver/rspamd/custom-commands.conf
+
+## @param extraDeploy Array of extra objects to deploy with the release
+##
 extraDeploy: []

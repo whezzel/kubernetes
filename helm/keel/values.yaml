@@ -1,7 +1,6 @@
-replicas: 2
-webhook:
-  enabled: true
-  endpoint: http://homeassistant.homeassistant/api/webhook/keel_ndN656rVjA6E5V26nxXgGmRHo99Cm7wg
 resources:
   limits:
     memory: 256Mi
+secret:
+  create: false
+  name: keel-secrets
