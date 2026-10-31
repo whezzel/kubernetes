@@ -23,6 +23,10 @@ spec:
       labels:
         app: immich
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       enableServiceLinks: false
       containers:
         - name: immich-machine-learning
@@ -35,6 +39,8 @@ spec:
               value: "1000"
             - name: PGID
               value: "1000"
+            - name: HOME
+              value: /cache/home
             - name: IMMICH_MEDIA_LOCATION
               value: /photos
             - name: DB_DATABASE_NAME
@@ -108,4 +114,4 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 1Gi
+            storage: 5Gi
