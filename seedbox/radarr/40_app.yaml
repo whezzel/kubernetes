@@ -30,12 +30,25 @@ spec:
           ports:
             - containerPort: 7878
               name: http
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: localhost
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /ping
               port: http
               scheme: HTTP
-            initialDelaySeconds: 30
+              httpHeaders:
+                - name: Host
+                  value: localhost
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 5
@@ -45,7 +58,9 @@ spec:
               path: /ping
               port: http
               scheme: HTTP
-            initialDelaySeconds: 10
+              httpHeaders:
+                - name: Host
+                  value: localhost
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
@@ -78,7 +93,9 @@ spec:
               value: "False"
             - name: RADARR__LOG__LEVEL
               value: info
-            - name: RADARR__UPDATE__AUTOMATICALLY
+            - name: RADARR__SERVER__ALLOWEDHOSTS
+              value: "radarr.whezzel.com,radarr.seedbox.svc.cluster.local"
+            - name: SONARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: RADARR__UPDATE__MECHANISM
               value: Docker
@@ -93,7 +110,7 @@ spec:
             - name: RADARR__SERVER__SSLPORT
               value: "8787"
             - name: RADARR__SERVER__TRUSTEDNETWORKS
-              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::56"
+              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::/56"
             - name: RADARR__POSTGRES__HOST
               value: radarr-postgres-rw.postgres
             - name: RADARR__POSTGRES__PORT

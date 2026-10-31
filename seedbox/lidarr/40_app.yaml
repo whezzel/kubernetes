@@ -30,12 +30,25 @@ spec:
           ports:
             - containerPort: 8686
               name: http
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: localhost
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /ping
               port: http
               scheme: HTTP
-            initialDelaySeconds: 30
+              httpHeaders:
+                - name: Host
+                  value: localhost
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 5
@@ -45,7 +58,9 @@ spec:
               path: /ping
               port: http
               scheme: HTTP
-            initialDelaySeconds: 10
+              httpHeaders:
+                - name: Host
+                  value: localhost
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
@@ -78,6 +93,8 @@ spec:
               value: "False"
             - name: LIDARR__LOG__LEVEL
               value: info
+            - name: LIDARR__SERVER__ALLOWEDHOSTS
+              value: "lidarr.whezzel.com,lidarr.seedbox.svc.cluster.local"
             - name: LIDARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: LIDARR__UPDATE__MECHANISM
@@ -93,7 +110,7 @@ spec:
             - name: LIDARR__SERVER__SSLPORT
               value: "6868"
             - name: LIDARR__SERVER__TRUSTEDNETWORKS
-              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::56"
+              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::/56"
             - name: LIDARR__POSTGRES__HOST
               value: lidarr-postgres-rw.postgres
             - name: LIDARR__POSTGRES__PORT

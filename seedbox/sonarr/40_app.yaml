@@ -30,12 +30,25 @@ spec:
           ports:
             - containerPort: 8989
               name: http
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: http
+              scheme: HTTP
+              httpHeaders:
+                - name: Host
+                  value: localhost
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /ping
               port: http
               scheme: HTTP
-            initialDelaySeconds: 30
+              httpHeaders:
+                - name: Host
+                  value: localhost
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 5
@@ -45,7 +58,9 @@ spec:
               path: /ping
               port: http
               scheme: HTTP
-            initialDelaySeconds: 10
+              httpHeaders:
+                - name: Host
+                  value: localhost
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
@@ -78,6 +93,8 @@ spec:
               value: "False"
             - name: SONARR__LOG__LEVEL
               value: info
+            - name: SONARR__SERVER__ALLOWEDHOSTS
+              value: "sonarr.whezzel.com,sonarr.seedbox.svc.cluster.local"
             - name: SONARR__UPDATE__AUTOMATICALLY
               value: "True"
             - name: SONARR__UPDATE__MECHANISM
@@ -93,7 +110,7 @@ spec:
             - name: SONARR__SERVER__SSLPORT
               value: "9898"
             - name: SONARR__SERVER__TRUSTEDNETWORKS
-              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::56"
+              value: "10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::/56"
             - name: SONARR__POSTGRES__HOST
               value: sonarr-postgres-rw.postgres
             - name: SONARR__POSTGRES__PORT
