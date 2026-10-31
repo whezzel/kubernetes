@@ -82,7 +82,7 @@ spec:
             - name: OPENVPN_CONFIG
               value: us_east,us_houston,us_texas
             - name: OPENVPN_OPTS
-              value: --inactive 3600 --ping 10 --ping-exit 60
+              value: --inactive 3600 --ping 10
             - name: OPENVPN_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -100,7 +100,7 @@ spec:
             - name: PGID
               value: "1000"
             - name: TRANSMISSION_HOME
-              value: /data/transmission-home
+              value: /config/transmission-home
 #            - name: TRANSMISSION_WATCH_DIR_FORCE_GENERIC
 #              value: "false"
 #            - name: TRANSMISSION_WEB_HOME
@@ -228,7 +228,7 @@ spec:
             - name: TRANSMISSION_QUEUE_STALLED_MINUTES
               value: "10"
             - name: TRANSMISSION_SEED_QUEUE_ENABLED
-              value: "talse"
+              value: "false"
             - name: TRANSMISSION_SEED_QUEUE_SIZE
               value: "5"
 ### RPC ###
@@ -288,8 +288,8 @@ spec:
               mountPath: /media/downloads
             - name: nas-isos
               mountPath: /isos
-            - name: nas-config
-              mountPath: /data/transmission-home
+            - name: transmission-config
+              mountPath: /config/transmission-home
           resources:
             limits:
               devic.es/tun: "1"
@@ -306,7 +306,6 @@ spec:
           nfs:
             server: nas01-20.whezzel.com
             path: /isos
-        - name: nas-config
-          nfs:
-            server: nas01-20.whezzel.com
-            path: /media/transmission
+        - name: transmission-config
+          persistentVolumeClaim:
+            claimName: transmission-config
