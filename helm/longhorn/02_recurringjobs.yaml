@@ -38,5 +38,5 @@ spec:
   groups:
   - default
   name: snapshot-delete
-  retain: 30
+  retain: 5
   task: snapshot-delete
