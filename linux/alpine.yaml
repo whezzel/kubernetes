@@ -97,23 +97,13 @@ spec:
           volumeMounts:
             - name: nas
               mountPath: /mnt/temp
-#            - name: frigate
-#              mountPath: /frigate
-#            - name: minecraft-test
-#              mountPath: /minecraft-test
-#            - name: mosquitto
-#              mountPath: /mosquitto
+#            - name: changeme
+#              mountPath: /changeme
       volumes:
         - name: nas
           nfs:
             server: nas01-20.whezzel.com
             path: /temp
-#        - name: frigate
+#        - name: changeme
 #          persistentVolumeClaim:
-#            claimName: frigate
-#        - name: minecraft-test
-#          persistentVolumeClaim:
-#            claimName: minecraft-test
-#        - name: mosquitto
-#          persistentVolumeClaim:
-#            claimName: mosquitto
+#            claimName: changeme
