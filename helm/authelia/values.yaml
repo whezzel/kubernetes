@@ -335,6 +335,12 @@ configMap:
           - group:radarr
         policy: two_factor
       - domain:
+          - search.whezzel.com
+        subject:
+          - group:admins
+          - group:searxng
+        policy: two_factor
+      - domain:
           - scrutiny.whezzel.com
         resources:
           - ^/api([/?].*)?$
