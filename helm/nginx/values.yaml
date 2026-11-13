@@ -33,7 +33,7 @@ controller:
   extraArgs:
     default-ssl-certificate: cert-manager/whezzel-com-tls
   config:
-    compute-full-forwarded-for: true
+    compute-full-forwarded-for: false
     use-forwarded-headers: true
     #annotations-risk-level: Critical
     proxy-real-ip-cidr: 10.69.0.0/16,10.244.0.0/16,fd69::/48,fd6a:0:244::/56
